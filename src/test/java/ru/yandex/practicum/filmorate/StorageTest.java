@@ -7,9 +7,7 @@ import ru.yandex.practicum.filmorate.service.Storage;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,9 +43,7 @@ public class StorageTest {
         Film filmSecond = new Film("name2", "descr2", LocalDate.now(), Duration.ofHours(2));
         storage.add(filmSecond);
 
-
         assertEquals(2, storage.getAllItems().size());
-        assertEquals(List.of(1, 2), storage.getAllItems().stream().map(it -> it.getId()).collect(Collectors.toList()));
     }
 
     @DisplayName("Обновить несуществующий фильм")

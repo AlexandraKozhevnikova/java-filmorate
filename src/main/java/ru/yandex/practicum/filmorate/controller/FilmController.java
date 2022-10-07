@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.Storage;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class FilmController {
     }
 
     @PostMapping("/films")
-    public Film addNewFilm(@RequestBody Film film) {
+    public Film addNewFilm(@RequestBody @Valid Film film) {
         return storage.add(film);
     }
 
