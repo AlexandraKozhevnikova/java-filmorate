@@ -1,3 +1,9 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
 *.class
 *.log
 *.jar
@@ -9,10 +15,6 @@
 *.rar
 hs_err_pid*
 out/
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
 ### STS ###
 .apt_generated
@@ -41,6 +43,9 @@ build/
 
 ### VS Code ###
 .vscode/
+<<<<<<< HEAD
 
 *.db
 db/*
+=======
+>>>>>>> ee56e7b (init commit)
