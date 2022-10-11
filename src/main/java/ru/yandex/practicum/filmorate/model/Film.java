@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import ru.yandex.practicum.filmorate.helper.ReleaseDate;
 
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
+@RequiredArgsConstructor
 public class Film implements IdControl {
     private int id;
     @NotBlank(message = "'name' should non be empty")

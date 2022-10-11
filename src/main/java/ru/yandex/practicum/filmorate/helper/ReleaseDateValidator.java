@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * Дата релиза фильма должна быть больше даты рождения кино - 28 декабря 1895 года.
  */
 public class ReleaseDateValidator implements ConstraintValidator<ReleaseDate, LocalDate> {
-    private static LocalDate FIRST_FILM_DATE = LocalDate.of(1895, 12, 28);
+    private static final LocalDate FIRST_FILM_DATE = LocalDate.of(1895, 12, 28);
 
     @Override
     public boolean isValid(LocalDate date, ConstraintValidatorContext constraintValidatorContext) {

@@ -19,7 +19,6 @@ public class Storage<T extends IdControl> {
     }
 
     public T update(T newItem) {
-
         Optional<T> oldItem = itemList.stream()
                 .filter(item -> item.getId() == newItem.getId())
                 .findFirst();
@@ -32,7 +31,7 @@ public class Storage<T extends IdControl> {
 
         itemList.add(newItem);
 
-        return  itemList.stream()
+        return itemList.stream()
                 .filter(item -> item.getId() == newItem.getId())
                 .findFirst().get();
     }
@@ -44,5 +43,4 @@ public class Storage<T extends IdControl> {
     private int getIdForNewItem() {
         return currentItemId++;
     }
-
 }
