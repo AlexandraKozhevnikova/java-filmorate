@@ -19,16 +19,16 @@ public class StorageTest {
     @Test
     public void shouldSaveFilmWithId() {
         Storage<Film> storage = new Storage();
-        Film filmFirst = new Film("name1", "descr1", LocalDate.now(), Duration.ofHours(2));
+        Film filmFirst = new Film("name1", "descr1", LocalDate.now(), 200);
         storage.add(filmFirst);
-        Film filmSecond = new Film("name2", "descr2", LocalDate.now(), Duration.ofHours(2));
+        Film filmSecond = new Film("name2", "descr2", LocalDate.now(), 200);
         storage.add(filmSecond);
 
         assertEquals(1, filmFirst.getId());
         assertEquals(2, filmSecond.getId());
 
         Storage otherStorage = new Storage();
-        Film film = new Film("name", "descr", LocalDate.now(), Duration.ofHours(2));
+        Film film = new Film("name", "descr", LocalDate.now(), 200);
         otherStorage.add(film);
 
         assertEquals(1, film.getId());
@@ -38,9 +38,9 @@ public class StorageTest {
     @Test
     public void shouldAddFilmInStorage() {
         Storage<Film> storage = new Storage();
-        Film filmFirst = new Film("name1", "descr1", LocalDate.now(), Duration.ofHours(2));
+        Film filmFirst = new Film("name1", "descr1", LocalDate.now(), 200);
         storage.add(filmFirst);
-        Film filmSecond = new Film("name2", "descr2", LocalDate.now(), Duration.ofHours(2));
+        Film filmSecond = new Film("name2", "descr2", LocalDate.now(), 200);
         storage.add(filmSecond);
 
         assertEquals(2, storage.getAllItems().size());
@@ -52,7 +52,7 @@ public class StorageTest {
         Storage<Film> storage = new Storage();
         assertTrue(storage.getAllItems().isEmpty());
 
-        Film film = new Film("name2", "descr2", LocalDate.now(), Duration.ofHours(2));
+        Film film = new Film("name2", "descr2", LocalDate.now(), 200);
         film.setId(4);
 
         Exception exception = assertThrows(
@@ -67,14 +67,14 @@ public class StorageTest {
     @Test
     public void shouldSuccessUpdatedFilm() {
         Storage<Film> storage = new Storage();
-        Film filmFirst = new Film("name old", "descr1", LocalDate.now(), Duration.ofHours(2));
+        Film filmFirst = new Film("name old", "descr1", LocalDate.now(), 200);
         storage.add(filmFirst);
         assertEquals(1, filmFirst.getId());
         assertEquals(1, storage.getAllItems().size());
 
         assertEquals("name old", storage.getAllItems().get(0).getName());
 
-        Film filmSecond = new Film("name new", "descr2", LocalDate.now(), Duration.ofHours(2));
+        Film filmSecond = new Film("name new", "descr2", LocalDate.now(), 200);
         filmSecond.setId(1);
         storage.update(filmSecond);
 

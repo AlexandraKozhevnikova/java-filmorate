@@ -6,28 +6,29 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.Storage;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-public class FilmController {
+public class UserController {
 
-    Storage<Film> storage = new Storage();
+    Storage<User> storage = new Storage();
 
-    @GetMapping("/films")
-    public List<Film> getAllFilms() {
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
         return storage.getAllItems();
     }
 
-    @PostMapping("/films")
-    public Film addNewFilm(@RequestBody @Valid Film film) {
-        return storage.add(film);
+    @PostMapping("/users")
+    public User addUser(@RequestBody @Valid User user) {
+        return storage.add(user);
     }
 
-    @PutMapping("/films")
-    public Film updateFilm(@RequestBody @Valid Film film){
-        return storage.update(film);
+    @PutMapping("/users")
+    public User updateUser(@RequestBody @Valid User user){
+        return storage.update(user);
     }
 }
