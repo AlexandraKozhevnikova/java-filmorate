@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.IdControl;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Service
 public class Storage<T extends IdControl> {
     private HashSet<T> itemList = new HashSet<>();
     private int currentItemId = 1;
