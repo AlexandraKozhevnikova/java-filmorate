@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.dto.film.AddFilmRequestDto;
 import ru.yandex.practicum.filmorate.dto.film.UpdateFilmRequestDto;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.Storage;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
 import javax.validation.Valid;
 import java.util.List;

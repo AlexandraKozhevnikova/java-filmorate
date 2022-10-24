@@ -3,9 +3,8 @@ package ru.yandex.practicum.filmorate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.Storage;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 

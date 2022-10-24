@@ -1,10 +1,9 @@
 package ru.yandex.practicum.filmorate.dto.film;
 
 import lombok.Data;
-import lombok.NonNull;
 import ru.yandex.practicum.filmorate.helper.ReleaseDate;
+
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;

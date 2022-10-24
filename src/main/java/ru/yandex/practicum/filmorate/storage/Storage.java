@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.IdControl;
@@ -40,6 +40,13 @@ public class Storage<T extends IdControl> {
 
     public List<T> getAllItems() {
         return new ArrayList<>(itemList);
+    }
+
+    public T getItemById(int id) {
+        Optional<T> targetItem = itemList.stream()
+                .filter(it -> it.getId() == id)
+                .findFirst();
+        return targetItem.orElseThrow(() -> new NoSuchElementException("element with id = " + id + " not found"));
     }
 
     private int getIdForNewItem() {
