@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-
     public void makeFriend(User firstFriend, User secondFriend) {
         firstFriend.friends.add(secondFriend.getId());
         secondFriend.friends.add(firstFriend.getId());

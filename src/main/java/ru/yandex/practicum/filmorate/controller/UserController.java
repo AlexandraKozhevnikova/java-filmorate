@@ -49,7 +49,6 @@ public class UserController {
         return userMapper.mapToGetUserResponseDto(user);
     }
 
-
     @GetMapping
     public List<User> getAllUsers() {
         return storage.getAllItems();
@@ -83,7 +82,6 @@ public class UserController {
         return user;
     }
 
-    //DELETE /users/{id}/friends/{friendId}
     @DeleteMapping("/{id}/friends/{friendId}")
     public User deleteFriend(
             @PathVariable("id") int id,

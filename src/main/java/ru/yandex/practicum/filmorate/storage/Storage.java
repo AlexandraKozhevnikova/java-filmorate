@@ -1,55 +1,16 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.model.IdControl;
+import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
-@Component
-public class Storage<T extends IdControl> {
-    private final HashSet<T> itemList = new HashSet<>();
-    private int currentItemId = 1;
+public interface Storage<T> {
 
-    public T add(T item) {
-        item.setId(getIdForNewItem());
-        itemList.add(item);
-        return item;
-    }
+    T add(T item);
 
-    public T update(T newItem) {
-        Optional<T> oldItem = itemList.stream()
-                .filter(item -> item.getId() == newItem.getId())
-                .findFirst();
+    T update(T newItem);
 
-        if (oldItem.isPresent()) {
-            itemList.remove(oldItem.get());
-        } else {
-            throw new NoSuchElementException("Не найден элемент с id " + newItem.getId());
-        }
+    List<T> getAllItems();
 
-        itemList.add(newItem);
-
-        return itemList.stream()
-                .filter(item -> item.getId() == newItem.getId())
-                .findFirst().get();
-    }
-
-    public List<T> getAllItems() {
-        return new ArrayList<>(itemList);
-    }
-
-    public T getItemById(int id) {
-        Optional<T> targetItem = itemList.stream()
-                .filter(it -> it.getId() == id)
-                .findFirst();
-        return targetItem.orElseThrow(() -> new NoSuchElementException("element with id = " + id + " not found"));
-    }
-
-    private int getIdForNewItem() {
-        return currentItemId++;
-    }
+    T getItemById(int id);
 }
