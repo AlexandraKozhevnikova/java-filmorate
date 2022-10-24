@@ -17,6 +17,6 @@ public class User implements IdControl {
     public Set<Integer> friends = new HashSet<>();
 
     public String getName() {
-        return name == null ? login : name;
+        return name.isBlank() ? login : name;
     }
 }

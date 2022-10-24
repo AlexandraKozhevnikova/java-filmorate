@@ -2,7 +2,9 @@ package ru.yandex.practicum.filmorate.mapper;
 
 import ru.yandex.practicum.filmorate.dto.film.AddFilmRequestDto;
 import ru.yandex.practicum.filmorate.dto.film.UpdateFilmRequestDto;
+import ru.yandex.practicum.filmorate.dto.user.AddUserResponseDto;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 
 
 public class FilmMapper {
@@ -24,4 +26,6 @@ public class FilmMapper {
         film.setId(dto.getId());
         return film;
     }
+
+
 }
