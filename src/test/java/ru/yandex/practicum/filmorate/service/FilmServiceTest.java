@@ -10,17 +10,19 @@ import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class FilmServiceTest {
     private UserStorage userStorage;
-    private User user;
+    private User user1;
+    private User user2;
     private FilmStorage filmStorage;
-    private Film film;
+    private Film film1;
+    private Film film2;
+    private Film film3;
     private FilmService service;
 
 
@@ -30,24 +32,48 @@ class FilmServiceTest {
         filmStorage = new InMemoryFilmStorage();
         service = new FilmService(filmStorage, userStorage);
 
-        user = new User();
-        user.setLogin("login");
-        user.setEmail("log@ya.ru");
-        user.setBirthday(LocalDate.of(1999, 1, 1));
-        userStorage.add(user);
+        user1 = new User();
+        user1.setLogin("login");
+        user1.setEmail("log@ya.ru");
+        user1.setBirthday(LocalDate.of(1999, 1, 1));
+        userStorage.add(user1);
 
-        film = new Film();
-        film.setName("the best");
-        film.setDuration(100);
-        film.setReleaseDate(LocalDate.of(2000, 1, 1));
-        filmStorage.add(film);
+        user2 = new User();
+        user2.setLogin("log22in2");
+        user2.setEmail("lo2g@ya.ru");
+        user2.setBirthday(LocalDate.of(1999, 1, 1));
+        userStorage.add(user2);
+
+        film1 = new Film();
+        film1.setName("the best");
+        film1.setDuration(100);
+        film1.setReleaseDate(LocalDate.of(2000, 1, 1));
+        filmStorage.add(film1);
+
+        film2 = new Film();
+        film2.setName("the worst");
+        film2.setDuration(140);
+        film2.setReleaseDate(LocalDate.of(2002, 2, 2));
+        filmStorage.add(film2);
+
+        film3 = new Film();
+        film3.setName("the worst");
+        film3.setDuration(140);
+        film3.setReleaseDate(LocalDate.of(2002, 2, 2));
+        filmStorage.add(film3);
     }
 
     @Test
-    public void shouldLikedUnlikedFilm() {
-        service.like(film.getId(), user.getId());
-        assertEquals(List.of(film), service.getTopFilms(2));
-        service.unlike(film.getId(), user.getId());
-        assertTrue(service.getTopFilms(2).isEmpty());
+    public void shouldLikedUnlikedFilmAndGetInRightOrder() {
+        service.like(film2.getId(), user1.getId());
+        service.like(film2.getId(), user2.getId());
+        service.like(film1.getId(), user1.getId());
+        service.like(film1.getId(), user1.getId());
+        assertEquals(3, service.getTopFilms(10).size());
+        assertEquals(film2, service.getTopFilms(10).stream().findFirst().get());
+        service.unlike(film2.getId(), user1.getId());
+        service.unlike(film2.getId(), user2.getId());
+        assertEquals(3, service.getTopFilms(10).size());
+        assertEquals(Set.of(film1), service.getTopFilms(1));
     }
 }

@@ -53,8 +53,6 @@ public class FilmService {
     public Set<Film> getTopFilms(int threshold) {
         Set<Film> filmList = likesStorage.entrySet().stream()
                 .sorted(Comparator.comparingInt(it -> (-1) * it.getValue().size()))
-                .sorted()
-                .filter(it -> it.getValue().size() > 0)
                 .limit(threshold)
                 .map(Map.Entry::getKey)
                 .map(filmStorage::getItemById)
