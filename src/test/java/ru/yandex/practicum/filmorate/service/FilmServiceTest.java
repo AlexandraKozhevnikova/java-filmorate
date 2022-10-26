@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryStorage;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,17 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class FilmServiceTest {
-    private Storage<User> userStorage;
+    private UserStorage userStorage;
     private User user;
-    private Storage<Film> filmStorage;
+    private FilmStorage filmStorage;
     private Film film;
     private FilmService service;
 
 
     @BeforeEach
     public void dataPreparation() {
-        userStorage = new InMemoryStorage<User>();
-        filmStorage = new InMemoryStorage<Film>();
+        userStorage = new InMemoryUserStorage();
+        filmStorage = new InMemoryFilmStorage();
         service = new FilmService(filmStorage, userStorage);
 
         user = new User();

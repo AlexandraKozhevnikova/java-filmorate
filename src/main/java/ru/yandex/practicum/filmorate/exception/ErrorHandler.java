@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -26,6 +27,15 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNoSuchElementException(final NoSuchElementException e) {
         return Map.of("logic error", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, List<String>> handleConstraintViolationException(final ConstraintViolationException e) {
+      List<String> listError = e.getConstraintViolations().stream()
+              .map(it -> it.getMessage())
+              .collect(Collectors.toList());
+        return Map.of("validation error", listError);
     }
 
     @ExceptionHandler

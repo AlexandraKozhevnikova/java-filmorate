@@ -1,14 +1,15 @@
 package ru.yandex.practicum.filmorate.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.film.AddFilmRequestDto;
 import ru.yandex.practicum.filmorate.dto.film.UpdateFilmRequestDto;
 import ru.yandex.practicum.filmorate.dto.user.AddUserResponseDto;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
-
+@Component
 public class FilmMapper {
-    public static Film mapToFilm(AddFilmRequestDto dto) {
+    public Film mapToFilm(AddFilmRequestDto dto) {
         Film film = new Film();
         film.setName(dto.getName());
         film.setDescription(dto.getDescription());
@@ -17,7 +18,7 @@ public class FilmMapper {
         return film;
     }
 
-    public static Film mapToFilm(UpdateFilmRequestDto dto) {
+    public Film mapToFilm(UpdateFilmRequestDto dto) {
         Film film = new Film();
         film.setName(dto.getName());
         film.setDescription(dto.getDescription());

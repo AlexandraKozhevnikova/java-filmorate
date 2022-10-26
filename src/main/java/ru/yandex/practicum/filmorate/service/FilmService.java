@@ -2,30 +2,32 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.comparator.ComparableComparator;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
 
-    private Storage<Film> filmStorage;
-    private Storage<User> userStorage;
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
     private final Map<Integer, Set<Integer>> likesStorage = new HashMap<>();
 
 
     @Autowired
-    public FilmService(Storage<Film> filmStorage, Storage<User> userStorage) {
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
@@ -48,14 +50,22 @@ public class FilmService {
         }
     }
 
-    public List<Film> getTopFilms(int threshold) {
-        List<Film> filmList = likesStorage.entrySet().stream()
-                .sorted(Comparator.comparingInt(it -> it.getValue().size()))
+    public Set<Film> getTopFilms(int threshold) {
+        Set<Film> filmList = likesStorage.entrySet().stream()
+                .sorted(Comparator.comparingInt(it -> (-1) * it.getValue().size()))
+                .sorted()
                 .filter(it -> it.getValue().size() > 0)
                 .limit(threshold)
                 .map(Map.Entry::getKey)
                 .map(filmStorage::getItemById)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
+
+        if (filmList.size() < threshold) {
+            filmList.addAll(filmStorage.getAllItems());
+            filmList = filmList.stream()
+                    .limit(threshold)
+                    .collect(Collectors.toSet());
+        }
         return filmList;
     }
 }

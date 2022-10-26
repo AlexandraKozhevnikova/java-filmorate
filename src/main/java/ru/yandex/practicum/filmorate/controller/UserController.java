@@ -18,7 +18,7 @@ import ru.yandex.practicum.filmorate.exception.BadFriendshipException;
 import ru.yandex.practicum.filmorate.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,13 +29,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 public class UserController {
 
-    private final Storage<User> storage;
+    private final UserStorage storage;
     private final UserService service;
     private final UserMapper userMapper;
 
     @Autowired
     public UserController(
-            Storage<User> storage,
+            UserStorage storage,
             UserService service,
             UserMapper userMapper) {
         this.storage = storage;
@@ -56,14 +56,14 @@ public class UserController {
 
     @PostMapping
     public AddUserResponseDto addUser(@RequestBody @Valid AddUserRequestDto userDto) {
-        User user = UserMapper.mapToUser(userDto);
+        User user = userMapper.mapToUser(userDto);
         user = storage.add(user);
         return userMapper.mapToAddUserResponseDto(user);
     }
 
     @PutMapping
     public UpdateUserResponseDto updateUser(@RequestBody @Valid UpdateUserRequestDto userDto) {
-        User user = UserMapper.mapToUser(userDto);
+        User user = userMapper.mapToUser(userDto);
         user = storage.update(user);
         return userMapper.mapToUpdateUserResponseDto(user);
     }

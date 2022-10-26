@@ -9,19 +9,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@Component
-public class InMemoryStorage<T extends IdControl> implements Storage<T> {
+public class InMemoryStorage<T extends IdControl> {
     private final HashSet<T> itemList = new HashSet<>();
     private int currentItemId = 1;
 
-    @Override
     public T add(T item) {
         item.setId(getIdForNewItem());
         itemList.add(item);
         return item;
     }
 
-    @Override
     public T update(T newItem) {
         Optional<T> oldItem = itemList.stream()
                 .filter(item -> item.getId() == newItem.getId())
@@ -40,12 +37,10 @@ public class InMemoryStorage<T extends IdControl> implements Storage<T> {
                 .findFirst().get();
     }
 
-    @Override
     public List<T> getAllItems() {
         return new ArrayList<>(itemList);
     }
 
-    @Override
     public T getItemById(int id) {
         Optional<T> targetItem = itemList.stream()
                 .filter(it -> it.getId() == id)

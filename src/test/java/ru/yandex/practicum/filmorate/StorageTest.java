@@ -80,6 +80,4 @@ public class StorageTest {
         assertEquals(1, storage.getAllItems().size());
         assertEquals("name new", storage.getAllItems().get(0).getName());
     }
-
-
 }

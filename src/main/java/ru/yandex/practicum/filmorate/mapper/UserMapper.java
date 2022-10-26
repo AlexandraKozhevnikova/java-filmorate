@@ -14,7 +14,7 @@ import ru.yandex.practicum.filmorate.model.User;
 @Component
 public class UserMapper {
 
-    public static User mapToUser(AddUserRequestDto dto) {
+    public User mapToUser(AddUserRequestDto dto) {
         User user = new User();
         user.setName(dto.getName());
         user.setLogin(dto.getLogin());
@@ -23,7 +23,7 @@ public class UserMapper {
         return user;
     }
 
-    public static User mapToUser(UpdateUserRequestDto dto) {
+    public User mapToUser(UpdateUserRequestDto dto) {
         User user = new User();
         user.setName(dto.getName());
         user.setLogin(dto.getLogin());
