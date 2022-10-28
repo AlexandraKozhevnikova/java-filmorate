@@ -3,9 +3,8 @@ package ru.yandex.practicum.filmorate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.Storage;
+import ru.yandex.practicum.filmorate.storage.InMemoryStorage;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
@@ -18,7 +17,7 @@ public class StorageTest {
     @DisplayName("Проверить номера id для разных стораджей")
     @Test
     public void shouldSaveFilmWithId() {
-        Storage<Film> storage = new Storage();
+        InMemoryStorage<Film> storage = new InMemoryStorage();
         Film filmFirst = new Film("name1", "descr1", LocalDate.now(), 200);
         storage.add(filmFirst);
         Film filmSecond = new Film("name2", "descr2", LocalDate.now(), 200);
@@ -27,7 +26,7 @@ public class StorageTest {
         assertEquals(1, filmFirst.getId());
         assertEquals(2, filmSecond.getId());
 
-        Storage otherStorage = new Storage();
+        InMemoryStorage otherStorage = new InMemoryStorage();
         Film film = new Film("name", "descr", LocalDate.now(), 200);
         otherStorage.add(film);
 
@@ -37,7 +36,7 @@ public class StorageTest {
     @DisplayName("Сохранить два фильма в один сторадж")
     @Test
     public void shouldAddFilmInStorage() {
-        Storage<Film> storage = new Storage();
+        InMemoryStorage<Film> storage = new InMemoryStorage();
         Film filmFirst = new Film("name1", "descr1", LocalDate.now(), 200);
         storage.add(filmFirst);
         Film filmSecond = new Film("name2", "descr2", LocalDate.now(), 200);
@@ -49,7 +48,7 @@ public class StorageTest {
     @DisplayName("Обновить несуществующий фильм")
     @Test
     public void shouldGetExceptionWhenUpdateFilm() {
-        Storage<Film> storage = new Storage();
+        InMemoryStorage<Film> storage = new InMemoryStorage();
         assertTrue(storage.getAllItems().isEmpty());
 
         Film film = new Film("name2", "descr2", LocalDate.now(), 200);
@@ -66,7 +65,7 @@ public class StorageTest {
     @DisplayName("Успешно обновить фильм")
     @Test
     public void shouldSuccessUpdatedFilm() {
-        Storage<Film> storage = new Storage();
+        InMemoryStorage<Film> storage = new InMemoryStorage();
         Film filmFirst = new Film("name old", "descr1", LocalDate.now(), 200);
         storage.add(filmFirst);
         assertEquals(1, filmFirst.getId());
@@ -81,6 +80,4 @@ public class StorageTest {
         assertEquals(1, storage.getAllItems().size());
         assertEquals("name new", storage.getAllItems().get(0).getName());
     }
-
-
 }

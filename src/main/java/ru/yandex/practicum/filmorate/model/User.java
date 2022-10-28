@@ -1,25 +1,36 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 public class User implements IdControl {
 
     private int id;
-    @Email(message = "'email' should not be blank")
     private String email;
-    @NotBlank(message = "'login' should not be blank")
     private String login;
     private String name;
-    @PastOrPresent(message = "'birthday' should not be from the future")
     private LocalDate birthday;
+    private Set<Integer> friends = new HashSet<>();
+
+    public Set<Integer> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<Integer> friends) {
+        this.friends = friends;
+    }
+
+    public User() {
+    }
 
     public String getName() {
-        return name == null ? login : name;
+        return StringUtils.isBlank(name) ? login : name;
     }
 }
