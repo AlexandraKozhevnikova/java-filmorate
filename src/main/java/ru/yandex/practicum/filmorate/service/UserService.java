@@ -10,13 +10,23 @@ import java.util.stream.Collectors;
 public class UserService {
 
     public void makeFriend(User firstFriend, User secondFriend) {
-        firstFriend.friends.add(secondFriend.getId());
-        secondFriend.friends.add(firstFriend.getId());
+        Set<Integer> friendsListFirst = firstFriend.getFriends();
+        friendsListFirst.add(secondFriend.getId());
+        firstFriend.setFriends(friendsListFirst);
+
+        Set<Integer> friendsListSecond = secondFriend.getFriends();
+        friendsListSecond.add(firstFriend.getId());
+        secondFriend.setFriends(friendsListSecond);
     }
 
     public void deleteFriend(User firstFriend, User secondFriend) {
-        firstFriend.friends.remove(secondFriend.getId());
-        secondFriend.friends.remove(firstFriend.getId());
+        Set<Integer> friendsListFirst = firstFriend.getFriends();
+        friendsListFirst.remove(secondFriend.getId());
+        firstFriend.setFriends(friendsListFirst);
+
+        Set<Integer> friendsListSecond = secondFriend.getFriends();
+        friendsListSecond.remove(firstFriend.getId());
+        secondFriend.setFriends(friendsListFirst);
     }
 
     public Set<Integer> getCommonFriend(User firstFriend, User secondFriend) {

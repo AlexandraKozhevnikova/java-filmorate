@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserServiceTest {
 
@@ -39,18 +38,18 @@ class UserServiceTest {
     @Test
     void makeFriend() {
         userService.makeFriend(user1, user2);
-        assertEquals(new HashSet<Integer>(List.of(2)), user1.friends);
-        assertEquals(new HashSet<Integer>(List.of(1)), user2.friends);
+        assertEquals(new HashSet<Integer>(List.of(2)), user1.getFriends());
+        assertEquals(new HashSet<Integer>(List.of(1)), user2.getFriends());
     }
 
     @Test
     void deleteFriend() {
         userService.makeFriend(user1, user2);
-        assertEquals(new HashSet<Integer>(List.of(2)), user1.friends);
+        assertEquals(new HashSet<Integer>(List.of(2)), user1.getFriends());
 
         userService.deleteFriend(user1, user2);
-        assertTrue(user1.friends.isEmpty());
-        assertTrue(user2.friends.isEmpty());
+        assertTrue(user1.getFriends().isEmpty());
+        assertTrue(user2.getFriends().isEmpty());
 
     }
 

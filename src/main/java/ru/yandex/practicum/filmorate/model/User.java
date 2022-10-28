@@ -1,9 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -18,12 +17,20 @@ public class User implements IdControl {
     private String login;
     private String name;
     private LocalDate birthday;
-    public Set<Integer> friends = new HashSet<>();
+    private Set<Integer> friends = new HashSet<>();
+
+    public Set<Integer> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<Integer> friends) {
+        this.friends = friends;
+    }
 
     public User() {
     }
 
     public String getName() {
-        return name.isBlank() ? login : name;
+        return StringUtils.isBlank(name) ? login : name;
     }
 }
