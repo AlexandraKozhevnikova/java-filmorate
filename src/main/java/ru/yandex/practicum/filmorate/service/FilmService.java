@@ -3,10 +3,12 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -17,7 +19,6 @@ public class FilmService {
 
     private final FilmStorage filmStorage;
     private final UserService userService;
-
 
     @Autowired
     public FilmService(
@@ -55,7 +56,6 @@ public class FilmService {
         );
     }
 
-
     public void like(int filmId, int userId) {
         filmStorage.getItemById(filmId);
         userService.getUserById(userId);
@@ -73,21 +73,10 @@ public class FilmService {
     }
 
     public List<Genre> getAllGenres() {
-        return filmStorage.getAllGenres();
+        return List.of(Genre.values());
     }
 
     public Genre getGenreById(int id) {
-        Optional<Genre> genre = filmStorage.getGenreById(id);
-        return genre.orElseThrow(
-                () -> new NoSuchElementException("genre with id = " + id + " not found")
-        );
+        return Genre.getGenreById(id);
     }
-
-//    public List<Integer> getFilmGenres(int filmId) {
-//        List<Integer> genres = filmStorage.getFilmGenres(filmId);
-//        if (genres.isEmpty()) {
-//            throw new NoSuchElementException("genres have not found for film with id = " + filmId);
-//        }
-//        return genres;
-//    }
 }

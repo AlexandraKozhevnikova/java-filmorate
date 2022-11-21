@@ -21,7 +21,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleBadRatingMpaException(final BadRatingMpaException e) {
+    public Map<String, String> handleBadFoundResultByIdException(final BadFoundResultByIdException e) {
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("validation error", e.getMessage());
     }

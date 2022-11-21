@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-import ru.yandex.practicum.filmorate.exception.BadRatingMpaException;
+import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 
 public enum RatingMPA {
     G("General Audiences", 1),
@@ -9,8 +9,8 @@ public enum RatingMPA {
     R("Restricted", 4),
     NC_17("Adults Only", 5);
 
-    private final String description;
     private final int id;
+    private final String description;
 
     RatingMPA(String description, int id) {
         this.description = description;
@@ -31,7 +31,7 @@ public enum RatingMPA {
                 return mpa;
             }
         }
-        throw new BadRatingMpaException("RatingMPA with id = " + id + "does not exist");
+        throw new BadFoundResultByIdException("RatingMPA with id = " + id + "does not exist");
     }
 }
 

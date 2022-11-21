@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
-import ru.yandex.practicum.filmorate.db.dao.GenreDao;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -18,13 +17,11 @@ import java.util.Optional;
 public class DbFilmStorage implements FilmStorage {
 
     private final FilmDao filmDao;
-    private final GenreDao genreDao;
     private final FilmGenreDao filmGenreDao;
 
     @Autowired
-    public DbFilmStorage(FilmDao filmDao, GenreDao genreDao, FilmGenreDao filmGenreDao) {
+    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao) {
         this.filmDao = filmDao;
-        this.genreDao = genreDao;
         this.filmGenreDao = filmGenreDao;
     }
 
@@ -49,16 +46,6 @@ public class DbFilmStorage implements FilmStorage {
     @Override
     public Optional<Film> getItemById(int id) {
         return filmDao.getFilmById(id);
-    }
-
-    @Override
-    public List<Genre> getAllGenres() {
-        return genreDao.getAllGenre();
-    }
-
-    @Override
-    public Optional<Genre> getGenreById(int id) {
-        return genreDao.getGenreById(id);
     }
 
     @Override
