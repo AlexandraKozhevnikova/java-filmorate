@@ -1,21 +1,14 @@
-package ru.yandex.practicum.filmorate.dto.user;
+package ru.yandex.practicum.filmorate.web.dto.user;
 
 import lombok.Data;
-import lombok.NonNull;
-
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
-public class UpdateUserRequestDto {
+public class AddUserRequestDto {
 
-    private int id;
     @Email(message = "'email' should not be blank")
     private String email;
     @NotBlank(message = "'login' should not be blank")

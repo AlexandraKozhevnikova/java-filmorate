@@ -1,69 +1,93 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
 
     private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
-    private final Map<Integer, Set<Integer>> likesStorage = new HashMap<>();
+    private final UserService userService;
 
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
+    public FilmService(
+            @Qualifier("dbFilmStorage") FilmStorage filmStorage,
+            UserService userService
+    ) {
         this.filmStorage = filmStorage;
-        this.userStorage = userStorage;
+        this.userService = userService;
     }
+
+    public List<Film> getAllFilms() {
+        return filmStorage.getAllItems();
+    }
+
+    public Film addFilm(Film film) {
+        int id = filmStorage.add(film);
+        Film filmFromDb = getFilmById(id);
+        List<Integer> genres = filmStorage.getFilmGenres(filmFromDb.getId());
+        filmFromDb.setGenres(genres);
+        return filmFromDb;
+    }
+
+    public Film update(Film film) {
+        filmStorage.update(film);
+        Film filmFromDb = getFilmById(film.getId());
+        List<Integer> genres = filmStorage.getFilmGenres(filmFromDb.getId());
+        filmFromDb.setGenres(genres);
+        return filmFromDb;
+    }
+
+    public Film getFilmById(int id) {
+        Optional<Film> film = filmStorage.getItemById(id);
+        return film.orElseThrow(
+                () -> new NoSuchElementException("film with id = " + id + " not found")
+        );
+    }
+
 
     public void like(int filmId, int userId) {
         filmStorage.getItemById(filmId);
-        userStorage.getItemById(userId);
-        if (likesStorage.containsKey(filmId)) {
-            likesStorage.get(filmId).add(userId);
-        } else {
-            likesStorage.put(filmId, new HashSet<>(List.of(userId)));
-        }
+        userService.getUserById(userId);
+
     }
 
     public void unlike(int filmId, int userId) {
         filmStorage.getItemById(filmId);
-        userStorage.getItemById(userId);
-        if (likesStorage.containsKey(filmId)) {
-            likesStorage.get(filmId).remove(userId);
-        }
+
     }
 
     public Set<Film> getTopFilms(int threshold) {
-        Set<Film> filmList = likesStorage.entrySet().stream()
-                .sorted(Comparator.comparingInt(it -> (-1) * it.getValue().size()))
-                .limit(threshold)
-                .map(Map.Entry::getKey)
-                .map(filmStorage::getItemById)
-                .collect(Collectors.toSet());
-
-        if (filmList.size() < threshold) {
-            filmList.addAll(filmStorage.getAllItems());
-            filmList = filmList.stream()
-                    .limit(threshold)
-                    .collect(Collectors.toSet());
-        }
+        Set<Film> filmList = null;
         return filmList;
     }
+
+    public List<Genre> getAllGenres() {
+        return filmStorage.getAllGenres();
+    }
+
+    public Genre getGenreById(int id) {
+        Optional<Genre> genre = filmStorage.getGenreById(id);
+        return genre.orElseThrow(
+                () -> new NoSuchElementException("genre with id = " + id + " not found")
+        );
+    }
+
+//    public List<Integer> getFilmGenres(int filmId) {
+//        List<Integer> genres = filmStorage.getFilmGenres(filmId);
+//        if (genres.isEmpty()) {
+//            throw new NoSuchElementException("genres have not found for film with id = " + filmId);
+//        }
+//        return genres;
+//    }
 }

@@ -1,17 +1,18 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface UserStorage{
+public interface UserStorage {
 
-    User add(User item);
+    int add(User item);
 
-    User update(User newItem);
+    void update(User newItem);
 
-    List<User> getAllItems();
+    List<UserDbEntity> getAllItems();
 
-    User getItemById(int id);
+    Optional<User> getItemById(int id);
 }

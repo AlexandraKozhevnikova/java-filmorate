@@ -1,14 +1,11 @@
-package ru.yandex.practicum.filmorate.mapper;
+package ru.yandex.practicum.filmorate.web.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dto.film.AddFilmRequestDto;
-import ru.yandex.practicum.filmorate.dto.film.UpdateFilmRequestDto;
-import ru.yandex.practicum.filmorate.dto.user.AddUserRequestDto;
-import ru.yandex.practicum.filmorate.dto.user.AddUserResponseDto;
-import ru.yandex.practicum.filmorate.dto.user.GetUserResponseDto;
-import ru.yandex.practicum.filmorate.dto.user.UpdateUserRequestDto;
-import ru.yandex.practicum.filmorate.dto.user.UpdateUserResponseDto;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequestDto;
+import ru.yandex.practicum.filmorate.web.dto.user.AddUserResponseDto;
+import ru.yandex.practicum.filmorate.web.dto.user.GetUserResponseDto;
+import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequestDto;
+import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserResponseDto;
 import ru.yandex.practicum.filmorate.model.User;
 
 @Component

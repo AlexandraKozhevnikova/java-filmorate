@@ -1,11 +1,11 @@
-package ru.yandex.practicum.filmorate.dto.user;
+package ru.yandex.practicum.filmorate.web.dto.user;
 
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class AddUserResponseDto {
+public class GetUserResponseDto {
     private int id;
     private String email;
     private String login;

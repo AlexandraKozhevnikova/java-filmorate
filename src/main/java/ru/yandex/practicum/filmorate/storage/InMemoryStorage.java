@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.IdControl;
 
 import java.util.ArrayList;
@@ -10,16 +9,17 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class InMemoryStorage<T extends IdControl> {
-    private final HashSet<T> itemList = new HashSet<>();
+    private final HashSet<T> itemList = new HashSet<>(); //todo лучше хеш мапа по ид
     private int currentItemId = 1;
 
-    public T add(T item) {
-        item.setId(getIdForNewItem());
+    public int add(T item) {
+        int id = getIdForNewItem();
+        item.setId(id);
         itemList.add(item);
-        return item;
+        return item.getId();
     }
 
-    public T update(T newItem) {
+    public void update(T newItem) {
         Optional<T> oldItem = itemList.stream()
                 .filter(item -> item.getId() == newItem.getId())
                 .findFirst();
@@ -31,21 +31,17 @@ public class InMemoryStorage<T extends IdControl> {
         }
 
         itemList.add(newItem);
-
-        return itemList.stream()
-                .filter(item -> item.getId() == newItem.getId())
-                .findFirst().get();
     }
 
     public List<T> getAllItems() {
         return new ArrayList<>(itemList);
     }
 
-    public T getItemById(int id) {
+    public Optional<T> getItemById(int id) {
         Optional<T> targetItem = itemList.stream()
                 .filter(it -> it.getId() == id)
                 .findFirst();
-        return targetItem.orElseThrow(() -> new NoSuchElementException("element with id = " + id + " not found"));
+        return targetItem;
     }
 
     private int getIdForNewItem() {
