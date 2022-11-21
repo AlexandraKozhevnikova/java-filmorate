@@ -1,12 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @Builder
@@ -17,6 +17,7 @@ public class Film implements IdControl {
     private String description;
     private LocalDate releaseDate;
     private int duration;
+    @JsonProperty("mpa")
     private RatingMPA ratingMPA;
     private List<Integer> genres;
 }

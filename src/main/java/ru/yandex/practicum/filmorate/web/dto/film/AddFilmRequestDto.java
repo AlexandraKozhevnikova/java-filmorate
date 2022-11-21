@@ -33,7 +33,7 @@ public class AddFilmRequestDto {
     @Positive
     private int duration;
     private List<GenreIdDto> genres;
-    @NotNull
+    @NotNull(message = "'mpa' must not be null")
     @JsonProperty("mpa")
     private RatingMpaId ratingMpaId;
 }
