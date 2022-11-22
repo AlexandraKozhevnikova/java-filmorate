@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.web.dto.Id;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -17,7 +20,10 @@ public class Film implements IdControl {
     private String description;
     private LocalDate releaseDate;
     private int duration;
-    @JsonProperty("mpa")
-    private RatingMPA ratingMPA;
+    private int ratingMpaId;
     private List<Integer> genres;
+
+    public void setGenres(List<Integer> genres) {
+        this.genres = Objects.requireNonNullElse(genres, Collections.emptyList());
+    }
 }

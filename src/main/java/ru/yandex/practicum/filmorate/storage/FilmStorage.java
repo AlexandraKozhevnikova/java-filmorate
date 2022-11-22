@@ -9,11 +9,13 @@ public interface FilmStorage {
 
     int add(Film film);
 
+    void upsertGenresForFilm(int filmId, List<Integer> genres);
+
     void update(Film film);
 
     List<Film> getAllItems();
 
     Optional<Film> getItemById(int id);
 
-    List<Integer> getFilmGenres(int filmId);
+    List<Integer> getFilmGenresId(int filmId);
 }

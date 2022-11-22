@@ -3,6 +3,9 @@ package ru.yandex.practicum.filmorate.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 
+import java.util.List;
+import java.util.Optional;
+
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Genre {
     COMEDY("Комедия", 1),
@@ -28,12 +31,12 @@ public enum Genre {
         return name;
     }
 
-    public static Genre getGenreById(int id) {
+    public static Optional<Genre> getGenreById(int id) {
         for (Genre genre : Genre.values()) {
-            if (genre.getId() == id){
-                return genre;
+            if (genre.getId() == id) {
+                return Optional.of(genre);
             }
         }
-        throw new BadFoundResultByIdException("Genre with id = " + id + "does not exist");
+        return Optional.empty();
     }
 }

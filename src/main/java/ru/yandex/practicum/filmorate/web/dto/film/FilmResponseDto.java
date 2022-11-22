@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.model.RatingMPA;
-import ru.yandex.practicum.filmorate.web.dto.RatingMpaId;
-import ru.yandex.practicum.filmorate.web.dto.genre.GenreIdDto;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.RatingMpa;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,14 +13,13 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
-public class UpdateFilmResponseDto {
+public class FilmResponseDto {
     private int id;
     private String name;
     private String description;
     private LocalDate releaseDate;
     private int duration;
     @JsonProperty("mpa")
-    private RatingMpaId ratingMpaId;
-    private List<GenreIdDto> genres;
+    private RatingMpa ratingMpa;
+    private List<Genre> genres;
 }
-

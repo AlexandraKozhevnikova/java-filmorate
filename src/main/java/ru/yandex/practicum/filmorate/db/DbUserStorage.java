@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +32,9 @@ public class DbUserStorage implements UserStorage {
     }
 
     @Override
-    public List<UserDbEntity> getAllItems() {
-        return userDao.getAllUsers();
+    public List<User> getAllItems() {
+        return Collections.emptyList(); //todo
+        //return userDao.getAllUsers();
     }
 
     @Override

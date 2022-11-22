@@ -50,9 +50,9 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDbEntity> getAllUsers() throws JsonProcessingException {
+    public List<User> getAllUsers() throws JsonProcessingException {
         log.info("Get request: GET {}", Arrays.stream(this.getClass().getAnnotation(RequestMapping.class).value()).findFirst().get());
-        List <UserDbEntity> responseBody = service.getAllUsers();
+        List <User> responseBody = service.getAllUsers();
         log.info("Response status code: 200 ОК");
         log.info("Response body: {}", jacksonMapper.writeValueAsString(responseBody));
         return responseBody;

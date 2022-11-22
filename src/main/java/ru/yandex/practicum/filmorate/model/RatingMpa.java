@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 
+import java.util.Optional;
+
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum RatingMPA {
+public enum RatingMpa {
     G("General Audiences", "G", 1),
     PG("Parental Guidance Suggested", "PG", 2),
     PG_13("Parents Strongly Cautioned", "PG-13", 3),
@@ -18,7 +20,7 @@ public enum RatingMPA {
     private final String description;
 
 
-    RatingMPA(String description, String title, int id) {
+    RatingMpa(String description, String title, int id) {
         this.description = description;
         this.id = id;
         this.title = title;
@@ -36,12 +38,12 @@ public enum RatingMPA {
         return id;
     }
 
-    public static RatingMPA getRatingMpaById(int id) {
-        for (RatingMPA mpa : RatingMPA.values()) {
+    public static Optional<RatingMpa> getRatingMpaById(int id) {
+        for (RatingMpa mpa : RatingMpa.values()) {
             if (mpa.getId() == id) {
-                return mpa;
+                return Optional.of(mpa);
             }
         }
-        throw new BadFoundResultByIdException("RatingMPA with id = " + id + " does not exist");
+        return Optional.empty();
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.List;
@@ -28,8 +27,12 @@ public class DbFilmStorage implements FilmStorage {
     @Override
     public int add(Film film) {
         int id = filmDao.insertFilm(film);
-        filmGenreDao.upsertFilmGenres(id, film.getGenres());
         return id;
+    }
+
+    @Override
+    public void upsertGenresForFilm(int filmId, List<Integer> genres) {
+        filmGenreDao.upsertFilmGenres(filmId, genres);
     }
 
     @Override
@@ -49,7 +52,7 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Integer> getFilmGenres(int filmId) {
+    public List<Integer> getFilmGenresId(int filmId) {
         return filmGenreDao.getFilmGenres(filmId);
     }
 }

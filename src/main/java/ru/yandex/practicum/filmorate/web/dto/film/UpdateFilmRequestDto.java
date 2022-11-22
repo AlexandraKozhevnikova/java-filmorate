@@ -2,18 +2,18 @@ package ru.yandex.practicum.filmorate.web.dto.film;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.model.RatingMPA;
-import ru.yandex.practicum.filmorate.web.dto.RatingMpaId;
-import ru.yandex.practicum.filmorate.web.dto.genre.GenreIdDto;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.RatingMpa;
+import ru.yandex.practicum.filmorate.web.dto.Id;
 import ru.yandex.practicum.filmorate.web.validation.ReleaseDate;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -21,7 +21,6 @@ import java.util.List;
 
 @Data
 public class UpdateFilmRequestDto {
-
     private int id;
     @NotBlank(message = "'name' should non be empty")
     private String name;
@@ -34,7 +33,8 @@ public class UpdateFilmRequestDto {
     private LocalDate releaseDate;
     @Positive
     private int duration;
+    @NotNull(message = "'mpa' must not be null")
     @JsonProperty("mpa")
-    private RatingMpaId ratingMpaId;
-    private List<GenreIdDto> genres;
+    private Id ratingMpaId;
+    private List<Id> genres;
 }

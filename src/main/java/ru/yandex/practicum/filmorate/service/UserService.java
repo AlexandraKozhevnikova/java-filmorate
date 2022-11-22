@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -47,8 +48,9 @@ public class UserService {
         );
     }
 
-    public List<UserDbEntity> getAllUsers() {
-        return userStorage.getAllItems();
+    public List<User> getAllUsers() {
+        return Collections.emptyList(); //todo
+        //return userStorage.getAllItems();
     }
 
     public void makeFriend(int firstFriendId, int secondFriendId) {

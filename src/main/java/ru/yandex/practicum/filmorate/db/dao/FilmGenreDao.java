@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
-import org.springframework.data.relational.core.sql.In;
-import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
 

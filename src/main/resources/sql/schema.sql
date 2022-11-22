@@ -9,14 +9,14 @@ CREATE TABLE IF NOT EXISTS Film (
     CONSTRAINT release_date_age CHECK (release_date > '1895-12-28'),
     duration     INTEGER,
     CONSTRAINT duration_positive CHECK (duration > 0),
-    ratingMPA    INTEGER NOT NULL
+    rating_MPA    INTEGER NOT NULL
 );
 comment on column film.id is 'The film ID';
 comment on column film.name is 'The title of film';
 comment on column film.description is 'The description of film, max 200 symbols';
 comment on column film.release_date is 'The release date of film, more than 1895-12-28';
 comment on column film.duration is 'The duration of film, should be positive';
-comment on column film.ratingMPA is 'The film rating Motion Picture Association';
+comment on column film.rating_MPA is 'The film rating Motion Picture Association';
 
 
 CREATE TABLE IF NOT EXISTS Film_genre (

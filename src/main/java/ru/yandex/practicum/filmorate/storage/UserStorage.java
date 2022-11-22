@@ -12,7 +12,7 @@ public interface UserStorage {
 
     void update(User newItem);
 
-    List<UserDbEntity> getAllItems();
+    List<User> getAllItems();
 
     Optional<User> getItemById(int id);
 }

@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 public class ErrorHandler {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleBadFoundResultByIdException(final BadFoundResultByIdException e) {
-        log.info("Response status code 400 Bad Request {}", e.getMessage());
-        return Map.of("validation error", e.getMessage());
+        log.info("Response status code 404 Not Found {}", e.getMessage());
+        return Map.of("logic error", e.getMessage());
     }
 
     @ExceptionHandler
