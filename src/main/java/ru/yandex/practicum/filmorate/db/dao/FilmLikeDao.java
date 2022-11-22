@@ -1,9 +1,6 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
-import org.springframework.stereotype.Component;
+public interface FilmLikeDao {
 
-@Component
-public class FilmLikeDao {
-
-    //обработать дублирование DuplicateKeyException
+    void likeFilm(int filmId, int userId);
 }

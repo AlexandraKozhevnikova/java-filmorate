@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;

@@ -2,16 +2,14 @@ package ru.yandex.practicum.filmorate.web.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequestDto;
-import ru.yandex.practicum.filmorate.web.dto.user.AddUserResponseDto;
-import ru.yandex.practicum.filmorate.web.dto.user.GetUserResponseDto;
 import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequestDto;
-import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserResponseDto;
+import ru.yandex.practicum.filmorate.web.dto.user.UserResponseDto;
 import ru.yandex.practicum.filmorate.model.User;
 
 @Component
 public class UserMapper {
 
-    public User mapToUser(AddUserRequestDto dto) {
+    public static User mapToUser(AddUserRequestDto dto) {
         User user = new User();
         user.setName(dto.getName());
         user.setLogin(dto.getLogin());
@@ -20,7 +18,7 @@ public class UserMapper {
         return user;
     }
 
-    public User mapToUser(UpdateUserRequestDto dto) {
+    public static User mapToUser(UpdateUserRequestDto dto) {
         User user = new User();
         user.setName(dto.getName());
         user.setLogin(dto.getLogin());
@@ -30,28 +28,8 @@ public class UserMapper {
         return user;
     }
 
-    public AddUserResponseDto mapToAddUserResponseDto(User user) {
-        AddUserResponseDto userDto = new AddUserResponseDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setLogin(user.getLogin());
-        userDto.setBirthday(user.getBirthday());
-        return userDto;
-    }
-
-    public UpdateUserResponseDto mapToUpdateUserResponseDto(User user) {
-        UpdateUserResponseDto userDto = new UpdateUserResponseDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setLogin(user.getLogin());
-        userDto.setBirthday(user.getBirthday());
-        return userDto;
-    }
-
-    public GetUserResponseDto mapToGetUserResponseDto(User user) {
-        GetUserResponseDto userDto = new GetUserResponseDto();
+    public static UserResponseDto mapUserToResponseDto(User user) {
+        UserResponseDto userDto = new UserResponseDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());

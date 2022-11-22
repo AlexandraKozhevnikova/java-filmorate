@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -49,8 +48,7 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return Collections.emptyList(); //todo
-        //return userStorage.getAllItems();
+        return userStorage.getAllItems();
     }
 
     public void makeFriend(int firstFriendId, int secondFriendId) {

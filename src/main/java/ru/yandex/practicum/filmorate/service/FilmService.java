@@ -62,9 +62,11 @@ public class FilmService {
         return filmFromDb;
     }
 
-    public void like(int filmId, int userId) {
-        filmStorage.getItemById(filmId);
+    public String like(int filmId, int userId) {
+        getFilmById(filmId);
         userService.getUserById(userId);
+        filmStorage.likeFilm(filmId, userId);
+        return "success";
     }
 
     public void unlike(int filmId, int userId) {

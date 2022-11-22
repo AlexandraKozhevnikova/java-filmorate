@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.exception;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,6 +33,13 @@ public class ErrorHandler {
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("logic error", e.getMessage());
     }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, String> handleDuplicateKeyException(final DuplicateKeyException e) {
+        log.info("Response status code 200 ок {}", e.getMessage());
+        return Map.of("object already exist", e.getMessage());
+    }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.UserDao;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
-import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collections;
@@ -33,8 +32,7 @@ public class DbUserStorage implements UserStorage {
 
     @Override
     public List<User> getAllItems() {
-        return Collections.emptyList(); //todo
-        //return userDao.getAllUsers();
+        return userDao.getAllUsers();
     }
 
     @Override

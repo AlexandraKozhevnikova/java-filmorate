@@ -18,4 +18,6 @@ public interface FilmStorage {
     Optional<Film> getItemById(int id);
 
     List<Integer> getFilmGenresId(int filmId);
+
+    void likeFilm(int filmId, int userId);
 }

@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
-import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -10,7 +9,7 @@ public interface UserDao {
 
     Optional<User> getUserById(int id);
 
-    List<UserDbEntity> getAllUsers();
+    List<User> getAllUsers();
 
     int add(User user);
 

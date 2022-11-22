@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.web.dto.user.UserDbEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.ResultSet;
@@ -24,7 +23,6 @@ public class UserDaoImpl implements UserDao {
     public UserDaoImpl(JdbcTemplate jdbcTemplate) {
         db = jdbcTemplate;
     }
-
 
     @Override
     public int add(User user) {
@@ -71,14 +69,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<UserDbEntity> getAllUsers() {
+    public List<User> getAllUsers() {
         String sql = "SELECT id, email, login, name, birthday FROM user_filmorate";
-        List<UserDbEntity>  userList = db.query(sql, this::mapRowToUserDbEntity);
+        List<User>  userList = db.query(sql, this::mapRowToUser);
         return userList;
     }
 
-    private UserDbEntity mapRowToUserDbEntity(ResultSet rs, int rowNumber) throws SQLException {
-        return UserDbEntity.builder()
+    private User mapRowToUser(ResultSet rs, int rowNumber) throws SQLException {
+        return User.builder()
                 .id(rs.getInt("id"))
                 .email(rs.getString("email"))
                 .login(rs.getString("login"))

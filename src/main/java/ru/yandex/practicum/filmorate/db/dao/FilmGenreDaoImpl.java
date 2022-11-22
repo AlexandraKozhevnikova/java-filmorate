@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class FilmGenreDaoImpl implements FilmGenreDao {
