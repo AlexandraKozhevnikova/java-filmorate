@@ -14,5 +14,7 @@ public interface FilmDao {
     List<Film> getAllFilms();
 
     Optional<Film> getFilmById(int id);
+
+    List<Film> getFilteredFilm(int count, List<Integer> excludeList);
 }
 

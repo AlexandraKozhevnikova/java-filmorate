@@ -3,6 +3,9 @@ package ru.yandex.practicum.filmorate.db.dao;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -18,6 +21,8 @@ import java.util.Optional;
 @Log4j2
 public class FilmDaoImpL implements FilmDao {
     private final JdbcTemplate db;
+
+    private NamedParameterJdbcTemplate namedDb;
 
     public FilmDaoImpL(JdbcTemplate db) {
         this.db = db;
@@ -65,6 +70,27 @@ public class FilmDaoImpL implements FilmDao {
         }
         return Optional.ofNullable(film);
     }
+
+    public List<Film> getFilteredFilm(int count, List<Integer> excludeList) {
+        namedDb = new NamedParameterJdbcTemplate(db);
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource("ids", excludeList);
+        parameters.addValue("count", count);
+
+        String sql = "SELECT id, name, description, release_date, duration, rating_MPA " +
+                "FROM film " +
+                (!excludeList.isEmpty() ? "WHERE id NOT IN (:ids) " : "") +
+                "LIMIT (:count)";
+
+        List<Film> films = namedDb.query(
+                sql,
+                parameters,
+                this::mapRowToFilm
+        );
+
+        return films;
+    }
+
 
     private Film mapRowToFilm(ResultSet resultSet, int rowNum) throws SQLException {
         return Film.builder()

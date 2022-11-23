@@ -79,21 +79,25 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public String  like(@PathVariable("id") int filmId, @PathVariable("userId") int userId) {
-      return  filmService.like(filmId, userId);
+    public String like(@PathVariable("id") int filmId, @PathVariable("userId") int userId) {
+        return filmService.like(filmId, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void unlike(@PathVariable("id") int id, @PathVariable("userId") int userId) {
-        filmService.unlike(id, userId);
+    public String unlike(@PathVariable("id") int id, @PathVariable("userId") int userId) {
+        return filmService.unlike(id, userId);
     }
 
     @GetMapping("/popular")
-    public Set<Film> getTop(
+    public List<FilmResponseDto> getTop(
             @RequestParam(name = "count", defaultValue = "10")
             @Min(value = 1, message = "'count' should be positive")
             Integer threshold
     ) {
-        return filmService.getTopFilms(threshold);
+        List<Film> films = filmService.getTopFilms(threshold);
+        List<FilmResponseDto> response = films.stream()
+                .map(FilmMapper::mapFilmToFilmResponseDto)
+                .collect(Collectors.toList());
+        return response;
     }
 }

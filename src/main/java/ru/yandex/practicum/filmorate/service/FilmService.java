@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class FilmService {
@@ -69,14 +68,19 @@ public class FilmService {
         return "success";
     }
 
-    public void unlike(int filmId, int userId) {
-        filmStorage.getItemById(filmId);
+    public String unlike(int filmId, int userId) {
+        getFilmById(filmId);
+        userService.getUserById(userId);
+        filmStorage.unlikeFilm(filmId, userId);
+        return "success";
 
     }
 
-    public Set<Film> getTopFilms(int threshold) {
-        Set<Film> filmList = null;
-        return filmList; //todo
+    public List<Film> getTopFilms(int threshold) {
+        List<Film> films =  filmStorage.getTopFilms(threshold);
+        films.forEach(film -> film.setGenres(
+                filmStorage.getFilmGenresId(film.getId())));
+        return  films;
     }
 
     public List<Genre> getAllGenres() {

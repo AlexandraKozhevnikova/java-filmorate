@@ -9,8 +9,12 @@ import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Qualifier("dbFilmStorage")
@@ -60,7 +64,36 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void likeFilm(int filmId, int userId){
+    public void likeFilm(int filmId, int userId) {
         filmLikeDao.likeFilm(filmId, userId);
+    }
+
+    @Override
+    public void unlikeFilm(int filmId, int userId) {
+        filmLikeDao.unlikeFilm(filmId, userId);
+    }
+
+    @Override
+    public List<Film> getTopFilms(int threshold) {
+        List<Map<String, Object>> mapLikes = filmLikeDao.getTopLikes(threshold);
+
+        List<Integer> filmLikes = new ArrayList<>();
+
+        for (Map<String, Object> map : mapLikes) {
+            filmLikes.add((Integer) map.get("film_id"));
+        }
+
+        int dif = threshold - filmLikes.size()  ;
+        List<Film> randomFilmsWithoutLike = Collections.emptyList();
+        if (dif > 0) {
+            randomFilmsWithoutLike = filmDao.getFilteredFilm(dif, filmLikes);
+        }
+
+        List<Film> filmWithLike = filmLikes.stream()
+                .map(it -> getItemById(it).orElseThrow())
+                .collect(Collectors.toList());
+
+        filmWithLike.addAll(randomFilmsWithoutLike);
+        return filmWithLike;
     }
 }

@@ -13,7 +13,7 @@ public enum Genre {
     CARTOON("Мультфильм", 3),
     THRILLER("Триллер", 4),
     DOCUMENTARY("Документальный", 5),
-    ACTION_MOVIE("Экшен", 6);
+    ACTION_MOVIE("Боевик", 6);
 
     private final int id;
     private final String name;

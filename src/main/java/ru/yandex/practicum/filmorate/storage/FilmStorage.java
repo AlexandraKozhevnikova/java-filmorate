@@ -20,4 +20,9 @@ public interface FilmStorage {
     List<Integer> getFilmGenresId(int filmId);
 
     void likeFilm(int filmId, int userId);
+
+    void unlikeFilm(int filmId, int userId);
+
+    List<Film> getTopFilms(int threshold);
 }
+
