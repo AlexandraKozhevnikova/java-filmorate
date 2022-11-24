@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS Film (
     CONSTRAINT release_date_age CHECK (release_date > '1895-12-28'),
     duration     INTEGER,
     CONSTRAINT duration_positive CHECK (duration > 0),
-    rating_MPA    INTEGER NOT NULL
+    rating_MPA   INTEGER NOT NULL
 );
 comment on column film.id is 'The film ID';
 comment on column film.name is 'The title of film';
@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS Film_like (
 
 
 CREATE TABLE IF NOT EXISTS Friendship (
-    user_requester_id INTEGER REFERENCES User_filmorate (id),
-    user_responser_id INTEGER REFERENCES User_filmorate (id),
+    user_requester_id INTEGER REFERENCES User_filmorate (id) ON DELETE CASCADE,
+    user_responser_id INTEGER REFERENCES User_filmorate (id) ON DELETE CASCADE,
     status            VARCHAR(10),
     CONSTRAINT users_not_equal CHECK (user_requester_id <> user_responser_id),
     CONSTRAINT friendship_pk PRIMARY KEY (user_requester_id, user_responser_id)

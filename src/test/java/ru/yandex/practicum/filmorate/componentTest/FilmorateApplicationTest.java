@@ -22,21 +22,35 @@ class FilmorateApplicationTest {
 
     @Test
     public void findUserByIdTest() {
-        User user = User.builder()
-                .name("Harry")
-                .login("hp")
-                .email("hp@ya.ru")
-                .birthday(LocalDate.now())
-                .build();
-
-        user.setId(userStorage.add(user));
-
         Optional<User> userOptional = userStorage.getItemById(1);
 
         assertThat(userOptional)
                 .isPresent()
                 .hasValueSatisfying(it ->
-                        assertThat(user).hasFieldOrPropertyWithValue("id", 1)
+                        assertThat(it).hasFieldOrPropertyWithValue("id", 1)
+                ).hasValueSatisfying(it ->
+                        assertThat(it).hasFieldOrPropertyWithValue("name", "harry potter")
+                );
+    }
+
+    @Test
+    public void addUserTest() {
+
+        User user = User.builder()
+                .name("Ron")
+                .login("ron")
+                .email("rw@ya.ru")
+                .birthday(LocalDate.now())
+                .build();
+
+        user.setId(userStorage.add(user));
+
+        Optional<User> userOptional = userStorage.getItemById(user.getId());
+
+        assertThat(userOptional)
+                .isPresent()
+                .hasValueSatisfying(it ->
+                        assertThat(it).hasFieldOrPropertyWithValue("name", "Ron")
                 );
     }
 }
