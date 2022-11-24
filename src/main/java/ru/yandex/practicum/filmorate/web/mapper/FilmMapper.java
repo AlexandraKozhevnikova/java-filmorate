@@ -6,9 +6,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.web.dto.Id;
-import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequestDto;
-import ru.yandex.practicum.filmorate.web.dto.film.FilmResponseDto;
-import ru.yandex.practicum.filmorate.web.dto.film.UpdateFilmRequestDto;
+import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
+import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
+import ru.yandex.practicum.filmorate.web.dto.film.UpdateFilmRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Log4j2
 public class FilmMapper {
-    public static Film mapToFilm(AddFilmRequestDto dto) {
+    public static Film mapToFilm(AddFilmRequest dto) {
         List<Integer> genres = Collections.emptyList();
         if (dto.getGenres() != null) {
             genres = dto.getGenres().stream()
@@ -35,7 +35,7 @@ public class FilmMapper {
         return film;
     }
 
-    public static Film mapToFilm(UpdateFilmRequestDto dto) {
+    public static Film mapToFilm(UpdateFilmRequest dto) {
         List<Integer> genres = Collections.emptyList();
         if (dto.getGenres() != null) {
             genres = dto.getGenres().stream()
@@ -55,7 +55,7 @@ public class FilmMapper {
         return film;
     }
 
-    public static FilmResponseDto mapFilmToFilmResponseDto(Film film) {
+    public static FilmResponse mapFilmToFilmResponse(Film film) {
         List<Genre> genres = Collections.emptyList();
         if (film.getGenres() != null && !film.getGenres().isEmpty()) { //todo   подебажить на пустой и нал
             genres = film.getGenres().stream()
@@ -68,7 +68,7 @@ public class FilmMapper {
                 .orElseThrow(() -> new BadFoundResultByIdException(
                         "RatingMPA with id = " + film.getRatingMpaId() + " does not exist"));
 
-        return FilmResponseDto.builder()
+        return FilmResponse.builder()
                 .id(film.getId())
                 .name(film.getName())
                 .description(film.getDescription())

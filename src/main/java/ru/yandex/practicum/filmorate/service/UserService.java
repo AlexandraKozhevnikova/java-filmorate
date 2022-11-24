@@ -6,11 +6,9 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -52,40 +50,40 @@ public class UserService {
     }
 
     public void makeFriend(int firstFriendId, int secondFriendId) {
-       User requester = getUserById(firstFriendId);
-       User responser = getUserById(secondFriendId);
-
-
-
-
-
-
-//        Set<Integer> friendsListFirst = firstFriend.getFriends();
-//        friendsListFirst.add(secondFriend.getId());
-//        firstFriend.setFriends(friendsListFirst);
-//
-//        Set<Integer> friendsListSecond = secondFriend.getFriends();
-//        friendsListSecond.add(firstFriend.getId());
-//        secondFriend.setFriends(friendsListSecond);
+        getUserById(firstFriendId);
+        getUserById(secondFriendId);
+        userStorage.addFriend(firstFriendId, secondFriendId);
     }
 
-    public void deleteFriend(User firstFriend, User secondFriend) {
-        Set<Integer> friendsListFirst = firstFriend.getFriends();
-        friendsListFirst.remove(secondFriend.getId());
-        firstFriend.setFriends(friendsListFirst);
-
-        Set<Integer> friendsListSecond = secondFriend.getFriends();
-        friendsListSecond.remove(firstFriend.getId());
-        secondFriend.setFriends(friendsListFirst);
+    public void deleteFriend(int firstFriendId, int secondFriendId) {
+        getUserById(firstFriendId);
+        getUserById(secondFriendId);
+        userStorage.deleteFriend(firstFriendId, secondFriendId);
     }
 
-    public Set<Integer> getCommonFriend(User firstFriend, User secondFriend) {
-        Set<Integer> firstUserFriends = firstFriend.getFriends();
-        Set<Integer> secondUserFriends = secondFriend.getFriends();
-        Set<Integer> result = firstUserFriends
-                .stream()
-                .filter(secondUserFriends::contains)
-                .collect(Collectors.toSet());
-        return result;
+    public List<User> getUserFriends(int userId) {
+        getUserById(userId);
+        List<Integer> friendsId = userStorage.getUserFriends(userId);
+        return friendsId.stream()
+                .map(this::getUserById)
+                .collect(Collectors.toList());
+    }
+
+
+    public List<User> getCommonFriend(int firstFriendId, int secondFriendId) {
+        getUserById(firstFriendId);
+        List<Integer> friendsIdFirst = userStorage.getUserFriends(firstFriendId);
+
+        getUserById(secondFriendId);
+        List<Integer> friendsIdSecond = userStorage.getUserFriends(secondFriendId);
+
+        List<Integer> commonFriend = friendsIdFirst.stream()
+                .filter(friendsIdSecond::contains)
+                .collect(Collectors.toList());
+
+        return commonFriend.stream()
+                .map(this::getUserById)
+                .collect(Collectors.toList());
     }
 }
+

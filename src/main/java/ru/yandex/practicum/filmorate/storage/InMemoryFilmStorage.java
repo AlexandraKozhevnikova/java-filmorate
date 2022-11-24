@@ -1,34 +1,45 @@
-//package ru.yandex.practicum.filmorate.storage;
-//
-//import org.springframework.beans.factory.annotation.Qualifier;
-//import org.springframework.stereotype.Component;
-//import ru.yandex.practicum.filmorate.model.Film;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//import java.util.Set;
-//
-//@Component
-//@Qualifier("inMemoryFilmStorage")
-//public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmStorage {
-//
-//    private final Map<Integer, Set<Integer>> likesStorage = new HashMap<>();
-//
-////    public Set<Film> getTopFilms(int threshold) {
-////        Set<Film> filmList = likesStorage.entrySet().stream()
-////                .sorted(Comparator.comparingInt(it -> (-1) * it.getValue().size()))
-////                .limit(threshold)
-////                .map(Map.Entry::getKey)
-////                .map(filmStorage::getItemById)
-////                .map(Optional::get)// todo   подумать  так как поменялся на оптионал
-////                .collect(Collectors.toSet());
-////
-////        if (filmList.size() < threshold) {
-////            filmList.addAll(filmStorage.getAllItems());
-////            filmList = filmList.stream()
-////                    .limit(threshold)
-////                    .collect(Collectors.toSet());
-////        }
-////        return filmList;
-////    }
-//}
+package ru.yandex.practicum.filmorate.storage;
+
+import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Film;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+@Component
+@Qualifier("inMemoryFilmStorage")
+public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmStorage {
+
+    private final Map<Integer, Set<Integer>> likesStorage = new HashMap<>();
+
+    @Override
+    public void upsertGenresForFilm(int filmId, List<Integer> genres) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
+    public List<Integer> getFilmGenresId(int filmId) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
+    public void likeFilm(int filmId, int userId) {
+        throw new NotImplementedException("метод реализован только для БД");
+
+    }
+
+    @Override
+    public void unlikeFilm(int filmId, int userId) {
+        throw new NotImplementedException("метод реализован только для БД");
+
+    }
+
+    @Override
+    public List<Film> getTopFilms(int threshold) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+}

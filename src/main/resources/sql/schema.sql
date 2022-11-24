@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Film_like (
 CREATE TABLE IF NOT EXISTS Friendship (
     user_requester_id INTEGER REFERENCES User_filmorate (id),
     user_responser_id INTEGER REFERENCES User_filmorate (id),
-    status            VARCHAR(10) NOT NULL,
+    status            VARCHAR(10),
     CONSTRAINT users_not_equal CHECK (user_requester_id <> user_responser_id),
     CONSTRAINT friendship_pk PRIMARY KEY (user_requester_id, user_responser_id)
 );

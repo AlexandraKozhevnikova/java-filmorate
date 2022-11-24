@@ -2,8 +2,7 @@ package ru.yandex.practicum.filmorate;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequestDto;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -31,7 +30,7 @@ public class CustomValidationFilmTest {
     @Test
     @DisplayName("Дата релиза равно дата ранее даты появления кино. Ошибка валидации")
     public void releaseDateIsEqualBirthdayCinema() {
-        AddFilmRequestDto filmDto = new AddFilmRequestDto();
+        AddFilmRequest filmDto = new AddFilmRequest();
         filmDto.setName("name");
         filmDto.setDescription("desc");
         filmDto.setReleaseDate(LocalDate.of(1895, 12, 28));
@@ -39,7 +38,7 @@ public class CustomValidationFilmTest {
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        Set<ConstraintViolation<AddFilmRequestDto>> violations = validator.validate(filmDto);
+        Set<ConstraintViolation<AddFilmRequest>> violations = validator.validate(filmDto);
         assertEquals(1, violations.size());
         assertEquals("error release date", violations.stream().findFirst().get().getMessage());
     }
@@ -47,7 +46,7 @@ public class CustomValidationFilmTest {
     @Test
     @DisplayName("Дата релиза -  дата ранее даты появления кино. Ошибка валидации")
     public void releaseDateIsAfterBirthdayCinema() {
-        AddFilmRequestDto filmDto = new AddFilmRequestDto();
+        AddFilmRequest filmDto = new AddFilmRequest();
         filmDto.setName("name");
         filmDto.setDescription("desc");
         filmDto.setReleaseDate(LocalDate.of(1895, 12, 27));
@@ -55,7 +54,7 @@ public class CustomValidationFilmTest {
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        Set<ConstraintViolation<AddFilmRequestDto>> violations = validator.validate(filmDto);
+        Set<ConstraintViolation<AddFilmRequest>> violations = validator.validate(filmDto);
         assertEquals(1, violations.size());
         assertEquals("error release date", violations.stream().findFirst().get().getMessage());
     }

@@ -1,12 +1,13 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.List;
 
 @Component
-public class FriendshipDaoImpl {
+public class FriendshipDaoImpl implements FriendshipDao {
 
     private final JdbcTemplate db;
 
@@ -14,18 +15,25 @@ public class FriendshipDaoImpl {
         db = jdbcTemplate;
     }
 
-    public void addFriendship(int requestId, int responseId) {
-        String sql = "SELECT * FROM friendship WHERE user_requester_id = ? AND user_responser_id = ?";
+    @Override
+    public void addFriend(int requestId, int responseId) throws DuplicateKeyException {
+        String sql = "INSERT INTO friendship (user_requester_id, user_responser_id) VALUES (?,?)";
+        db.update(sql, requestId, responseId);
+    }
 
-        Map<String, Object> map = db.queryForMap(sql, requestId, responseId);
-        map.putAll( db.queryForMap(sql,responseId, requestId));
+    @Override
+    public void deleteFriend(int firstFriendId, int secondFriendId) {
+        String sql = "DELETE FROM friendship WHERE user_requester_id =? AND  user_responser_id = ?";
+        db.update(sql, firstFriendId, secondFriendId);
+    }
 
-        if(map.isEmpty()){
-         // вставить дружбу с вейтинг
-        } else {
-
-        }
-//обработать дублирование DuplicateKeyException
+    @Override
+    public List<Integer> getUserFriends(int userId) {
+        String sql = "SELECT user_responser_id FROM friendship WHERE user_requester_id = ?";
+        return db.query(sql,
+                (rs, rowNum) ->
+                        rs.getInt("user_responser_id"),
+                userId);
     }
 
 }

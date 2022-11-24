@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.web.dto.Id;
 import ru.yandex.practicum.filmorate.web.validation.ReleaseDate;
 
@@ -20,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class AddFilmRequestDto {
+public class AddFilmRequest {
     @NotBlank(message = "'name' should non be empty")
     private String name;
     @Size(max = 200, message = "'description' should have length no more than 200")

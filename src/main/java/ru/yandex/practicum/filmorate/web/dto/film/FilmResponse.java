@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
-public class FilmResponseDto {
+public class FilmResponse {
     private int id;
     private String name;
     private String description;
