@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class InMemoryStorage<T extends IdControl> {
-    private final HashSet<T> itemList = new HashSet<>(); //todo лучше хеш мапа по ид
+    private final HashSet<T> itemList = new HashSet<>();
     private int currentItemId = 1;
 
     public int add(T item) {

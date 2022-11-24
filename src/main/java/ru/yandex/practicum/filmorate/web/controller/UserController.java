@@ -102,7 +102,7 @@ public class UserController {
 
         return friends.stream()
                 .map(UserMapper::mapUserToResponse)
-                .collect(Collectors.toList()); //todo недотестировано
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")

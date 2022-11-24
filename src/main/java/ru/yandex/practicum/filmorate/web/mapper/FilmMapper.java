@@ -57,7 +57,7 @@ public class FilmMapper {
 
     public static FilmResponse mapFilmToFilmResponse(Film film) {
         List<Genre> genres = Collections.emptyList();
-        if (film.getGenres() != null && !film.getGenres().isEmpty()) { //todo   подебажить на пустой и нал
+        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             genres = film.getGenres().stream()
                     .map(id -> Genre.getGenreById(id)
                             .orElseThrow(() -> new BadFoundResultByIdException("Genre with id = " + id + "does not exist")))
