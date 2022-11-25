@@ -3,45 +3,32 @@ package ru.yandex.practicum.filmorate.storage;
 import ru.yandex.practicum.filmorate.model.IdControl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 import java.util.Optional;
 
 public class InMemoryStorage<T extends IdControl> {
-    private final HashSet<T> itemList = new HashSet<>();
+    private final Map<Integer, T> itemList = new HashMap<>();
     private int currentItemId = 1;
 
     public int add(T item) {
         int id = getIdForNewItem();
         item.setId(id);
-        itemList.add(item);
+        itemList.put(id, item);
         return item.getId();
     }
 
     public void update(T newItem) {
-        Optional<T> oldItem = itemList.stream()
-                .filter(item -> item.getId() == newItem.getId())
-                .findFirst();
-
-        if (oldItem.isPresent()) {
-            itemList.remove(oldItem.get());
-        } else {
-            throw new NoSuchElementException("Не найден элемент с id " + newItem.getId());
-        }
-
-        itemList.add(newItem);
+        itemList.put(newItem.getId(), newItem);
     }
 
     public List<T> getAllItems() {
-        return new ArrayList<>(itemList);
+        return new ArrayList<>(itemList.values());
     }
 
     public Optional<T> getItemById(int id) {
-        Optional<T> targetItem = itemList.stream()
-                .filter(it -> it.getId() == id)
-                .findFirst();
-        return targetItem;
+        return Optional.ofNullable(itemList.get(id));
     }
 
     private int getIdForNewItem() {

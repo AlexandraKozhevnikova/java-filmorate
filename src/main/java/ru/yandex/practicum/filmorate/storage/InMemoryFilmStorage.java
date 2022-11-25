@@ -5,16 +5,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Component
 @Qualifier("inMemoryFilmStorage")
 public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmStorage {
-
-    private final Map<Integer, Set<Integer>> likesStorage = new HashMap<>();
 
     @Override
     public void upsertGenresForFilm(int filmId, List<Integer> genres) {
@@ -29,13 +24,11 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     @Override
     public void likeFilm(int filmId, int userId) {
         throw new NotImplementedException("метод реализован только для БД");
-
     }
 
     @Override
     public void unlikeFilm(int filmId, int userId) {
         throw new NotImplementedException("метод реализован только для БД");
-
     }
 
     @Override
