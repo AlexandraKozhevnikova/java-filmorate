@@ -1,14 +1,11 @@
 package ru.yandex.practicum.filmorate.web.mapper;
 
-import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UserResponse;
-import ru.yandex.practicum.filmorate.model.User;
 
-@Component
 public class UserMapper {
-
     public static User mapToUser(AddUserRequest dto) {
         User user = new User();
         user.setName(dto.getName());

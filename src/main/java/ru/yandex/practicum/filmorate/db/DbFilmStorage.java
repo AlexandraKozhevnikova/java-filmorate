@@ -33,8 +33,7 @@ public class DbFilmStorage implements FilmStorage {
 
     @Override
     public int add(Film film) {
-        int id = filmDao.insertFilm(film);
-        return id;
+        return filmDao.insertFilm(film);
     }
 
     @Override
