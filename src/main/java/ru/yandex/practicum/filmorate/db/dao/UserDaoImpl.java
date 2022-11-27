@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Log4j2
+@Slf4j
 @Component
 public class UserDaoImpl implements UserDao {
 

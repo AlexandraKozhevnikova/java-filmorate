@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.web.mapper;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log4j2
+@Slf4j
 public class FilmMapper {
     public static Film mapToFilm(AddFilmRequest dto) {
         List<Integer> genres = Collections.emptyList();

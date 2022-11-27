@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-@Log4j2
+@Slf4j
 public class FilmDaoImpL implements FilmDao {
     private final JdbcTemplate db;
 

@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Validated
-@Log4j2
+@Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {

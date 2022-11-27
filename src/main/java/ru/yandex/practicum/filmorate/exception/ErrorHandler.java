@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.exception;
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@Log4j2
+@Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
 
