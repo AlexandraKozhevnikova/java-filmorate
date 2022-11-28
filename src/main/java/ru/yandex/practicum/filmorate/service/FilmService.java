@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class FilmService {
 
     private final FilmStorage filmStorage;
@@ -44,12 +46,21 @@ public class FilmService {
         return filmFromDbWithoutGenres;
     }
 
-    public Film update(Film film) {
-        filmStorage.update(film);
-        Film filmFromDb = getFilmById(film.getId());
-        List<Integer> genres = filmStorage.getFilmGenresId(filmFromDb.getId());
-        filmFromDb.setGenres(genres);
-        return filmFromDb;
+    public Film update(Film newFilm) {
+        Film newFilmFromDb;
+        Optional<Film> oldFilm = filmStorage.getItemById(newFilm.getId());
+
+        if (oldFilm.isPresent()) {
+            log.info("Film with id " + newFilm.getId() + " has found");
+            filmStorage.update(newFilm);
+            newFilmFromDb = getFilmById(newFilm.getId());
+            List<Integer> genres = filmStorage.getFilmGenresId(newFilmFromDb.getId());
+            newFilmFromDb.setGenres(genres);
+        } else {
+            log.warn("Film can not be updated cause user with id = " + newFilm.getId() + " not found");
+            throw new NoSuchElementException("Film can not be updated cause user with id = " + newFilm.getId() + " not found");
+        }
+        return newFilmFromDb;
     }
 
     public Film getFilmById(int id) {
@@ -77,10 +88,10 @@ public class FilmService {
     }
 
     public List<Film> getTopFilms(int threshold) {
-        List<Film> films =  filmStorage.getTopFilms(threshold);
+        List<Film> films = filmStorage.getTopFilms(threshold);
         films.forEach(film -> film.setGenres(
                 filmStorage.getFilmGenresId(film.getId())));
-        return  films;
+        return films;
     }
 
     public List<Genre> getAllGenres() {
