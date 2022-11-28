@@ -1,29 +1,29 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import ru.yandex.practicum.filmorate.helper.ReleaseDate;
+import ru.yandex.practicum.filmorate.web.dto.Id;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class Film implements IdControl {
     private int id;
     private String name;
     private String description;
     private LocalDate releaseDate;
     private int duration;
+    private int ratingMpaId;
+    private List<Integer> genres;
 
-    public Film(){
-    }
-
-    public Film(String name, String description, LocalDate releaseDate, int duration) {
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
+    public void setGenres(List<Integer> genres) {
+        this.genres = Objects.requireNonNullElse(genres, Collections.emptyList());
     }
 }

@@ -1,51 +1,34 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.IdControl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Map;
 import java.util.Optional;
 
 public class InMemoryStorage<T extends IdControl> {
-    private final HashSet<T> itemList = new HashSet<>();
+    private final Map<Integer, T> itemList = new HashMap<>();
     private int currentItemId = 1;
 
-    public T add(T item) {
-        item.setId(getIdForNewItem());
-        itemList.add(item);
-        return item;
+    public int add(T item) {
+        int id = getIdForNewItem();
+        item.setId(id);
+        itemList.put(id, item);
+        return item.getId();
     }
 
-    public T update(T newItem) {
-        Optional<T> oldItem = itemList.stream()
-                .filter(item -> item.getId() == newItem.getId())
-                .findFirst();
-
-        if (oldItem.isPresent()) {
-            itemList.remove(oldItem.get());
-        } else {
-            throw new NoSuchElementException("Не найден элемент с id " + newItem.getId());
-        }
-
-        itemList.add(newItem);
-
-        return itemList.stream()
-                .filter(item -> item.getId() == newItem.getId())
-                .findFirst().get();
+    public void update(T newItem) {
+        itemList.put(newItem.getId(), newItem);
     }
 
     public List<T> getAllItems() {
-        return new ArrayList<>(itemList);
+        return new ArrayList<>(itemList.values());
     }
 
-    public T getItemById(int id) {
-        Optional<T> targetItem = itemList.stream()
-                .filter(it -> it.getId() == id)
-                .findFirst();
-        return targetItem.orElseThrow(() -> new NoSuchElementException("element with id = " + id + " not found"));
+    public Optional<T> getItemById(int id) {
+        return Optional.ofNullable(itemList.get(id));
     }
 
     private int getIdForNewItem() {

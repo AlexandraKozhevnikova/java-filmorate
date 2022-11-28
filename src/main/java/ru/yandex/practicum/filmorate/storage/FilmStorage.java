@@ -3,14 +3,26 @@ package ru.yandex.practicum.filmorate.storage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FilmStorage {
 
-    Film add(Film item);
+    int add(Film film);
 
-    Film update(Film newItem);
+    void upsertGenresForFilm(int filmId, List<Integer> genres);
+
+    void update(Film film);
 
     List<Film> getAllItems();
 
-    Film getItemById(int id);
+    Optional<Film> getItemById(int id);
+
+    List<Integer> getFilmGenresId(int filmId);
+
+    void likeFilm(int filmId, int userId);
+
+    void unlikeFilm(int filmId, int userId);
+
+    List<Film> getTopFilms(int threshold);
 }
+
