@@ -18,7 +18,7 @@ public class MpaController {
         this.filmService = filmService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<RatingMpa> getMpa() {
         List<RatingMpa> list = filmService.getAllMpa();
         return list;

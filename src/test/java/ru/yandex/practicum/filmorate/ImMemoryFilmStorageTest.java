@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import java.util.Optional;
 
 public class ImMemoryFilmStorageTest {
-    FilmStorage storage = new InMemoryFilmStorage();
+    private FilmStorage storage = new InMemoryFilmStorage();
 
 
     @Test

@@ -82,7 +82,7 @@ public class DbFilmStorage implements FilmStorage {
             filmLikes.add((Integer) map.get("film_id"));
         }
 
-        int dif = threshold - filmLikes.size()  ;
+        int dif = threshold - filmLikes.size();
         List<Film> randomFilmsWithoutLike = Collections.emptyList();
         if (dif > 0) {
             randomFilmsWithoutLike = filmDao.getFilteredFilm(dif, filmLikes);

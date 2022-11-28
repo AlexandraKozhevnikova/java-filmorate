@@ -13,23 +13,23 @@ import java.util.Map;
 @Component
 public class FilmLikeDaoImpl implements FilmLikeDao {
 
-    private final JdbcTemplate db;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public FilmLikeDaoImpl(JdbcTemplate jdbcTemplate) {
-        db = jdbcTemplate;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public void likeFilm(int filmId, int userId) throws DuplicateKeyException {
         String sql = "INSERT INTO film_like (film_id, user_id) VALUES (?,?)";
-        db.update(sql, filmId, userId);
+        jdbcTemplate.update(sql, filmId, userId);
     }
 
     @Override
     public void unlikeFilm(int filmId, int userId) {
         String sql = "DELETE FROM film_like WHERE film_id = ? AND user_id = ?";
-        db.update(sql, filmId, userId);
+        jdbcTemplate.update(sql, filmId, userId);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
                 "ORDER by count_likes desc " +
                 "LIMIT ?";
 
-        return db.queryForList(sql, threshold);
+        return jdbcTemplate.queryForList(sql, threshold);
     }
 
 

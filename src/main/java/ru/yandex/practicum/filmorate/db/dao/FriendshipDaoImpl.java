@@ -9,28 +9,28 @@ import java.util.List;
 @Component
 public class FriendshipDaoImpl implements FriendshipDao {
 
-    private final JdbcTemplate db;
+    private final JdbcTemplate jdbcTemplate;
 
     public FriendshipDaoImpl(JdbcTemplate jdbcTemplate) {
-        db = jdbcTemplate;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public void addFriend(int requestId, int responseId) throws DuplicateKeyException {
         String sql = "INSERT INTO friendship (user_requester_id, user_responser_id) VALUES (?,?)";
-        db.update(sql, requestId, responseId);
+        jdbcTemplate.update(sql, requestId, responseId);
     }
 
     @Override
     public void deleteFriend(int firstFriendId, int secondFriendId) {
         String sql = "DELETE FROM friendship WHERE user_requester_id =? AND  user_responser_id = ?";
-        db.update(sql, firstFriendId, secondFriendId);
+        jdbcTemplate.update(sql, firstFriendId, secondFriendId);
     }
 
     @Override
     public List<Integer> getUserFriends(int userId) {
         String sql = "SELECT user_responser_id FROM friendship WHERE user_requester_id = ?";
-        return db.query(sql,
+        return jdbcTemplate.query(sql,
                 (rs, rowNum) ->
                         rs.getInt("user_responser_id"),
                 userId);

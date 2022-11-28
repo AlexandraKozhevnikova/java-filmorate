@@ -12,8 +12,8 @@ import java.util.NoSuchElementException;
 
 public class UserServiceTest {
 
-    UserStorage storage = new InMemoryUserStorage();
-    UserService service = new UserService(storage);
+    private UserStorage storage = new InMemoryUserStorage();
+    private UserService service = new UserService(storage);
 
     @Test
     public void addUserTest() {
