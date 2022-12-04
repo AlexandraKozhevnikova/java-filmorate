@@ -34,7 +34,9 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
             );
             while (filmsRs.next()) {
                 int foundId = filmsRs.getInt("film_id");
-                if (!usersLikedFilmsIds.contains(foundId)) filmIdsToRecommend.add(foundId);
+                if (!usersLikedFilmsIds.contains(foundId)) {
+                    filmIdsToRecommend.add(foundId);
+                }
             }
         }
         return List.copyOf(filmIdsToRecommend);
@@ -66,7 +68,9 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
         while (maxCommonUserIdsRs.next()) {
             maxCommonUserIds.add(maxCommonUserIdsRs.getInt("USER_ID"));
         }
-        if (maxCommonUserIds.isEmpty()) return Collections.emptyList();
+        if (maxCommonUserIds.isEmpty()) {
+            return Collections.emptyList();
+        }
         return maxCommonUserIds;
     }
 }

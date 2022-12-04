@@ -120,8 +120,8 @@ public class UserController {
 
     @GetMapping("/{id}/recommendations")
     public List<FilmResponse> getRecommendations(@PathVariable("id") int id) {
-        List<Film> common = service.getFilmRecommendations(id);
-        return common.stream()
+        List<Film> recommendations = service.getFilmRecommendations(id);
+        return recommendations.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
     }
