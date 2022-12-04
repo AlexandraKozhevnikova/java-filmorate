@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.FriendshipDao;
 import ru.yandex.practicum.filmorate.db.dao.UserDao;
+import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -17,11 +19,13 @@ public class DbUserStorage implements UserStorage {
 
     private final UserDao userDao;
     private final FriendshipDao friendshipDao;
+    private final RecommendationsDao recommendationsDao;
 
     @Autowired
-    public DbUserStorage(UserDao userDao, FriendshipDao friendshipDao) {
+    public DbUserStorage(UserDao userDao, FriendshipDao friendshipDao, RecommendationsDao recommendationsDao) {
         this.userDao = userDao;
         this.friendshipDao = friendshipDao;
+        this.recommendationsDao = recommendationsDao;
     }
 
     @Override
@@ -58,5 +62,10 @@ public class DbUserStorage implements UserStorage {
     @Override
     public List<Integer> getUserFriends(int userId) {
          return friendshipDao.getUserFriends(userId);
+    }
+
+    @Override
+    public List<Film> getRecommendations(int userId) {
+        return recommendationsDao.getRecommendations(userId);
     }
 }
