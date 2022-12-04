@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.FriendshipDao;
 import ru.yandex.practicum.filmorate.db.dao.UserDao;
 import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -68,7 +67,7 @@ public class DbUserStorage implements UserStorage {
     }
 
     @Override
-    public List<Film> getRecommendations(int userId) {
+    public List<Integer> getRecommendations(int userId) {
         return recommendationsDao.getRecommendations(userId);
     }
 }

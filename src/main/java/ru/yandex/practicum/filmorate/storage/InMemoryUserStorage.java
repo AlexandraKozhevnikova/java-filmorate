@@ -26,7 +26,7 @@ public class InMemoryUserStorage extends InMemoryStorage<User> implements UserSt
     }
 
     @Override
-    public List<Film> getRecommendations(int userId) {
+    public List<Integer> getRecommendations(int userId) {
         throw new NotImplementedException("метод реализован только для БД");
     }
 }
