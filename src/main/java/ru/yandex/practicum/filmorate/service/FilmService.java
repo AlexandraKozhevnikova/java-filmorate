@@ -87,10 +87,13 @@ public class FilmService {
 
     }
 
-    public List<Film> getTopFilms(int threshold) {
-        List<Film> films = filmStorage.getTopFilms(threshold);
+    public List<Film> getTopFilms(int threshold, Integer genreId, String year) {
+        if (genreId != null) {getGenreById(genreId);}
+
+        List<Film> films = filmStorage.getTopFilms(threshold, genreId, year);
         films.forEach(film -> film.setGenres(
                 filmStorage.getFilmGenresId(film.getId())));
+        // todo добавить добивку режиссерами
         return films;
     }
 

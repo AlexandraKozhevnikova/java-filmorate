@@ -73,8 +73,9 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getTopFilms(int threshold) {
-        List<Map<String, Object>> mapLikes = filmLikeDao.getTopLikes(threshold);
+    public List<Film> getTopFilms(int threshold, Integer genreId, String year) {
+
+        List<Map<String, Object>> mapLikes = filmLikeDao.getTopLikes(threshold, genreId, year);
 
         List<Integer> filmLikes = new ArrayList<>();
 
@@ -85,7 +86,7 @@ public class DbFilmStorage implements FilmStorage {
         int dif = threshold - filmLikes.size();
         List<Film> randomFilmsWithoutLike = Collections.emptyList();
         if (dif > 0) {
-            randomFilmsWithoutLike = filmDao.getFilteredFilm(dif, filmLikes);
+            randomFilmsWithoutLike = filmDao.getFilteredFilm(dif, filmLikes, genreId, year);
         }
 
         List<Film> filmWithLike = filmLikes.stream()

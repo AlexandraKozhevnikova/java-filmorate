@@ -23,6 +23,6 @@ public interface FilmStorage {
 
     void unlikeFilm(int filmId, int userId);
 
-    List<Film> getTopFilms(int threshold);
+    List<Film> getTopFilms(int threshold, Integer genreId, String year);
 }
 
