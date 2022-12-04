@@ -14,9 +14,9 @@ import java.util.NoSuchElementException;
 
 public class UserServiceTest {
 
-    private final UserStorage uStorage = new InMemoryUserStorage();
-    private final FilmStorage fStorage = new InMemoryFilmStorage();
-    private final UserService service = new UserService(fStorage, uStorage);
+    private final UserStorage userStorage = new InMemoryUserStorage();
+    private final FilmStorage filmStorage = new InMemoryFilmStorage();
+    private final UserService userService = new UserService(filmStorage, userStorage);
 
     @Test
     public void addUserTest() {
@@ -26,7 +26,7 @@ public class UserServiceTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        user = service.add(user);
+        user = userService.add(user);
         Assertions.assertEquals(1, user.getId());
     }
 
@@ -41,10 +41,10 @@ public class UserServiceTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        service.update(user);
+        userService.update(user);
         Assertions.assertEquals(
                 "PIN",
-                uStorage.getItemById(1).get().getName());
+                userStorage.getItemById(1).getName());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class UserServiceTest {
 
         Assertions.assertThrows(
                 NoSuchElementException.class,
-                () -> service.update(user)
+                () -> userService.update(user)
         );
     }
 
@@ -66,14 +66,14 @@ public class UserServiceTest {
     public void getNotExistUserTest() {
         Assertions.assertThrows(
                 NoSuchElementException.class,
-                () -> service.getUserById(123)
+                () -> userService.getUserById(123)
         );
     }
 
     @Test
     public void getExistUserTest() {
         dataPreparation();
-        User user = service.getUserById(1);
+        User user = userService.getUserById(1);
         Assertions.assertEquals("pinki@ya.ru", user.getEmail());
     }
 
@@ -83,7 +83,7 @@ public class UserServiceTest {
         dataPreparation();
         dataPreparation();
 
-        Assertions.assertEquals(3, uStorage.getAllItems().size());
+        Assertions.assertEquals(3, userStorage.getAllItems().size());
     }
 
     private void dataPreparation() {
@@ -93,6 +93,6 @@ public class UserServiceTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        service.add(user);
+        userService.add(user);
     }
 }

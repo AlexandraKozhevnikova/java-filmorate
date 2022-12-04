@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,22 +72,13 @@ public class RecommendationsTest {
     }
     
     @BeforeEach
-    void getReady() {
+    void init() {
         filmStorage.add(film1);
         filmStorage.add(film2);
         filmStorage.add(film3);
         userStorage.add(user1);
         userStorage.add(user2);
         userStorage.add(user3);
-    }
-    
-    @AfterEach
-    void reset() {
-        /*
-        jdbcTemplate.update("DELETE FROM film;");
-        jdbcTemplate.update("DELETE FROM user_filmorate;");
-
-         */
     }
     
     @Test

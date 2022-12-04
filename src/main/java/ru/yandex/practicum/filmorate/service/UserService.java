@@ -86,8 +86,7 @@ public class UserService {
         getUserById(user_id);
         List<Film> films = new ArrayList<>();
         for (Integer id : userStorage.getRecommendations(user_id)) {
-            Optional<Film> film = filmStorage.getItemById(id);
-            film.ifPresent(films::add);
+            films.add(filmStorage.getItemById(id));
         }
         return films;
     }
