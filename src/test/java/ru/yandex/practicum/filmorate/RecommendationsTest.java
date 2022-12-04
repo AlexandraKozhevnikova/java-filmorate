@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -60,12 +61,14 @@ public class RecommendationsTest {
     public final JdbcTemplate jdbcTemplate;
     public final FilmStorage filmStorage;
     public final UserStorage userStorage;
+    public final UserService userService;
 
     @Autowired
-    public RecommendationsTest(JdbcTemplate jdbcTemplate, @Qualifier("dbFilmStorage") FilmStorage filmStorage,  @Qualifier("dbUserStorage") UserStorage userStorage) {
+    public RecommendationsTest(JdbcTemplate jdbcTemplate, @Qualifier("dbFilmStorage") FilmStorage filmStorage, @Qualifier("dbUserStorage") UserStorage userStorage, UserService userService) {
         this.jdbcTemplate = jdbcTemplate;
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
+        this.userService = userService;
     }
     
     @BeforeEach
@@ -93,11 +96,11 @@ public class RecommendationsTest {
         filmStorage.likeFilm(1,2);
 
         // ALL LIKE ONE FILM
-        assertEquals(0, userStorage.getRecommendations(1).size());
+        assertEquals(0, userService.getFilmRecommendations(1).size());
 
         // ONE RECOMMENDED
         filmStorage.likeFilm(2,2);
-        assertEquals(1, userStorage.getRecommendations(1).size());
+        assertEquals(1, userService.getFilmRecommendations(1).size());
 
         // ADD MORE LIKES AND SHOW FILM FROM OTHER USER'S RECOMMENDATION
         filmStorage.likeFilm(2,1);
@@ -105,12 +108,12 @@ public class RecommendationsTest {
         filmStorage.likeFilm(2,3);
         filmStorage.likeFilm(3,3);
 
-        assertEquals(1, userStorage.getRecommendations(1).size());
-        assertEquals("test3", userStorage.getRecommendations(1).get(0).getName());
+        assertEquals(1, userService.getFilmRecommendations(1).size());
+        assertEquals("test3", userService.getFilmRecommendations(1).get(0).getName());
 
         // NO LIKES AND OVERLAPS
         filmStorage.unlikeFilm(1,1);
         filmStorage.unlikeFilm(2,1);
-        assertEquals(0, userStorage.getRecommendations(1).size());
+        assertEquals(0, userService.getFilmRecommendations(1).size());
     }
 }

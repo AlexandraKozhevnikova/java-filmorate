@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -12,8 +14,9 @@ import java.util.NoSuchElementException;
 
 public class UserServiceTest {
 
-    private UserStorage storage = new InMemoryUserStorage();
-    private UserService service = new UserService(storage);
+    private final UserStorage uStorage = new InMemoryUserStorage();
+    private final FilmStorage fStorage = new InMemoryFilmStorage();
+    private final UserService service = new UserService(fStorage, uStorage);
 
     @Test
     public void addUserTest() {
@@ -41,7 +44,7 @@ public class UserServiceTest {
         service.update(user);
         Assertions.assertEquals(
                 "PIN",
-                storage.getItemById(1).get().getName());
+                uStorage.getItemById(1).get().getName());
     }
 
     @Test
@@ -80,7 +83,7 @@ public class UserServiceTest {
         dataPreparation();
         dataPreparation();
 
-        Assertions.assertEquals(3, storage.getAllItems().size());
+        Assertions.assertEquals(3, uStorage.getAllItems().size());
     }
 
     private void dataPreparation() {
