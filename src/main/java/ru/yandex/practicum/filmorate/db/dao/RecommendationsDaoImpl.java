@@ -20,7 +20,7 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
 
 
     @Autowired
-    public RecommendationsDaoImpl(JdbcTemplate jdbcTemplate, @Qualifier("dbFilmStorage")FilmStorage filmStorage) {
+    public RecommendationsDaoImpl(JdbcTemplate jdbcTemplate, @Qualifier("dbFilmStorage") FilmStorage filmStorage) {
         this.jdbcTemplate = jdbcTemplate;
         this.filmStorage = filmStorage;
     }
@@ -28,28 +28,10 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
     @Override
     public List<Film> getRecommendations(int user_id) {
         List<Film> films = new ArrayList<>();
-
-        List<Integer> maxCommonUserIds = new ArrayList<>();
-        SqlRowSet maxCommonUserIdsRs = jdbcTemplate.queryForRowSet(
-                "SELECT USER_ID, MAX(common_count) as max_common FROM (SELECT USER_ID, COUNT(USER_ID) as common_count FROM FILM_LIKE WHERE FILM_ID IN (SELECT FILM_ID FROM film_like WHERE user_id = ?) AND USER_ID <> ? GROUP BY user_id) group by common_count",
-                user_id, user_id
-        );
-        while (maxCommonUserIdsRs.next()) {
-            maxCommonUserIds.add(maxCommonUserIdsRs.getInt("USER_ID"));
-        }
-        if (maxCommonUserIds.isEmpty()) return Collections.emptyList();
-
-        List<Integer> usersLikedFilmsIds = new ArrayList<>();
-        SqlRowSet userRs = jdbcTemplate.queryForRowSet(
-                "SELECT film_id from film_like WHERE user_id = ?",
-                user_id
-        );
-        while (userRs.next()) {
-            usersLikedFilmsIds.add(userRs.getInt("film_id"));
-        }
+        List<Integer> usersLikedFilmsIds = getUsersLikedFilmsIds(user_id);
 
         Set<Integer> filmIdsToRecommend = new HashSet<>();
-        for (Integer userId : maxCommonUserIds) {
+        for (Integer userId : maxCommonUserIds(user_id)) {
             SqlRowSet filmsRs = jdbcTemplate.queryForRowSet(
                     "SELECT film_id from film_like WHERE user_id = ?",
                     userId
@@ -65,5 +47,30 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
             film.ifPresent(films::add);
         }
         return films;
+    }
+
+    private List<Integer> getUsersLikedFilmsIds(int user_id) {
+        List<Integer> usersLikedFilmsIds = new ArrayList<>();
+        SqlRowSet userRs = jdbcTemplate.queryForRowSet(
+                "SELECT film_id from film_like WHERE user_id = ?",
+                user_id
+        );
+        while (userRs.next()) {
+            usersLikedFilmsIds.add(userRs.getInt("film_id"));
+        }
+        return usersLikedFilmsIds;
+    }
+
+    private List<Integer> maxCommonUserIds(int user_id) {
+        List<Integer> maxCommonUserIds = new ArrayList<>();
+        SqlRowSet maxCommonUserIdsRs = jdbcTemplate.queryForRowSet(
+                "SELECT USER_ID, MAX(common_count) as max_common FROM (SELECT USER_ID, COUNT(USER_ID) as common_count FROM FILM_LIKE WHERE FILM_ID IN (SELECT FILM_ID FROM film_like WHERE user_id = ?) AND USER_ID <> ? GROUP BY user_id) group by common_count",
+                user_id, user_id
+        );
+        while (maxCommonUserIdsRs.next()) {
+            maxCommonUserIds.add(maxCommonUserIdsRs.getInt("USER_ID"));
+        }
+        if (maxCommonUserIds.isEmpty()) return Collections.emptyList();
+        return maxCommonUserIds;
     }
 }
