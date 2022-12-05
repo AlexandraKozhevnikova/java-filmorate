@@ -41,7 +41,7 @@ public class UserServiceTest {
         service.update(user);
         Assertions.assertEquals(
                 "PIN",
-                storage.getItemById(1).get().getName());
+                storage.getItemById(1).getName());
     }
 
     @Test

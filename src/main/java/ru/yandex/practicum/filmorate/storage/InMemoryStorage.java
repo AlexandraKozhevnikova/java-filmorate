@@ -27,8 +27,8 @@ public class InMemoryStorage<T extends IdControl> {
         return new ArrayList<>(itemList.values());
     }
 
-    public Optional<T> getItemById(int id) {
-        return Optional.ofNullable(itemList.get(id));
+    public T getItemById(int id) {
+        return itemList.get(id);
     }
 
     private int getIdForNewItem() {

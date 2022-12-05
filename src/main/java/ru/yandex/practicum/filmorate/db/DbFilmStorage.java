@@ -9,11 +9,7 @@ import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -49,12 +45,20 @@ public class DbFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> getAllItems() {
-        return filmDao.getAllFilms();
+        List<Film> films = filmDao.getAllFilms();
+        for (Film film : films) {
+            setFieldsOnFilm(film);
+        }
+        return films;
     }
 
     @Override
-    public Optional<Film> getItemById(int id) {
-        return filmDao.getFilmById(id);
+    public Film getItemById(int id) {
+        Optional<Film> film = filmDao.getFilmById(id);
+        Film filmFromDb = film.orElseThrow(
+                () -> new NoSuchElementException("film with id = " + id + " not found"));
+        setFieldsOnFilm(filmFromDb);
+        return filmFromDb;
     }
 
     @Override
@@ -89,10 +93,20 @@ public class DbFilmStorage implements FilmStorage {
         }
 
         List<Film> filmWithLike = filmLikes.stream()
-                .map(it -> getItemById(it).orElseThrow())
+                .map(it -> getItemById(it))
                 .collect(Collectors.toList());
 
         filmWithLike.addAll(randomFilmsWithoutLike);
         return filmWithLike;
+    }
+
+    private void setFieldsOnFilm(Film film) {
+        setGenresOnFilm(film);
+        //add more fields
+    }
+
+    private void setGenresOnFilm(Film film) {
+        List<Integer> genres = getFilmGenresId(film.getId());
+        film.setGenres(genres);
     }
 }
