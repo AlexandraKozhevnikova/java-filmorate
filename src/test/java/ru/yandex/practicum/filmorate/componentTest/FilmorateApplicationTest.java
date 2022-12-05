@@ -22,7 +22,7 @@ class FilmorateApplicationTest {
 
     @Test
     public void findUserByIdTest() {
-        Optional<User> userOptional = userStorage.getItemById(1);
+        Optional<User> userOptional = Optional.ofNullable(userStorage.getItemById(1));
 
         assertThat(userOptional)
                 .isPresent()
@@ -45,7 +45,7 @@ class FilmorateApplicationTest {
 
         user.setId(userStorage.add(user));
 
-        Optional<User> userOptional = userStorage.getItemById(user.getId());
+        Optional<User> userOptional = Optional.ofNullable(userStorage.getItemById(user.getId()));
 
         assertThat(userOptional)
                 .isPresent()

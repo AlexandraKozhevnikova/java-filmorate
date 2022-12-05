@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import java.util.Optional;
 
 public class ImMemoryFilmStorageTest {
-    private FilmStorage storage = new InMemoryFilmStorage();
+    private final FilmStorage storage = new InMemoryFilmStorage();
 
 
     @Test
@@ -37,14 +37,14 @@ public class ImMemoryFilmStorageTest {
         storage.update(film);
         Assertions.assertEquals(
                 "the GREAT time",
-                storage.getItemById(1).get().getName());
+                storage.getItemById(1).getName());
     }
 
     @Test
     public void getNotExistFilmTest() {
         Optional<Film> film;
 
-        film = storage.getItemById(123);
+        film = Optional.ofNullable(storage.getItemById(123));
         Assertions.assertFalse(film.isPresent());
     }
 
@@ -53,7 +53,7 @@ public class ImMemoryFilmStorageTest {
         dataPreparation();
         Optional<Film> film;
 
-        film = storage.getItemById(1);
+        film = Optional.ofNullable(storage.getItemById(1));
         Assertions.assertTrue(film.isPresent());
         Assertions.assertEquals("the time", film.get().getName());
     }
