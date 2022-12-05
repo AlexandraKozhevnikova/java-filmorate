@@ -22,8 +22,13 @@ public class Film implements IdControl {
     private int duration;
     private int ratingMpaId;
     private List<Integer> genres;
+    private List<Director> director;
 
     public void setGenres(List<Integer> genres) {
         this.genres = Objects.requireNonNullElse(genres, Collections.emptyList());
+    }
+
+    public void setDirector(List<Director> director) {
+        this.director = Objects.requireNonNullElse(director, Collections.emptyList());
     }
 }
