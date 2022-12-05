@@ -1,9 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 
-import java.util.List;
 import java.util.Optional;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)

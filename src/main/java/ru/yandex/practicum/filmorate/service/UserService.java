@@ -7,8 +7,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,22 +25,14 @@ public class UserService {
     }
 
     public User update(User user) {
-        Optional<User> existUser = userStorage.getItemById(user.getId());
-        if (existUser.isPresent()) {
-            log.info("User with id " + user.getId() + " has found");
-            userStorage.update(user);
-        } else {
-            log.warn("User can not be updated cause user with id = " + user.getId() + " not found");
-            throw new NoSuchElementException("User can not be updated cause user with id = " + user.getId() + " not found");
-        }
-        return getUserById(user.getId());
+        User existUser = userStorage.getItemById(user.getId());
+        log.info("User with id " + user.getId() + " has found");
+        userStorage.update(user);
+        return getUserById(existUser.getId());
     }
 
     public User getUserById(int id) {
-        Optional<User> user = userStorage.getItemById(id);
-        return user.orElseThrow(
-                () -> new NoSuchElementException("user with id = " + id + " not found")
-        );
+        return userStorage.getItemById(id);
     }
 
     public List<User> getAllUsers() {

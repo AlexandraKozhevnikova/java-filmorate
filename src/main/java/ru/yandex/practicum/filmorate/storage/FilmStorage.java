@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.storage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FilmStorage {
 
@@ -15,7 +14,7 @@ public interface FilmStorage {
 
     List<Film> getAllItems();
 
-    Optional<Film> getItemById(int id);
+    Film getItemById(int id);
 
     List<Integer> getFilmGenresId(int filmId);
 
@@ -24,5 +23,7 @@ public interface FilmStorage {
     void unlikeFilm(int filmId, int userId);
 
     List<Film> getTopFilms(int threshold);
+
+    boolean isExist(int id);
 }
 

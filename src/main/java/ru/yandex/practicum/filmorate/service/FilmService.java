@@ -11,8 +11,6 @@ import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -32,55 +30,36 @@ public class FilmService {
 
     public List<Film> getAllFilms() {
         List<Film> films = filmStorage.getAllItems();
-        films.forEach(film -> film.setGenres(
-                filmStorage.getFilmGenresId(film.getId())));
         return films;
     }
 
     public Film addFilm(Film filmWithoutId) {
         int id = filmStorage.add(filmWithoutId);
-        Film filmFromDbWithoutGenres = getFilmById(id);
-        filmStorage.upsertGenresForFilm(filmFromDbWithoutGenres.getId(), filmWithoutId.getGenres());
-        List<Integer> genres = filmStorage.getFilmGenresId(filmFromDbWithoutGenres.getId());
-        filmFromDbWithoutGenres.setGenres(genres);
-        return filmFromDbWithoutGenres;
+        filmStorage.upsertGenresForFilm(id, filmWithoutId.getGenres());
+        return getFilmById(id);
     }
 
     public Film update(Film newFilm) {
-        Film newFilmFromDb;
-        Optional<Film> oldFilm = filmStorage.getItemById(newFilm.getId());
-
-        if (oldFilm.isPresent()) {
-            log.info("Film with id " + newFilm.getId() + " has found");
-            filmStorage.update(newFilm);
-            newFilmFromDb = getFilmById(newFilm.getId());
-            List<Integer> genres = filmStorage.getFilmGenresId(newFilmFromDb.getId());
-            newFilmFromDb.setGenres(genres);
-        } else {
-            log.warn("Film can not be updated cause user with id = " + newFilm.getId() + " not found");
-            throw new NoSuchElementException("Film can not be updated cause user with id = " + newFilm.getId() + " not found");
-        }
+        filmStorage.isExist(newFilm.getId());
+        log.info("Film with id " + newFilm.getId() + " has found");
+        filmStorage.update(newFilm);
+        Film newFilmFromDb = getFilmById(newFilm.getId());
         return newFilmFromDb;
     }
 
     public Film getFilmById(int id) {
-        Optional<Film> film = filmStorage.getItemById(id);
-        Film filmFromDb = film.orElseThrow(
-                () -> new NoSuchElementException("film with id = " + id + " not found"));
-        List<Integer> genres = filmStorage.getFilmGenresId(filmFromDb.getId());
-        filmFromDb.setGenres(genres);
-        return filmFromDb;
+        return filmStorage.getItemById(id);
     }
 
     public String like(int filmId, int userId) {
-        getFilmById(filmId);
+        filmStorage.isExist(filmId);
         userService.getUserById(userId);
         filmStorage.likeFilm(filmId, userId);
         return "success";
     }
 
     public String unlike(int filmId, int userId) {
-        getFilmById(filmId);
+        filmStorage.isExist(filmId);
         userService.getUserById(userId);
         filmStorage.unlikeFilm(filmId, userId);
         return "success";
@@ -89,8 +68,6 @@ public class FilmService {
 
     public List<Film> getTopFilms(int threshold) {
         List<Film> films = filmStorage.getTopFilms(threshold);
-        films.forEach(film -> film.setGenres(
-                filmStorage.getFilmGenresId(film.getId())));
         return films;
     }
 
