@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class ImMemoryFilmStorageTest {
@@ -42,10 +43,10 @@ public class ImMemoryFilmStorageTest {
 
     @Test
     public void getNotExistFilmTest() {
-        Optional<Film> film;
-
-        film = Optional.ofNullable(storage.getItemById(123));
-        Assertions.assertFalse(film.isPresent());
+        Assertions.assertThrows(
+                NoSuchElementException.class,
+                () -> storage.getItemById(123)
+        );
     }
 
     @Test
