@@ -3,9 +3,11 @@ package ru.yandex.practicum.filmorate.db;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
@@ -21,11 +23,14 @@ public class DbFilmStorage implements FilmStorage {
     private final FilmGenreDao filmGenreDao;
     private final FilmLikeDao filmLikeDao;
 
+    private final DirectorDao directorDao;
+
     @Autowired
-    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao) {
+    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao) {
         this.filmDao = filmDao;
         this.filmGenreDao = filmGenreDao;
         this.filmLikeDao = filmLikeDao;
+        this.directorDao = directorDao;
     }
 
     @Override
@@ -39,9 +44,15 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
+    public void upsertDirectorForFilm(int filmId, List<Director> directors) {
+        directorDao.upsertFilmDirector(filmId, directors);
+    }
+
+    @Override
     public void update(Film film) {
         filmDao.update(film);
         filmGenreDao.upsertFilmGenres(film.getId(), film.getGenres());
+        directorDao.upsertFilmDirector(film.getId(), film.getDirector());
     }
 
     @Override
@@ -66,6 +77,12 @@ public class DbFilmStorage implements FilmStorage {
     public List<Integer> getFilmGenresId(int filmId) {
         return filmGenreDao.getFilmGenres(filmId);
     }
+
+    @Override
+    public List<Director> getFilmDirector(int filmId) {
+        return directorDao.getFilmDirector(filmId);
+    }
+
 
     @Override
     public void likeFilm(int filmId, int userId) {
@@ -117,5 +134,35 @@ public class DbFilmStorage implements FilmStorage {
     private void setGenresOnFilm(Film film) {
         List<Integer> genres = getFilmGenresId(film.getId());
         film.setGenres(genres);
+    }
+
+    @Override
+    public int addDirector(Director director) {
+        return directorDao.insertDirector(director);
+    }
+
+    @Override
+    public Optional<Director> getDirectorById(int id) {
+        return directorDao.getDirectorById(id);
+    }
+
+    @Override
+    public List<Director> getAllDirectors() {
+        return directorDao.getAllDirectors();
+    }
+
+    @Override
+    public void updateDirector(Director director) {
+        directorDao.update(director);
+    }
+
+    @Override
+    public void deleteDirector(int id) {
+        directorDao.delete(id);
+    }
+
+    @Override
+    public List<Film> getAllFilmsByDirector(int directorId, String sortTypeForDirector) {
+        return filmDao.getAllFilmsByDirector(directorId, sortTypeForDirector);
     }
 }

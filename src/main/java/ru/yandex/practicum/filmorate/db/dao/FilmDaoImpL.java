@@ -127,5 +127,25 @@ public class FilmDaoImpL implements FilmDao {
 
         return map;
     }
+
+    public List<Film> getAllFilmsByDirector(int directorId, String sortCodeForDirectorMovies) {
+        List<Film> filmList = jdbcTemplate.query(
+                "" +
+                        "SELECT F.id, F.name, F.description, F.release_date, F.duration, F.rating_MPA " +
+                        "FROM film_director FD " +
+                        "LEFT JOIN film F on F.ID = FD.film_id " +
+                        "LEFT JOIN (" +
+                                    "SELECT DISTINCT film_id, " +
+                                    "COUNT(user_id) AS LIKECOUNT " +
+                                    "FROM film_like " +
+                                    "GROUP BY film_id) AS LIKETEMP on FD.film_id = LIKETEMP.film_id " +
+                        "WHERE director_ID = ?" +
+                        (sortCodeForDirectorMovies.equals("likes") ?
+                                "ORDER BY LIKETEMP.LIKECOUNT DESC":
+                                "ORDER BY F.release_date ASC"),
+                this::mapRowToFilm, directorId
+        );
+        return filmList;
+    }
 }
 

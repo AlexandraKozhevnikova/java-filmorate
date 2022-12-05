@@ -23,8 +23,7 @@ import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Validated
@@ -91,6 +90,21 @@ public class FilmController {
             Integer threshold
     ) {
         List<Film> films = filmService.getTopFilms(threshold);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/director/{directorId}")
+    public List<FilmResponse> getAllFilmsByDirector(
+            @PathVariable("directorId") int directorId,
+            @RequestParam(name = "sortBy", defaultValue = "year")
+            String sortTypeForDirector
+    ) {
+
+        List<Film> films = filmService.getAllFilmsByDirector(directorId,
+                sortTypeForDirector);
+
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
