@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -37,6 +38,16 @@ public class FilmDaoImpL implements FilmDao {
                 .withTableName("film")
                 .usingGeneratedKeyColumns("id");
         return simpleJdbcInsert.executeAndReturnKey(mapFilmToMap(film)).intValue();
+    }
+
+    @Override
+    public boolean isExist(int id) {
+        String sql = "SELECT id FROM film WHERE id = ?";
+        SqlRowSet rs = jdbcTemplate.queryForRowSet("SELECT id FROM film WHERE id = ?", id);
+        if (rs.next()) {
+            return true;
+        }
+        return false;
     }
 
     @Override

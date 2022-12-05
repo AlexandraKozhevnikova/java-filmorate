@@ -23,5 +23,7 @@ public interface FilmStorage {
     void unlikeFilm(int filmId, int userId);
 
     List<Film> getTopFilms(int threshold);
+
+    boolean isExist(int id);
 }
 

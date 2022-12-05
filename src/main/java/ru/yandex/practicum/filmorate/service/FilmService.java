@@ -40,7 +40,7 @@ public class FilmService {
     }
 
     public Film update(Film newFilm) {
-        Film oldFilm = filmStorage.getItemById(newFilm.getId());
+        filmStorage.isExist(newFilm.getId());
         log.info("Film with id " + newFilm.getId() + " has found");
         filmStorage.update(newFilm);
         Film newFilmFromDb = getFilmById(newFilm.getId());
@@ -52,14 +52,14 @@ public class FilmService {
     }
 
     public String like(int filmId, int userId) {
-        getFilmById(filmId);
+        filmStorage.isExist(filmId);
         userService.getUserById(userId);
         filmStorage.likeFilm(filmId, userId);
         return "success";
     }
 
     public String unlike(int filmId, int userId) {
-        getFilmById(filmId);
+        filmStorage.isExist(filmId);
         userService.getUserById(userId);
         filmStorage.unlikeFilm(filmId, userId);
         return "success";

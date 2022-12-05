@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
+import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -98,6 +99,14 @@ public class DbFilmStorage implements FilmStorage {
 
         filmWithLike.addAll(randomFilmsWithoutLike);
         return filmWithLike;
+    }
+
+    @Override
+    public boolean isExist(int id) {
+        if (!filmDao.isExist(id)) {
+            throw new BadFoundResultByIdException("Film with id = " + id + " does not exist");
+        }
+        return true;
     }
 
     private void setFieldsOnFilm(Film film) {
