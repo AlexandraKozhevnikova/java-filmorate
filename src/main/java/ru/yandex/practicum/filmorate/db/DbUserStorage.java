@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
@@ -40,9 +41,11 @@ public class DbUserStorage implements UserStorage {
     }
 
     @Override
-    public Optional<User> getItemById(int id) {
+    public User getItemById(int id) {
         Optional<User> user = userDao.getUserById(id);
-        return user;
+        return user.orElseThrow(
+                () -> new NoSuchElementException("user with id = " + id + " not found")
+        );
     }
 
     @Override

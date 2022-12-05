@@ -9,6 +9,8 @@ public interface FilmDao {
 
     int insertFilm(Film film);
 
+    boolean isExist(int id);
+
     void update(Film film);
 
     List<Film> getAllFilms();
