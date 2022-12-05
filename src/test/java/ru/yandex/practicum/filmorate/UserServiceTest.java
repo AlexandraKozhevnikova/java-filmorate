@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
-public class UserServiceTest {
+public class UserServiceTest { //  todo  Переименовать на инмемори
 
     private UserStorage storage = new InMemoryUserStorage();
     private UserService service = new UserService(storage);
