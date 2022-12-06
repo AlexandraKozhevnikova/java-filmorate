@@ -52,11 +52,10 @@ public class ImMemoryFilmStorageTest {
     @Test
     public void getExistFilmTest() {
         dataPreparation();
-        Optional<Film> film;
 
-        film = Optional.ofNullable(storage.getItemById(1));
-        Assertions.assertTrue(film.isPresent());
-        Assertions.assertEquals("the time", film.get().getName());
+        Film film = storage.getItemById(1);
+        Assertions.assertTrue(film != null);
+        Assertions.assertEquals("the time", film.getName());
     }
 
     @Test

@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.db.DbUserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,15 +21,11 @@ class FilmorateApplicationTest {
 
     @Test
     public void findUserByIdTest() {
-        Optional<User> userOptional = Optional.ofNullable(userStorage.getItemById(1));
+        User user = userStorage.getItemById(1);
 
-        assertThat(userOptional)
-                .isPresent()
-                .hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("id", 1)
-                ).hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("name", "harry potter")
-                );
+        assertThat(user)
+                .hasFieldOrPropertyWithValue("id", 1)
+                .hasFieldOrPropertyWithValue("name", "harry potter");
     }
 
     @Test
@@ -45,12 +40,9 @@ class FilmorateApplicationTest {
 
         user.setId(userStorage.add(user));
 
-        Optional<User> userOptional = Optional.ofNullable(userStorage.getItemById(user.getId()));
+        User userFromDb= userStorage.getItemById(user.getId());
 
-        assertThat(userOptional)
-                .isPresent()
-                .hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("name", "Ron")
-                );
+        assertThat(userFromDb)
+                .hasFieldOrPropertyWithValue("name", "Ron");
     }
 }

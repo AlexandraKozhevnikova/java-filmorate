@@ -2,7 +2,11 @@ package ru.yandex.practicum.filmorate.storage;
 
 import ru.yandex.practicum.filmorate.model.IdControl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class InMemoryStorage<T extends IdControl> {
     private final Map<Integer, T> itemList = new HashMap<>();
@@ -26,7 +30,7 @@ public class InMemoryStorage<T extends IdControl> {
     public T getItemById(int id) {
         T item = itemList.get(id);
         if (item == null) {
-            throw new NoSuchElementException("user with id = " + id + " not found");
+            throw new NoSuchElementException("item with id = " + id + " not found");
         }
         return item;
     }
