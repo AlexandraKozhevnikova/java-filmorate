@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.annotation.FeedAnnotation;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -51,6 +52,7 @@ public class FilmService {
         return filmStorage.getItemById(id);
     }
 
+    @FeedAnnotation
     public String like(int filmId, int userId) {
         filmStorage.isExist(filmId);
         userService.getUserById(userId);
@@ -58,6 +60,7 @@ public class FilmService {
         return "success";
     }
 
+    @FeedAnnotation
     public String unlike(int filmId, int userId) {
         filmStorage.isExist(filmId);
         userService.getUserById(userId);

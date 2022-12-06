@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.exception.BadFriendshipException;
+import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FeedService;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequest;
@@ -31,11 +33,13 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService service;
+    private final FeedService feedService;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
 
     @Autowired
-    public UserController(UserService service) {
+    public UserController(UserService service, FeedService feedService) {
         this.service = service;
+        this.feedService = feedService;
     }
 
     @GetMapping("/{id}")
@@ -114,4 +118,10 @@ public class UserController {
                 .map(UserMapper::mapUserToResponse)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/{id}/feed")
+    public Feed getFeedById(@PathVariable("id") int id) {
+        return feedService.getFeedById(id);
+    }
+
 }
