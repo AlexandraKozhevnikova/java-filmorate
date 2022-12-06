@@ -35,7 +35,7 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
     @Override
     public List<Map<String, Object>> getTopLikes(int threshold, Integer genreId, String year) {
         if (year == null) {
-            year = "0000"; //то левый джоин, если не нал то обычный джоин
+            year = "0000";
         }
 
         if(genreId ==null){

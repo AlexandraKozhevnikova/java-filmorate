@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler //todo удалить если не используют
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleBadFoundResultByIdException(final BadFoundResultByIdException e) {
         log.info("Response status code 404 Not Found {}", e.getMessage());

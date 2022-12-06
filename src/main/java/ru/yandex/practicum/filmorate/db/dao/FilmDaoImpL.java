@@ -84,7 +84,7 @@ public class FilmDaoImpL implements FilmDao {
         return film;
     }
 
-    public List<Film> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year) {
+    public List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year) {
         namedDb = new NamedParameterJdbcTemplate(jdbcTemplate);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(Map.of("ids", excludeList));
@@ -92,7 +92,7 @@ public class FilmDaoImpL implements FilmDao {
         parameters.addValue("genreId", genreId);
         parameters.addValue("year", year);
 
-        String sql = "SELECT id, name, description, release_date, duration, rating_MPA " +
+        String sql = "SELECT id " +
                 "FROM film " +
                 "WHERE 1=1 " +
                 (!excludeList.isEmpty() ? "AND id NOT IN (:ids) " : "") +
@@ -100,9 +100,9 @@ public class FilmDaoImpL implements FilmDao {
                 (year == null ? " " : " AND  EXTRACT(YEAR FROM release_date) = :year") +
                 " LIMIT (:count)";
 
-        List<Film> films = namedDb.query(sql, parameters, this::mapRowToFilm);
+        List<Integer> filmsId = namedDb.query(sql, parameters, (rs, rowNum) -> rs.getInt("id"));
 
-        return films;
+        return filmsId;
     }
 
 
