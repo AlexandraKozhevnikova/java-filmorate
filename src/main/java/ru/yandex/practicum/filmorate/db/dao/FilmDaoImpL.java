@@ -100,6 +100,10 @@ public class FilmDaoImpL implements FilmDao {
         return films;
     }
 
+    public void deleteFilm(int filmId) {
+        String sql = "DELETE FROM film WHERE id=?";
+        jdbcTemplate.update(sql, filmId);
+    }
 
     private Film mapRowToFilm(ResultSet resultSet, int rowNum) throws SQLException {
         Optional<Date> date = Optional.ofNullable(resultSet.getDate("release_date"));

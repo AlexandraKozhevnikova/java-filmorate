@@ -75,5 +75,10 @@ public class UserService {
                 .map(this::getUserById)
                 .collect(Collectors.toList());
     }
+
+    public void deleteUser(int userId) {
+        userStorage.deleteUser(userId);
+    }
+
 }
 

@@ -62,4 +62,10 @@ public class DbUserStorage implements UserStorage {
     public List<Integer> getUserFriends(int userId) {
          return friendshipDao.getUserFriends(userId);
     }
+
+    @Override
+    public void deleteUser(int userId) {
+        userDao.deleteUser(userId);
+    }
+
 }

@@ -118,4 +118,10 @@ public class DbFilmStorage implements FilmStorage {
         List<Integer> genres = getFilmGenresId(film.getId());
         film.setGenres(genres);
     }
+
+    @Override
+    public void deleteFilm(int filmId) {
+        filmDao.deleteFilm(filmId);
+    }
+
 }

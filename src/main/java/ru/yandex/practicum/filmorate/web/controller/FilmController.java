@@ -95,4 +95,10 @@ public class FilmController {
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
     }
+
+    @DeleteMapping("/{filmId}")
+    public void deleteFilm(@PathVariable("filmId") int filmId) {
+        filmService.deleteFilm(filmId);
+    }
+
 }

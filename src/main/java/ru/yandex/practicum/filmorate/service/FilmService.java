@@ -88,4 +88,9 @@ public class FilmService {
         return RatingMpa.getRatingMpaById(id).orElseThrow(
                 () -> new BadFoundResultByIdException("RatingMPA with id = " + id + " does not exist"));
     }
+
+    public void deleteFilm(int filmId) {
+        filmStorage.deleteFilm(filmId);
+    }
+
 }

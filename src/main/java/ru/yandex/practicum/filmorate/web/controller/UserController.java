@@ -114,4 +114,10 @@ public class UserController {
                 .map(UserMapper::mapUserToResponse)
                 .collect(Collectors.toList());
     }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable("userId") int userId) {
+        service.deleteUser(userId);
+    }
+
 }

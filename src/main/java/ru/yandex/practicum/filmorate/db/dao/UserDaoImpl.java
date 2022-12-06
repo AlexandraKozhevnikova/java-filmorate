@@ -78,6 +78,11 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
+    public void deleteUser(int userId) {
+        String sql = "DELETE FROM user_filmorate WHERE id=?";
+        jdbcTemplate.update(sql, userId);
+    }
+
     private User mapRowToUser(ResultSet rs, int rowNumber) throws SQLException {
         return User.builder()
                 .id(rs.getInt("id"))

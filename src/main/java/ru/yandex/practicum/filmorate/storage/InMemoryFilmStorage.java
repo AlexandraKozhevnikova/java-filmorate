@@ -40,4 +40,9 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     public boolean isExist(int id) {
         throw new NotImplementedException("метод реализован только для БД");
     }
+
+    @Override
+    public void deleteFilm(int filmId) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
 }

@@ -25,5 +25,8 @@ public interface FilmStorage {
     List<Film> getTopFilms(int threshold);
 
     boolean isExist(int id);
+
+    void deleteFilm(int filmId);
+
 }
 
