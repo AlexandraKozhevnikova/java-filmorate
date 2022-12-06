@@ -10,7 +10,12 @@ import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -112,7 +117,7 @@ public class DbFilmStorage implements FilmStorage {
 
     private void setFieldsOnFilm(Film film) {
         setGenresOnFilm(film);
-        //add more fields
+        //todo add more fields
     }
 
     private void setGenresOnFilm(Film film) {
