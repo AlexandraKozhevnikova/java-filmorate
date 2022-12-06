@@ -101,10 +101,8 @@ public class FilmController {
             @RequestParam(name = "sortBy", defaultValue = "year")
             String sortTypeForDirector
     ) {
-
         List<Film> films = filmService.getAllFilmsByDirector(directorId,
                 sortTypeForDirector);
-
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());

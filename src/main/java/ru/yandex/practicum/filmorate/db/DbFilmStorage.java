@@ -18,11 +18,9 @@ import java.util.stream.Collectors;
 @Component
 @Qualifier("dbFilmStorage")
 public class DbFilmStorage implements FilmStorage {
-
     private final FilmDao filmDao;
     private final FilmGenreDao filmGenreDao;
     private final FilmLikeDao filmLikeDao;
-
     private final DirectorDao directorDao;
 
     @Autowired

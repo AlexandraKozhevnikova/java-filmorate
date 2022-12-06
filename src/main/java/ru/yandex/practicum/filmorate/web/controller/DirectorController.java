@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.web.dto.director.AddDirectorRequest;
 import ru.yandex.practicum.filmorate.web.dto.director.DirectorResponse;
 import ru.yandex.practicum.filmorate.web.dto.director.UpdateDirectorRequest;
 import ru.yandex.practicum.filmorate.web.mapper.DirectorMapper;
-import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/directors")
 public class DirectorController {
     private final FilmService filmService;
-
     private final ObjectMapper jacksonMapper = new ObjectMapper();
 
     public DirectorController(FilmService filmService) {
@@ -47,7 +45,8 @@ public class DirectorController {
     }
 
     @PutMapping
-    public DirectorResponse updateFilm(@RequestBody @Valid UpdateDirectorRequest directorDto) throws JsonProcessingException {
+    public DirectorResponse updateDirector(@RequestBody @Valid UpdateDirectorRequest directorDto)
+            throws JsonProcessingException {
         log.info("Get request: PUT {}",
                 Arrays.stream(this.getClass().getAnnotation(RequestMapping.class).value()).findFirst().get());
         log.info("Response status code: 200 ОК");

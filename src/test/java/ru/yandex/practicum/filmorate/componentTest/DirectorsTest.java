@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -38,7 +37,6 @@ class DirectorsTest {
 
     @Test
     public void addDirectorTest() {
-
         Director director = Director.builder()
                 .name("Джеймс Кэмерон")
                 .build();
@@ -56,7 +54,6 @@ class DirectorsTest {
 
     @Test
     public void updateDirectorTest() {
-
         Director director = Director.builder()
                 .id(1)
                 .name("Джордж Лукас")
