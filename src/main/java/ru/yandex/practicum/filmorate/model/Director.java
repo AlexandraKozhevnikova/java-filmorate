@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Director implements IdControl {
+public class Director {
     private int id;
     private String name;
 }

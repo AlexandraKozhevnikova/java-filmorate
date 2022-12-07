@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -94,12 +93,12 @@ public class FilmService {
     }
 
     public Director addDirector(Director directorWithoutId) {
-        int id = filmStorage.addDirector(directorWithoutId);
-        return getDirectorById(id);
+        int directorId = filmStorage.addDirector(directorWithoutId);
+        return getDirectorById(directorId);
     }
 
-    public Director getDirectorById(int id) {
-        return filmStorage.getDirectorById(id);
+    public Director getDirectorById(int directorId) {
+        return filmStorage.getDirectorById(directorId);
     }
 
     public List<Director> getAllDirectors() {

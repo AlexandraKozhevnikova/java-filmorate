@@ -24,8 +24,4 @@ public class FilmResponse {
     private RatingMpa ratingMpa;
     private List<Genre> genres;
     private List<Director> directors;
-
-    public int compareFilmsByYear(FilmResponse f2) {
-        return releaseDate.isAfter(f2.getReleaseDate()) ? 1 : (releaseDate.isEqual(f2.getReleaseDate()) ? 0 : -1);
-    }
 }

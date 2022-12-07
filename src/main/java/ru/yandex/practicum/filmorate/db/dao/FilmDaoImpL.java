@@ -131,13 +131,11 @@ public class FilmDaoImpL implements FilmDao {
 
     public List<Film> getAllFilmsByDirector(int directorId) {
         List<Film> filmList = jdbcTemplate.query(
-                "" +
                         "SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_mpa " +
                         "FROM film_director fd " +
                         "LEFT JOIN film f on f.id = fd.film_id " +
                         "LEFT JOIN (" +
-                                    "SELECT DISTINCT film_id, " +
-                                    "COUNT(user_id) AS likecount " +
+                                    "SELECT DISTINCT film_id, COUNT(user_id) AS likecount " +
                                     "FROM film_like " +
                                     "GROUP BY film_id) AS liketemp on fd.film_id = liketemp.film_id " +
                         "WHERE director_id = ? " +

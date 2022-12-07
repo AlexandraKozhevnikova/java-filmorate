@@ -135,11 +135,10 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Director getDirectorById(int id) {
-        Optional<Director> director = directorDao.getDirectorById(id);
-        Director directorFromDb = director.orElseThrow(
-                () -> new NoSuchElementException("film with id = " + id + " not found"));
-        return directorFromDb;
+    public Director getDirectorById(int directorId) {
+        Optional<Director> director = directorDao.getDirectorById(directorId);
+        return director.orElseThrow(
+                () -> new NoSuchElementException("director with id = " + directorId + " not found"));
     }
 
     @Override
@@ -153,8 +152,8 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteDirector(int id) {
-        directorDao.delete(id);
+    public void deleteDirector(int directorId) {
+        directorDao.delete(directorId);
     }
 
     @Override
@@ -172,9 +171,9 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public boolean isDirectorExist(int id) {
-        if (!directorDao.isDirectorExist(id)) {
-            throw new BadFoundResultByIdException("Director with id = " + id + " does not exist");
+    public boolean isDirectorExist(int directorId) {
+        if (!directorDao.isDirectorExist(directorId)) {
+            throw new BadFoundResultByIdException("Director with id = " + directorId + " does not exist");
         }
         return true;
     }
