@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.web.dto.SearchByType;
 
 import java.util.List;
 
@@ -87,5 +88,10 @@ public class FilmService {
     public RatingMpa getMpaById(int id) {
         return RatingMpa.getRatingMpaById(id).orElseThrow(
                 () -> new BadFoundResultByIdException("RatingMPA with id = " + id + " does not exist"));
+    }
+
+    // поиск по названию фильма отсортированный по популярности
+    public List<Film> search(String query, SearchByType searchBy){
+        filmStorage.search
     }
 }

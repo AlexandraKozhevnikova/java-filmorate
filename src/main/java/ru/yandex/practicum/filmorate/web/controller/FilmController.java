@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.web.dto.SearchByType;
 import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
 import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
 import ru.yandex.practicum.filmorate.web.dto.film.UpdateFilmRequest;
@@ -24,6 +25,7 @@ import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,6 +99,21 @@ public class FilmController {
             String year //todo достаточно ли такой валидации
     ) {
         List<Film> films = filmService.getTopFilms(threshold, genreId, year);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/search")
+    public List<FilmResponse> searchFilms(
+            @NotBlank
+            @RequestParam(name = "guery")
+            String  query,
+            @NotBlank
+            @RequestParam(name = "by")
+            SearchByType searchBy //todo переделать на енам когда вмержать режиссеров https://www.baeldung.com/spring-enum-request-param
+    ) {
+        List<Film> films = filmService.search(query, searchBy);
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
