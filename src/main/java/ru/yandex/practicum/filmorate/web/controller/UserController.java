@@ -46,7 +46,10 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> getAllUsers() throws JsonProcessingException {
-        log.info("Get request: GET {}", Arrays.stream(this.getClass().getAnnotation(RequestMapping.class).value()).findFirst().get());
+        log.info("Get request: GET {}", Arrays.stream(this.getClass().getAnnotation(RequestMapping.class)
+                .value())
+                .findFirst()
+                .get());
         List<UserResponse> responseBody = service.getAllUsers().stream()
                 .map(UserMapper::mapUserToResponse)
                 .collect(Collectors.toList());
