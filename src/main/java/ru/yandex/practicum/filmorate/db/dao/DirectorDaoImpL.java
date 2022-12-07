@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.model.Director;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,25 +73,10 @@ public class DirectorDaoImpL implements DirectorDao {
                     .id(directorRow.getInt("director_id"))
                     .name(directorRow.getString("name"))
                     .build();
-
             return Optional.of(director);
         } else {
             return Optional.empty();
         }
-    }
-
-    private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
-        return Director.builder()
-                .id(resultSet.getInt("director_id"))
-                .name(resultSet.getString("name"))
-                .build();
-    }
-
-    private Map<String, Object> mapDirectorToMap(Director director) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("director_id", director.getId());
-        map.put("name", director.getName());
-        return map;
     }
 
     @Override
@@ -114,11 +98,31 @@ public class DirectorDaoImpL implements DirectorDao {
 
     @Override
     public List<Director> getFilmDirector(int filmId) {
-        String sql = "SELECT FD.director_id, D.name " +
-                "FROM film_director FD " +
-                "LEFT JOIN director D ON FD.director_id = D.director_id " +
+        String sql = "SELECT fd.director_id, d.name " +
+                "FROM film_director fd " +
+                "LEFT JOIN director d ON FD.director_id = D.director_id " +
                 "WHERE film_id = ?";
         return jdbcTemplate.query(sql, this::mapRowToDirector, filmId);
+    }
+
+    @Override
+    public boolean isDirectorExist(int id) {
+        SqlRowSet rs = jdbcTemplate.queryForRowSet("SELECT director_id FROM director WHERE director_id = ?", id);
+        return rs.next();
+    }
+
+    private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
+        return Director.builder()
+                .id(resultSet.getInt("director_id"))
+                .name(resultSet.getString("name"))
+                .build();
+    }
+
+    private Map<String, Object> mapDirectorToMap(Director director) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("director_id", director.getId());
+        map.put("name", director.getName());
+        return map;
     }
 }
 

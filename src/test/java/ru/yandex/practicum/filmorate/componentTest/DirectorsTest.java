@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,15 +23,9 @@ class DirectorsTest {
 
     @Test
     public void findDirectorByIdTest() {
-        Optional<Director> directorOptional = filmStorage.getDirectorById(1);
-
-        assertThat(directorOptional)
-                .isPresent()
-                .hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("id", 1)
-                ).hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("name", "Стивен Спилберг")
-                );
+        Director director = filmStorage.getDirectorById(1);
+        assertThat(director)
+                .hasFieldOrPropertyWithValue("name", "Стивен Спилберг");
     }
 
     @Test
@@ -43,13 +36,10 @@ class DirectorsTest {
 
         director.setId(filmStorage.addDirector(director));
 
-        Optional<Director> directorOptional = filmStorage.getDirectorById(director.getId());
+        Director directorFromDb = filmStorage.getDirectorById(director.getId());
 
-        assertThat(directorOptional)
-                .isPresent()
-                .hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("name", "Джеймс Кэмерон")
-                );
+        assertThat(directorFromDb)
+                .hasFieldOrPropertyWithValue("name", "Джеймс Кэмерон");
     }
 
     @Test
@@ -61,23 +51,20 @@ class DirectorsTest {
 
         filmStorage.updateDirector(director);
 
-        Optional<Director> directorOptional = filmStorage.getDirectorById(1);
+        Director directorFromDb = filmStorage.getDirectorById(director.getId());
 
-        assertThat(directorOptional)
-                .isPresent()
-                .hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("name", "Джордж Лукас")
-                );
+        assertThat(directorFromDb)
+                .hasFieldOrPropertyWithValue("name", "Джордж Лукас");
     }
 
     @Test
     public void deleteDirectorTest() {
         filmStorage.deleteDirector(2);
 
-        Optional<Director> directorOptional = filmStorage.getDirectorById(2);
-
-        assertThat(directorOptional)
-                .isEmpty();
+        Assertions.assertThrows(
+                NoSuchElementException.class,
+                () -> filmService.getDirectorById(2)
+        );
     }
 
     @Test

@@ -52,7 +52,8 @@ public class FilmDaoImpL implements FilmDao {
 
     @Override
     public void update(Film film) {
-        String sql = "UPDATE film SET name = ?, description = ?, release_date = ?, duration = ?, rating_MPA = ? WHERE id = ?";
+        String sql = "UPDATE film SET name = ?, description = ?, release_date = ?, duration = ?, rating_mpa = ? " +
+                "WHERE id = ?";
         jdbcTemplate.update(
                 sql,
                 film.getName(),
@@ -67,7 +68,7 @@ public class FilmDaoImpL implements FilmDao {
     @Override
     public List<Film> getAllFilms() {
         List<Film> filmList = jdbcTemplate.query(
-                "SELECT id, name, description, release_date, duration, rating_MPA  FROM film",
+                "SELECT id, name, description, release_date, duration, rating_mpa  FROM film",
                 this::mapRowToFilm
         );
         return filmList;
@@ -75,7 +76,7 @@ public class FilmDaoImpL implements FilmDao {
 
     @Override
     public Optional<Film> getFilmById(int id) {
-        String sql = "SELECT id, name, description, release_date, duration, rating_MPA FROM film WHERE id = ?";
+        String sql = "SELECT id, name, description, release_date, duration, rating_mpa FROM film WHERE id = ?";
         Optional<Film> film = Optional.empty();
         try {
             film = Optional.ofNullable(jdbcTemplate.queryForObject(sql, this::mapRowToFilm, id));
@@ -90,7 +91,7 @@ public class FilmDaoImpL implements FilmDao {
         MapSqlParameterSource parameters = new MapSqlParameterSource("ids", excludeList);
         parameters.addValue("count", count);
 
-        String sql = "SELECT id, name, description, release_date, duration, rating_MPA " +
+        String sql = "SELECT id, name, description, release_date, duration, rating_mpa " +
                 "FROM film " +
                 (!excludeList.isEmpty() ? "WHERE id NOT IN (:ids) " : "") +
                 "LIMIT (:count)";
@@ -128,21 +129,19 @@ public class FilmDaoImpL implements FilmDao {
         return map;
     }
 
-    public List<Film> getAllFilmsByDirector(int directorId, String sortCodeForDirectorMovies) {
+    public List<Film> getAllFilmsByDirector(int directorId) {
         List<Film> filmList = jdbcTemplate.query(
                 "" +
-                        "SELECT F.id, F.name, F.description, F.release_date, F.duration, F.rating_MPA " +
-                        "FROM film_director FD " +
-                        "LEFT JOIN film F on F.ID = FD.film_id " +
+                        "SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_mpa " +
+                        "FROM film_director fd " +
+                        "LEFT JOIN film f on f.id = fd.film_id " +
                         "LEFT JOIN (" +
                                     "SELECT DISTINCT film_id, " +
-                                    "COUNT(user_id) AS LIKECOUNT " +
+                                    "COUNT(user_id) AS likecount " +
                                     "FROM film_like " +
-                                    "GROUP BY film_id) AS LIKETEMP on FD.film_id = LIKETEMP.film_id " +
-                        "WHERE director_ID = ?" +
-                        (sortCodeForDirectorMovies.equals("likes") ?
-                                "ORDER BY LIKETEMP.LIKECOUNT DESC":
-                                "ORDER BY F.release_date ASC"),
+                                    "GROUP BY film_id) AS liketemp on fd.film_id = liketemp.film_id " +
+                        "WHERE director_id = ? " +
+                        "ORDER BY liketemp.likecount DESC",
                 this::mapRowToFilm, directorId
         );
         return filmList;

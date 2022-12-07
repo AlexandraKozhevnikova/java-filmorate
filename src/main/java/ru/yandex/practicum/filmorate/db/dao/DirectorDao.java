@@ -20,5 +20,7 @@ public interface DirectorDao {
     void upsertFilmDirector(int filmId, List<Director> directors);
 
     List<Director> getFilmDirector(int filmId);
+
+    boolean isDirectorExist(int id);
 }
 

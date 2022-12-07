@@ -11,8 +11,14 @@ import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -81,7 +87,6 @@ public class DbFilmStorage implements FilmStorage {
         return directorDao.getFilmDirector(filmId);
     }
 
-
     @Override
     public void likeFilm(int filmId, int userId) {
         filmLikeDao.likeFilm(filmId, userId);
@@ -124,24 +129,17 @@ public class DbFilmStorage implements FilmStorage {
         return true;
     }
 
-    private void setFieldsOnFilm(Film film) {
-        setGenresOnFilm(film);
-        //add more fields
-    }
-
-    private void setGenresOnFilm(Film film) {
-        List<Integer> genres = getFilmGenresId(film.getId());
-        film.setGenres(genres);
-    }
-
     @Override
     public int addDirector(Director director) {
         return directorDao.insertDirector(director);
     }
 
     @Override
-    public Optional<Director> getDirectorById(int id) {
-        return directorDao.getDirectorById(id);
+    public Director getDirectorById(int id) {
+        Optional<Director> director = directorDao.getDirectorById(id);
+        Director directorFromDb = director.orElseThrow(
+                () -> new NoSuchElementException("film with id = " + id + " not found"));
+        return directorFromDb;
     }
 
     @Override
@@ -160,7 +158,40 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getAllFilmsByDirector(int directorId, String sortTypeForDirector) {
-        return filmDao.getAllFilmsByDirector(directorId, sortTypeForDirector);
+    public List<Film> getAllFilmsByDirector(int directorId, SortTypeDirectors sortTypeForDirectors) {
+        List<Film> films = filmDao.getAllFilmsByDirector(directorId);
+        for (Film film : films) {
+            setFieldsOnFilm(film);
+        }
+        if (sortTypeForDirectors.equals(SortTypeDirectors.YEAR)) {
+          films = films.stream()
+                  .sorted(Film::compareFilmsByYear)
+                  .collect(Collectors.toList());
+        }
+        return films;
+    }
+
+    @Override
+    public boolean isDirectorExist(int id) {
+        if (!directorDao.isDirectorExist(id)) {
+            throw new BadFoundResultByIdException("Director with id = " + id + " does not exist");
+        }
+        return true;
+    }
+
+    private void setFieldsOnFilm(Film film) {
+        setGenresOnFilm(film);
+        setDirectorsOnFilm(film);
+        //add more fields
+    }
+
+    private void setGenresOnFilm(Film film) {
+        List<Integer> genres = getFilmGenresId(film.getId());
+        film.setGenres(genres);
+    }
+
+    private void setDirectorsOnFilm(Film film) {
+        List<Director> directors = getFilmDirector(film.getId());
+        film.setDirectors(directors);
     }
 }

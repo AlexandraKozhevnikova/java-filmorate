@@ -19,6 +19,6 @@ public interface FilmDao {
 
     List<Film> getFilteredFilm(int count, List<Integer> excludeList);
 
-    public List<Film> getAllFilmsByDirector(int directorId, String sortTypeForDirector);
+    List<Film> getAllFilmsByDirector(int directorId);
 }
 

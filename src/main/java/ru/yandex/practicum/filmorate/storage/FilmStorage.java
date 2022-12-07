@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage;
 
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface FilmStorage {
 
     public int addDirector(Director director);
 
-    public Optional<Director> getDirectorById(int id);
+    public Director getDirectorById(int id);
 
     public List<Director> getAllDirectors();
 
@@ -41,6 +42,8 @@ public interface FilmStorage {
 
     public List<Director> getFilmDirector(int filmId);
 
-    public List<Film> getAllFilmsByDirector(int directorId, String sortTypeForDirector);
+    public List<Film> getAllFilmsByDirector(int directorId, SortTypeDirectors sortTypeForDirectors);
+
+    public boolean isDirectorExist(int id);
 }
 

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     }
 
     @Override
-    public Optional<Director> getDirectorById(int id) {
+    public Director getDirectorById(int id) {
         throw new NotImplementedException("метод реализован только для БД");
     }
 
@@ -79,7 +80,12 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     }
 
     @Override
-    public List<Film> getAllFilmsByDirector(int directorId, String sortTypeForDirector) {
+    public List<Film> getAllFilmsByDirector(int directorId, SortTypeDirectors sortTypeForDirectors) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
+    public boolean isDirectorExist(int id) {
         throw new NotImplementedException("метод реализован только для БД");
     }
 }
