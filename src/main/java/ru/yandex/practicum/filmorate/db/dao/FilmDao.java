@@ -17,8 +17,9 @@ public interface FilmDao {
 
     Optional<Film> getFilmById(int id);
 
-    List<Film> getFilteredFilm(int count, List<Integer> excludeList);
-
     List<Film> getAllFilmsByDirector(int directorId);
+
+    List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year);
+
 }
 

@@ -69,8 +69,8 @@ public class FilmService {
 
     }
 
-    public List<Film> getTopFilms(int threshold) {
-        List<Film> films = filmStorage.getTopFilms(threshold);
+    public List<Film> getTopFilms(int threshold, Integer genreId, String year) {
+        List<Film> films = filmStorage.getTopFilms(threshold, genreId, year);
         return films;
     }
 
