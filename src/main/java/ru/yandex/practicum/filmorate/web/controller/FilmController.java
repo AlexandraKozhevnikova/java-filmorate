@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -88,9 +89,14 @@ public class FilmController {
     public List<FilmResponse> getTop(
             @RequestParam(name = "count", defaultValue = "10")
             @Min(value = 1, message = "'count' should be positive")
-            Integer threshold
+            Integer threshold,
+            @RequestParam(name = "genreId", required = false)
+            Integer genreId,
+            @RequestParam(name = "year", required = false)
+            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
+            String year //todo достаточно ли такой валидации
     ) {
-        List<Film> films = filmService.getTopFilms(threshold);
+        List<Film> films = filmService.getTopFilms(threshold, genreId, year);
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());

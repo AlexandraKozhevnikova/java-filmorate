@@ -22,8 +22,7 @@ public interface FilmStorage {
 
     void unlikeFilm(int filmId, int userId);
 
-    List<Film> getTopFilms(int threshold);
-
     boolean isExist(int id);
+    List<Film> getTopFilms(int threshold, Integer genreId, String year);
 }
 

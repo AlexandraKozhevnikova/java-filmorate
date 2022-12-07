@@ -32,7 +32,7 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     }
 
     @Override
-    public List<Film> getTopFilms(int threshold) {
+    public List<Film> getTopFilms(int threshold, Integer genreId, String year) {
         throw new NotImplementedException("метод реализован только для БД");
     }
 

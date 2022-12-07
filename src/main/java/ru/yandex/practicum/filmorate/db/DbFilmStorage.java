@@ -10,7 +10,12 @@ import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,8 +61,7 @@ public class DbFilmStorage implements FilmStorage {
     @Override
     public Film getItemById(int id) {
         Optional<Film> film = filmDao.getFilmById(id);
-        Film filmFromDb = film.orElseThrow(
-                () -> new NoSuchElementException("film with id = " + id + " not found"));
+        Film filmFromDb = film.orElseThrow(() -> new NoSuchElementException("film with id = " + id + " not found"));
         setFieldsOnFilm(filmFromDb);
         return filmFromDb;
     }
@@ -78,26 +82,27 @@ public class DbFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getTopFilms(int threshold) {
-        List<Map<String, Object>> mapLikes = filmLikeDao.getTopLikes(threshold);
-
-        List<Integer> filmLikes = new ArrayList<>();
-
+    public List<Film> getTopFilms(int threshold, Integer genreId, String year) {
+        //  получаем фильмы с лайками
+        List<Map<String, Object>> mapLikes = filmLikeDao.getTopLikes(threshold, genreId, year);
+        List<Integer> filmIdWithLikes = new ArrayList<>();
         for (Map<String, Object> map : mapLikes) {
-            filmLikes.add((Integer) map.get("film_id"));
+            filmIdWithLikes.add((Integer) map.get("film_id"));
         }
-
-        int dif = threshold - filmLikes.size();
-        List<Film> randomFilmsWithoutLike = Collections.emptyList();
+        //добиваем фильмы без лайков если лайканных не хватает
+        int dif = threshold - filmIdWithLikes.size();
+        List<Integer> randomFilmsIdWithoutLike = Collections.emptyList();
         if (dif > 0) {
-            randomFilmsWithoutLike = filmDao.getFilteredFilm(dif, filmLikes);
+            randomFilmsIdWithoutLike = filmDao.getFilteredFilm(dif, filmIdWithLikes, genreId, year);
         }
-
-        List<Film> filmWithLike = filmLikes.stream()
-                .map(it -> getItemById(it))
+        //собираем в общую коллекцию
+        List<Film> filmWithLike = filmIdWithLikes.stream()
+                .map(this::getItemById)
                 .collect(Collectors.toList());
+        randomFilmsIdWithoutLike.stream()
+                .map(this::getItemById)
+                .forEach(film -> filmWithLike.add(film));
 
-        filmWithLike.addAll(randomFilmsWithoutLike);
         return filmWithLike;
     }
 
@@ -111,7 +116,7 @@ public class DbFilmStorage implements FilmStorage {
 
     private void setFieldsOnFilm(Film film) {
         setGenresOnFilm(film);
-        //add more fields
+        //todo add more fields
     }
 
     private void setGenresOnFilm(Film film) {
