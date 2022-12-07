@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class GetPopularTest {
     private final FilmService filmService;
-
     @Test
     public void shouldGetEmptyListTest() {
         List<Film> films = filmService.getTopFilms(10, 5, "3030");
