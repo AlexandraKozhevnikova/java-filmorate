@@ -29,7 +29,7 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
         Set<Integer> filmIdsToRecommend = new HashSet<>();
         for (Integer userId : maxCommonUserIds(user_id)) {
             SqlRowSet filmsRs = jdbcTemplate.queryForRowSet(
-                    "SELECT film_id from film_like WHERE user_id = ?",
+                    "SELECT film_id FROM film_like WHERE user_id = ?",
                     userId
             );
             while (filmsRs.next()) {
@@ -45,7 +45,7 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
     private List<Integer> getUsersLikedFilmsIds(int user_id) {
         List<Integer> usersLikedFilmsIds = new ArrayList<>();
         SqlRowSet userRs = jdbcTemplate.queryForRowSet(
-                "SELECT film_id from film_like WHERE user_id = ?",
+                "SELECT film_id FROM film_like WHERE user_id = ?",
                 user_id
         );
         while (userRs.next()) {
@@ -62,7 +62,7 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
                         "WHERE FILM_ID IN (" +
                             "SELECT FILM_ID FROM film_like WHERE user_id = ?) " +
                         "AND USER_ID <> ? GROUP BY user_id) " +
-                    "group by common_count, USER_ID",
+                    "GROUP BY common_count, USER_ID",
                 user_id, user_id
         );
         while (maxCommonUserIdsRs.next()) {
