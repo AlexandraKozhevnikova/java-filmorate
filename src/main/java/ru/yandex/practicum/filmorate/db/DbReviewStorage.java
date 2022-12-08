@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Qualifier("dbReviewStorage")
+//@Qualifier("dbReviewStorage")
 public class DbReviewStorage implements ReviewStorage {
     private final ReviewDao reviewDao;
     private final ReviewUsefulDao reviewUsefulDao;

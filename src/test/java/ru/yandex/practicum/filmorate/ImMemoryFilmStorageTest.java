@@ -12,7 +12,6 @@ import java.util.Optional;
 public class ImMemoryFilmStorageTest {
     private FilmStorage storage = new InMemoryFilmStorage();
 
-
     @Test
     public void addFilmTest() {
         Film film = Film.builder()
