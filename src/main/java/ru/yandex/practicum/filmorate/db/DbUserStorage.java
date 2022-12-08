@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.FriendshipDao;
 import ru.yandex.practicum.filmorate.db.dao.UserDao;
+import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
@@ -17,11 +19,13 @@ public class DbUserStorage implements UserStorage {
 
     private final UserDao userDao;
     private final FriendshipDao friendshipDao;
+    private final RecommendationsDao recommendationsDao;
 
     @Autowired
-    public DbUserStorage(UserDao userDao, FriendshipDao friendshipDao) {
+    public DbUserStorage(UserDao userDao, FriendshipDao friendshipDao, RecommendationsDao recommendationsDao) {
         this.userDao = userDao;
         this.friendshipDao = friendshipDao;
+        this.recommendationsDao = recommendationsDao;
     }
 
     @Override
@@ -40,9 +44,11 @@ public class DbUserStorage implements UserStorage {
     }
 
     @Override
-    public Optional<User> getItemById(int id) {
+    public User getItemById(int id) {
         Optional<User> user = userDao.getUserById(id);
-        return user;
+        return user.orElseThrow(
+                () -> new NoSuchElementException("user with id = " + id + " not found")
+        );
     }
 
     @Override
@@ -58,5 +64,10 @@ public class DbUserStorage implements UserStorage {
     @Override
     public List<Integer> getUserFriends(int userId) {
          return friendshipDao.getUserFriends(userId);
+    }
+
+    @Override
+    public List<Integer> getRecommendations(int userId) {
+        return recommendationsDao.getRecommendations(userId);
     }
 }

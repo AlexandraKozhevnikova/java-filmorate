@@ -9,12 +9,17 @@ public interface FilmDao {
 
     int insertFilm(Film film);
 
+    boolean isExist(int id);
+
     void update(Film film);
 
     List<Film> getAllFilms();
 
     Optional<Film> getFilmById(int id);
 
-    List<Film> getFilteredFilm(int count, List<Integer> excludeList);
+    List<Film> getAllFilmsByDirector(int directorId);
+
+    List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year);
+
 }
 

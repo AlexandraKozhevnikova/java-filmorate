@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 
@@ -22,4 +23,5 @@ public class FilmResponse {
     @JsonProperty("mpa")
     private RatingMpa ratingMpa;
     private List<Genre> genres;
+    private List<Director> directors;
 }
