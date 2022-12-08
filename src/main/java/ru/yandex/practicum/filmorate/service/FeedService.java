@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.db.dao.FeedDao;
 import ru.yandex.practicum.filmorate.model.Feed;
 
+import java.util.List;
+
 @Service
 public class FeedService {
 
@@ -15,7 +17,7 @@ public class FeedService {
         this.feedDao = feedDao;
     }
 
-    public Feed getFeedById(int id) {
+    public List<Feed> getFeedById(int id) {
         return feedDao.getFeedById(id);
     }
 

@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.Operation;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Aspect
@@ -38,8 +36,8 @@ public class FeedAspect {
 
     private Feed createFeed(Operation operation, EventType eventType, Object[] arguments) {
         Feed feed = new Feed();
-        feed.setOperation(operation);
-        feed.setEventType(eventType);
+        feed.setOperation(operation.getName());
+        feed.setEventType(eventType.getName());
         feed.setEventTime(Timestamp.valueOf(LocalDateTime.now()));
         if (eventType.equals(EventType.FRIEND)) {
             Integer userId = (Integer) arguments[0];
@@ -62,9 +60,9 @@ public class FeedAspect {
     }
 
     private Operation getOperation(String name) {
-        if (name.contains("add") || name.contains("make")) {
+        if (name.contains("add") || name.contains("make") || name.equals("like")) {
             return Operation.ADD;
-        } else if (name.contains("remove") || name.contains("delete")) {
+        } else if (name.contains("remove") || name.contains("delete") || name.equals("unlike")) {
             return Operation.REMOVE;
         } else if (name.equals("update")) {
             return Operation.UPDATE;

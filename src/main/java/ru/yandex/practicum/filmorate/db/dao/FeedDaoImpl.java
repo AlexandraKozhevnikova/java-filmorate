@@ -5,11 +5,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Feed;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.web.mapper.FeedMapper;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.util.List;
 
 @Component
 public class FeedDaoImpl implements FeedDao {
@@ -30,8 +29,8 @@ public class FeedDaoImpl implements FeedDao {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"eventId"});
             stmt.setInt(1, feed.getEntityId());
             stmt.setInt(2, feed.getUserId());
-            stmt.setInt(3, feed.getEventType().ordinal());
-            stmt.setInt(4, feed.getOperation().ordinal());
+            stmt.setString(3, feed.getEventType());
+            stmt.setString(4, feed.getOperation());
             stmt.setTimestamp(5, feed.getEventTime());
             return stmt;
         }, keyHolder);
@@ -40,11 +39,11 @@ public class FeedDaoImpl implements FeedDao {
     }
 
     @Override
-    public Feed getFeedById(int id) {
-        String sqlQuery = "SELECT * from feed where eventId=?";
+    public List<Feed> getFeedById(int id) {
+        String sqlQuery = "SELECT * from feed where userID=?";
 
-        Feed feed = jdbcTemplate.query(sqlQuery, new Object[]{id},
-                new FeedMapper()).stream().findAny().orElse(null);
+        List<Feed> feed = jdbcTemplate.query(sqlQuery, new Object[]{id},
+                new FeedMapper());
         return feed;
 
     }
