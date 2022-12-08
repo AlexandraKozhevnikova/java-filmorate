@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.ReviewStorage;
@@ -19,7 +18,7 @@ public class ReviewService {
     private final UserService userService;
     private final FilmService filmService;
 
-    public ReviewService(@Qualifier("dbReviewStorage") ReviewStorage reviewStorage, UserService userService, FilmService filmService) {
+    public ReviewService(ReviewStorage reviewStorage, UserService userService, FilmService filmService) {
         this.reviewStorage = reviewStorage;
         this.userService = userService;
         this.filmService = filmService;
@@ -38,7 +37,10 @@ public class ReviewService {
             reviewStorage.update(review);
         } else {
             log.warn("Review can not be updated cause review with id = " + review.getId() + " not found");
-            throw new NoSuchElementException("Review can not be updated cause review with id = " + review.getId() + " not found");
+            throw new NoSuchElementException
+                    (
+                            "Review can not be updated cause review with id = " + review.getId() + " not found"
+                    );
         }
         return getReviewById(review.getId());
     }

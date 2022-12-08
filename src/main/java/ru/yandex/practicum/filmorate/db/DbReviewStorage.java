@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.db;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.ReviewDao;
 import ru.yandex.practicum.filmorate.db.dao.ReviewUsefulDao;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-//@Qualifier("dbReviewStorage")
 public class DbReviewStorage implements ReviewStorage {
     private final ReviewDao reviewDao;
     private final ReviewUsefulDao reviewUsefulDao;

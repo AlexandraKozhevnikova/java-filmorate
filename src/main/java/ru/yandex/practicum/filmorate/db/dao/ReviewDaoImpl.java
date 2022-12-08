@@ -34,8 +34,8 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public void updateReview(Review review) {
-        String sql = "UPDATE REVIEW SET CONTENT = ?, ISPOSITIVE = ? " +
-                "WHERE REVIEW_ID = ?";
+        String sql = "UPDATE review SET content = ?, isPositive = ? " +
+                "WHERE review_id = ?";
         jdbcTemplate.update(sql,
                 review.getContent(),
                 review.getIsPositive(),
@@ -45,7 +45,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public Optional<Review> getReviewById(int id) {
-        String sql = "SELECT REVIEW_ID, CONTENT, ISPOSITIVE, USER_ID, FILM_ID FROM REVIEW WHERE REVIEW_ID = ?";
+        String sql = "SELECT review_id, content, isPositive, user_id, film_id FROM review WHERE review_id = ?";
         Optional<Review> review = Optional.empty();
         try {
             review = Optional.ofNullable(jdbcTemplate.queryForObject(sql, this::mapRowToReview, id));
@@ -56,7 +56,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public void deleteReview(int id) {
-        String sql = "DELETE FROM REVIEW WHERE REVIEW_ID = ?";
+        String sql = "DELETE FROM review WHERE review_id = ?";
         jdbcTemplate.update(sql, id);
     }
 
@@ -64,11 +64,10 @@ public class ReviewDaoImpl implements ReviewDao {
     public List<Review> getReviewsByFilmId(Integer filmId) {
         String sql;
         if (filmId == null) {
-            sql = "SELECT * FROM REVIEW";
+            sql = "SELECT * FROM review";
             return jdbcTemplate.query(sql, this::mapRowToReview);
-        }
-        else {
-            sql = "SELECT * FROM REVIEW WHERE FILM_ID = ?";
+        } else {
+            sql = "SELECT * FROM review WHERE film_id = ?";
             return jdbcTemplate.query(sql, this::mapRowToReview, filmId);
         }
     }

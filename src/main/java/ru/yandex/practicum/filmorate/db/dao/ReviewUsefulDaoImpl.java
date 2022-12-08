@@ -18,33 +18,33 @@ public class ReviewUsefulDaoImpl implements ReviewUsefulDao {
 
     @Override
     public void likeReview(int reviewId, int userId) {
-        String sql = "INSERT INTO REVIEW_USEFUL (REVIEW_ID, user_id, USEFUL) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO review_useful (review_id, user_id, useful) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, reviewId, userId, 1);
     }
 
     @Override
     public void deleteLikeReview(int reviewId, int userId) {
         checkReactionType(reviewId, userId);
-        String sql = "DELETE FROM REVIEW_USEFUL WHERE REVIEW_ID = ? AND user_id = ?";
+        String sql = "DELETE FROM review_useful WHERE review_id = ? AND user_id = ?";
         jdbcTemplate.update(sql, reviewId, userId);
     }
 
     @Override
     public void dislikeReview(int reviewId, int userId) {
-        String sql = "INSERT INTO REVIEW_USEFUL (REVIEW_ID, user_id, USEFUL) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO review_useful (review_id, user_id, useful) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, reviewId, userId, -1);
     }
 
     @Override
     public void deleteDislikeReview(int reviewId, int userId) {
         checkReactionType(reviewId, userId);
-        String sql = "DELETE FROM REVIEW_USEFUL WHERE REVIEW_ID = ? AND user_id = ?";
+        String sql = "DELETE FROM review_useful WHERE review_id = ? AND user_id = ?";
         jdbcTemplate.update(sql, reviewId, userId);
     }
 
     @Override
     public Integer getUsefulByReviewId(int reviewId) {
-        String sql = "SELECT SUM(USEFUL) FROM REVIEW_USEFUL WHERE REVIEW_ID = ?";
+        String sql = "SELECT SUM(useful) FROM review_useful WHERE review_id = ?";
         Integer useful = jdbcTemplate.queryForObject(sql, Integer.class, reviewId);
         if (useful == null)
             return 0;
@@ -57,7 +57,7 @@ public class ReviewUsefulDaoImpl implements ReviewUsefulDao {
      */
 
     private void checkReactionType(int reviewId, int userId) {
-        String sql = "SELECT USEFUL FROM REVIEW_USEFUL WHERE REVIEW_ID = ? AND USER_ID = ?";
+        String sql = "SELECT useful FROM review_useful WHERE review_id = ? AND user_id = ?";
         try {
             jdbcTemplate.queryForObject(sql, Integer.class, reviewId, userId);
         } catch (DataAccessException e) {
