@@ -28,6 +28,7 @@ public class CustomValidationFilmTest {
                 LocalDate.of(1895, 12, 29),
                 100,
                 RatingMpa.G.getId(),
+                null,
                 null);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();

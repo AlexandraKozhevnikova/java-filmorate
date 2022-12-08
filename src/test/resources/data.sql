@@ -1,3 +1,7 @@
+INSERT INTO director (NAME)
+VALUES ('Стивен Спилберг');
+VALUES ('Майкл Бэй');
+
 INSERT INTO user_filmorate (email, login, name, birthday)
 VALUES ('hp@ya.ru', 'hp', 'harry potter', '2000-12-1'),
        ('hp2@ya.ru', 'hp', 'harry potter', '2000-12-1'),

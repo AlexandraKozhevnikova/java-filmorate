@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
 import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
 import ru.yandex.practicum.filmorate.web.dto.film.UpdateFilmRequest;
@@ -97,6 +98,19 @@ public class FilmController {
             String year //todo достаточно ли такой валидации
     ) {
         List<Film> films = filmService.getTopFilms(threshold, genreId, year);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/director/{directorId}")
+    public List<FilmResponse> getAllFilmsByDirector(
+            @PathVariable("directorId") int directorId,
+            @RequestParam(name = "sortBy", defaultValue = "likes")
+            SortTypeDirectors sortTypeForDirector
+    ) {
+        List<Film> films = filmService.getAllFilmsByDirector(directorId,
+                sortTypeForDirector);
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
