@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 import ru.yandex.practicum.filmorate.web.dto.SearchByType;
 
 import java.util.List;
@@ -37,6 +39,7 @@ public class FilmService {
     public Film addFilm(Film filmWithoutId) {
         int id = filmStorage.add(filmWithoutId);
         filmStorage.upsertGenresForFilm(id, filmWithoutId.getGenres());
+        filmStorage.upsertDirectorForFilm(id, filmWithoutId.getDirector());
         return getFilmById(id);
     }
 
@@ -88,6 +91,37 @@ public class FilmService {
     public RatingMpa getMpaById(int id) {
         return RatingMpa.getRatingMpaById(id).orElseThrow(
                 () -> new BadFoundResultByIdException("RatingMPA with id = " + id + " does not exist"));
+    }
+
+    public Director addDirector(Director directorWithoutId) {
+        int directorId = filmStorage.addDirector(directorWithoutId);
+        return getDirectorById(directorId);
+    }
+
+    public Director getDirectorById(int directorId) {
+        return filmStorage.getDirectorById(directorId);
+    }
+
+    public List<Director> getAllDirectors() {
+        return filmStorage.getAllDirectors();
+    }
+
+    public Director updateDirector(Director newDirector) {
+        filmStorage.isDirectorExist(newDirector.getId());
+        log.info("Director with id " + newDirector.getId() + " has found");
+        filmStorage.updateDirector(newDirector);
+        return getDirectorById(newDirector.getId());
+    }
+
+    public void deleteDirector(int id) {
+        filmStorage.isDirectorExist(id);
+        filmStorage.deleteDirector(id);
+        log.info("Director with id " + id + " deleted");
+    }
+
+    public List<Film> getAllFilmsByDirector(int directorId, SortTypeDirectors sortTypeForDirector) {
+        filmStorage.isDirectorExist(directorId);
+        return filmStorage.getAllFilmsByDirector(directorId, sortTypeForDirector);
     }
 
     // поиск по названию фильма отсортированный по популярности

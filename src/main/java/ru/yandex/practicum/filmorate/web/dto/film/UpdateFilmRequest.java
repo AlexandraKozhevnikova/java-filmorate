@@ -35,4 +35,5 @@ public class UpdateFilmRequest {
     @JsonProperty("mpa")
     private Id ratingMpaId;
     private List<Id> genres;
+    private List<Id> directors;
 }

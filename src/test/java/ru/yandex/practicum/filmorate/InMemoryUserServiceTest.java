@@ -12,7 +12,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
-public class UserServiceTest { //  todo  Переименовать на инмемори
+public class InMemoryUserServiceTest {
 
     private final UserStorage userStorage = new InMemoryUserStorage();
     private final FilmStorage filmStorage = new InMemoryFilmStorage();

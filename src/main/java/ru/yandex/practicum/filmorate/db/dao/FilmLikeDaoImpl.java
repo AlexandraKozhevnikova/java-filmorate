@@ -38,7 +38,7 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
             year = "0000";
         }
 
-        if(genreId ==null){
+        if (genreId == null) {
             genreId = -1;
         }
 
