@@ -21,19 +21,6 @@ class FilmorateApplicationTest {
     private final DbUserStorage userStorage;
 
     @Test
-    public void findUserByIdTest() {
-        Optional<User> userOptional = userStorage.getItemById(1);
-
-        assertThat(userOptional)
-                .isPresent()
-                .hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("id", 1)
-                ).hasValueSatisfying(it ->
-                        assertThat(it).hasFieldOrPropertyWithValue("name", "harry potter")
-                );
-    }
-
-    @Test
     public void addUserTest() {
 
         User user = User.builder()
@@ -50,6 +37,19 @@ class FilmorateApplicationTest {
         assertThat(userOptional)
                 .isPresent()
                 .hasValueSatisfying(it ->
+                        assertThat(it).hasFieldOrPropertyWithValue("name", "Ron")
+                );
+    }
+
+    @Test
+    public void findUserByIdTest() {
+        Optional<User> userOptional = userStorage.getItemById(1);
+
+        assertThat(userOptional)
+                .isPresent()
+                .hasValueSatisfying(it ->
+                        assertThat(it).hasFieldOrPropertyWithValue("id", 1)
+                ).hasValueSatisfying(it ->
                         assertThat(it).hasFieldOrPropertyWithValue("name", "Ron")
                 );
     }
