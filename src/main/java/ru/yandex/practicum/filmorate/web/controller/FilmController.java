@@ -125,7 +125,8 @@ public class FilmController {
             String  query,
             @NotBlank
             @RequestParam(name = "by")
-            SearchByType searchBy //todo переделать на енам когда вмержать режиссеров https://www.baeldung.com/spring-enum-request-param
+            SearchByType searchBy
+            //todo переделать на енам когда вмержать режиссеров https://www.baeldung.com/spring-enum-request-param
     ) {
         List<Film> films = filmService.search(query, searchBy);
         return films.stream()
