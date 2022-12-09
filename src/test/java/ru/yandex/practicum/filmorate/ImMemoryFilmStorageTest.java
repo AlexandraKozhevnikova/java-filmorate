@@ -8,11 +8,9 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 public class ImMemoryFilmStorageTest {
     private final FilmStorage storage = new InMemoryFilmStorage();
-
 
     @Test
     public void addFilmTest() {

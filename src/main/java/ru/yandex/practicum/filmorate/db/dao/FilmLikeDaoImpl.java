@@ -33,15 +33,38 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
     }
 
     @Override
-    public List<Map<String, Object>> getTopLikes(int threshold) {
-        String sql = "SELECT film_id, count(user_id) as count_likes " +
+    public List<Map<String, Object>> getTopLikes(int threshold, Integer genreId, String year) {
+        if (year == null) {
+            year = "0000";
+        }
+
+        if (genreId == null) {
+            genreId = -1;
+        }
+
+        String sql = "WITH " +
+                "genre_filtred(film_id) AS (" +
+                "   SELECT film_id " +
+                "   FROM film_genre " +
+                "   WHERE 1 = 1 " +
+                (genreId == -1 ? " AND 1 <> ?" : " AND genre_id = ?") +
+                "), " +
+                "film_filtred(film_id) AS (" +
+                "   SELECT id " +
+                "   FROM film " +
+                "   WHERE 1=1 " +
+                (year == "0000" ? " AND 1 <> ? " : "AND  EXTRACT(YEAR FROM release_date) = ?") +
+                ") " +
+                "SELECT film_like.film_id, COUNT(user_id) as count_likes " +
                 "FROM film_like " +
-                "GROUP by film_id " +
-                "ORDER by count_likes desc " +
-                "LIMIT ?";
+                (genreId == -1 ? " LEFT " : " ") +
+                "    JOIN genre_filtred ON FILM_LIKE.FILM_ID = genre_filtred.film_id " +
+                (year == "0000" ? " LEFT " : " ") +
+                "    JOIN film_filtred ON FILM_LIKE.FILM_ID = film_filtred.film_id " +
+                "GROUP BY FILM_LIKE.film_id " +
+                "ORDER BY count_likes desc " +
+                "LIMIT ? ";
 
-        return jdbcTemplate.queryForList(sql, threshold);
+        return jdbcTemplate.queryForList(sql, genreId, year, threshold);
     }
-
-
 }

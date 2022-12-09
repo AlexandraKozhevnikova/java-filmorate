@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
 import java.util.List;
 
@@ -22,8 +24,27 @@ public interface FilmStorage {
 
     void unlikeFilm(int filmId, int userId);
 
-    List<Film> getTopFilms(int threshold);
-
     boolean isExist(int id);
+
+    public int addDirector(Director director);
+
+    public Director getDirectorById(int id);
+
+    public List<Director> getAllDirectors();
+
+    public void updateDirector(Director director);
+
+    public void deleteDirector(int id);
+
+    public void upsertDirectorForFilm(int filmId, List<Director> directors);
+
+    public List<Director> getFilmDirector(int filmId);
+
+    public List<Film> getAllFilmsByDirector(int directorId, SortTypeDirectors sortTypeForDirectors);
+
+    public boolean isDirectorExist(int id);
+
+    List<Film> getTopFilms(int threshold, Integer genreId, String year);
+
 }
 

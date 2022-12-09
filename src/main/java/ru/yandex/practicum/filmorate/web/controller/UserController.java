@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.exception.BadFriendshipException;
 import ru.yandex.practicum.filmorate.model.Feed;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FeedService;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
 import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UserResponse;
+import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.web.mapper.UserMapper;
 
 import javax.validation.Valid;
@@ -50,7 +53,10 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> getAllUsers() throws JsonProcessingException {
-        log.info("Get request: GET {}", Arrays.stream(this.getClass().getAnnotation(RequestMapping.class).value()).findFirst().get());
+        log.info("Get request: GET {}", Arrays.stream(this.getClass().getAnnotation(RequestMapping.class)
+                .value())
+                .findFirst()
+                .get());
         List<UserResponse> responseBody = service.getAllUsers().stream()
                 .map(UserMapper::mapUserToResponse)
                 .collect(Collectors.toList());
@@ -116,6 +122,14 @@ public class UserController {
            List<User> common = service.getCommonFriend(firstFriendId, secondFriendId);
         return common.stream()
                 .map(UserMapper::mapUserToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}/recommendations")
+    public List<FilmResponse> getRecommendations(@PathVariable("id") int id) {
+        List<Film> recommendations = service.getFilmRecommendations(id);
+        return recommendations.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
     }
 

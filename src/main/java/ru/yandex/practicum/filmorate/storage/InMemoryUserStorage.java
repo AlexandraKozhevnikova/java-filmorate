@@ -24,4 +24,9 @@ public class InMemoryUserStorage extends InMemoryStorage<User> implements UserSt
     public List<Integer> getUserFriends(int userId) {
         throw new NotImplementedException("метод реализован только для БД");
     }
+
+    @Override
+    public List<Integer> getRecommendations(int userId) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
 }
