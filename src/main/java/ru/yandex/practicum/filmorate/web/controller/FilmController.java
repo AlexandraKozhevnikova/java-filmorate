@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/films")
 public class FilmController {
 
-    private final FilmService filmService;
+    private final FilmService filmService ;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
 
 
