@@ -25,5 +25,3 @@ public interface DirectorDao {
 
     List<Integer> getFilmByDirectorName(String name);
 }
-
-

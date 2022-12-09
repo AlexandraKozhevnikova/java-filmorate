@@ -124,7 +124,7 @@ public class FilmDaoImpL implements FilmDao {
                         "LEFT JOIN (" +
                         "SELECT DISTINCT film_id, COUNT(user_id) AS likecount " +
                         "FROM film_like " +
-                        "GROUP BY film_id) AS liketemp on fd.film_id = liketemp.film_id " +
+                        "GROUP BY film_id) AS liketemp ON fd.film_id = liketemp.film_id " +
                         "WHERE director_id = ? " +
                         "ORDER BY liketemp.likecount DESC",
                 this::mapRowToFilm, directorId
