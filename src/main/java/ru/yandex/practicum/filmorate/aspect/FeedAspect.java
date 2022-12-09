@@ -60,7 +60,7 @@ public class FeedAspect {
     }
 
     private Operation getOperation(String name) {
-        if (name.contains("add") || name.contains("make") || name.equals("like")) {
+        if (name.contains("add") || name.contains("insert")  || name.contains("make") || name.equals("like")) {
             return Operation.ADD;
         } else if (name.contains("remove") || name.contains("delete") || name.equals("unlike")) {
             return Operation.REMOVE;
