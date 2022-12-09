@@ -79,7 +79,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void deleteUser(int userId) {
-        String sql = "DELETE FROM user_filmorate WHERE id=?";
+        String sql = "DELETE FROM user_filmorate WHERE id = ?";
         jdbcTemplate.update(sql, userId);
     }
 

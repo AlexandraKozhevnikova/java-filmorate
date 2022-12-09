@@ -101,7 +101,7 @@ public class FilmDaoImpL implements FilmDao {
     }
 
     public void deleteFilm(int filmId) {
-        String sql = "DELETE FROM film WHERE id=?";
+        String sql = "DELETE FROM film WHERE id = ?";
         jdbcTemplate.update(sql, filmId);
     }
 
