@@ -78,4 +78,11 @@ public class ErrorHandler {
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("could not parse fields: ", errorFields);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgumentException(final IllegalArgumentException e) {
+        log.info("Response status code 400 Bad Request {}", e.getMessage());
+        return Map.of("validation error", e.getLocalizedMessage());
+    }
 }
