@@ -180,9 +180,8 @@ public class DbFilmStorage implements FilmStorage {
 
     private void setFieldsOnFilm(Film film) {
         setGenresOnFilm(film);
-        //todo add more fields
         setDirectorsOnFilm(film);
-        //add more fields
+        //todo add more fields
     }
 
     private void setGenresOnFilm(Film film) {

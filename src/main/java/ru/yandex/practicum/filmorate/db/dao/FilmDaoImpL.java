@@ -94,7 +94,6 @@ public class FilmDaoImpL implements FilmDao {
         parameters.addValue("year", year);
 
         String sql = "SELECT id " +
-        String sql = "SELECT id, name, description, release_date, duration, rating_mpa " +
                 "FROM film " +
                 "WHERE 1=1 " +
                 (!excludeList.isEmpty() ? "AND id NOT IN (:ids) " : "") +

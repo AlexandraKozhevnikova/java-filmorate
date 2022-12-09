@@ -25,7 +25,6 @@ public interface FilmStorage {
     void unlikeFilm(int filmId, int userId);
 
     boolean isExist(int id);
-    List<Film> getTopFilms(int threshold, Integer genreId, String year);
 
     public int addDirector(Director director);
 
@@ -44,5 +43,8 @@ public interface FilmStorage {
     public List<Film> getAllFilmsByDirector(int directorId, SortTypeDirectors sortTypeForDirectors);
 
     public boolean isDirectorExist(int id);
+
+    List<Film> getTopFilms(int threshold, Integer genreId, String year);
+
 }
 

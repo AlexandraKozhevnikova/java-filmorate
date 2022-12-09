@@ -95,7 +95,7 @@ public class FilmController {
             Integer genreId,
             @RequestParam(name = "year", required = false)
             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
-            String year //todo достаточно ли такой валидации
+            String year
     ) {
         List<Film> films = filmService.getTopFilms(threshold, genreId, year);
         return films.stream()
