@@ -91,7 +91,10 @@ public class DirectorDaoImpL implements DirectorDao {
                             ps.setInt(1, filmId);
                             ps.setInt(2, directors.get(i).getId());
                         }
-                        public int getBatchSize() {return directors.size();}
+
+                        public int getBatchSize() {
+                            return directors.size();
+                        }
                     });
         }
     }
@@ -100,7 +103,7 @@ public class DirectorDaoImpL implements DirectorDao {
     public List<Director> getFilmDirector(int filmId) {
         String sql = "SELECT fd.director_id, d.name " +
                 "FROM film_director fd " +
-                "LEFT JOIN director d ON FD.director_id = D.director_id " +
+                "LEFT JOIN director d ON fd.director_id = d.director_id " +
                 "WHERE film_id = ?";
         return jdbcTemplate.query(sql, this::mapRowToDirector, filmId);
     }
@@ -109,6 +112,16 @@ public class DirectorDaoImpL implements DirectorDao {
     public boolean isDirectorExist(int id) {
         SqlRowSet rs = jdbcTemplate.queryForRowSet("SELECT director_id FROM director WHERE director_id = ?", id);
         return rs.next();
+    }
+
+    @Override
+    public List<Integer> getFilmByDirectorName(String name) {
+        String sql = "SELECT film_id " +
+                " FROM film_director f " +
+                " JOIN director d ON f.director_id = d.director_id " +
+                " WHERE d.name ILIKE ? ";
+
+        return jdbcTemplate.queryForList(sql, Integer.class, "%" + name + "%");
     }
 
     private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {

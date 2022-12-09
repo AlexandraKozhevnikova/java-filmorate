@@ -46,5 +46,10 @@ public interface FilmStorage {
 
     List<Film> getTopFilms(int threshold, Integer genreId, String year);
 
+    List<Integer> searchByFilmTitle(String query);
+
+    List<Integer> searchByFilmDirector(String query);
+
+    List<Integer> sortByPopular(List<Integer> filmWithQuery);
 }
 

@@ -121,12 +121,10 @@ public class FilmController {
     @GetMapping("/search")
     public List<FilmResponse> searchFilms(
             @NotBlank
-            @RequestParam(name = "guery")
-            String  query,
-            @NotBlank
+            @RequestParam(name = "query")
+            String query,
             @RequestParam(name = "by")
-            SearchByType searchBy
-            //todo переделать на енам когда вмержать режиссеров https://www.baeldung.com/spring-enum-request-param
+            List<SearchByType> searchBy
     ) {
         List<Film> films = filmService.search(query, searchBy);
         return films.stream()

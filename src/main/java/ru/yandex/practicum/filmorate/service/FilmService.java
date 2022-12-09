@@ -10,10 +10,12 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 import ru.yandex.practicum.filmorate.web.dto.SearchByType;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -124,8 +126,24 @@ public class FilmService {
         return filmStorage.getAllFilmsByDirector(directorId, sortTypeForDirector);
     }
 
-    // поиск по названию фильма отсортированный по популярности
-    public List<Film> search(String query, SearchByType searchBy){
-        filmStorage.search
+    // поиск по названию фильма и имени режиссера отсортированный по популярности
+    public List<Film> search(String query, List<SearchByType> searchBy) {
+        List<Integer> filmWithQuery = new ArrayList<>();
+
+        if (searchBy.contains(SearchByType.NAME)) {
+            filmWithQuery.addAll(filmStorage.searchByFilmTitle(query));
+        }
+
+        if (searchBy.contains(SearchByType.DIRECTOR)) {
+            filmWithQuery.addAll(filmStorage.searchByFilmDirector(query));
+        }
+
+        if (!filmWithQuery.isEmpty()) {
+            filmWithQuery = filmStorage.sortByPopular(filmWithQuery);
+        }
+
+        return filmWithQuery.stream()
+                .map(this::getFilmById)
+                .collect(Collectors.toList());
     }
 }

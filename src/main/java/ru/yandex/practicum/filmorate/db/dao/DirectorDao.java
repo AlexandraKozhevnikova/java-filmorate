@@ -22,5 +22,8 @@ public interface DirectorDao {
     List<Director> getFilmDirector(int filmId);
 
     boolean isDirectorExist(int id);
+
+    List<Integer> getFilmByDirectorName(String name);
 }
+
 

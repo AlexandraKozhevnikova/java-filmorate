@@ -1,15 +1,26 @@
 package ru.yandex.practicum.filmorate.web.dto;
 
-public enum SearchByType {
-    TITLE("title"),
-    DIRECTOR("director");
-    private String value;
+import java.util.Optional;
 
-    SearchByType(String value) {
-        this.value = value;
+public enum SearchByType {
+    NAME("title"),
+    DIRECTOR("director");
+    private String apiParam;
+
+    SearchByType(String apiParam) {
+        this.apiParam = apiParam;
     }
 
-    public String getValue() {
-        return value;
+    public String getApiParam() {
+        return apiParam;
+    }
+
+    public static Optional<SearchByType> getSearchTypeByApiParam(String apiParam) {
+        for (SearchByType type : SearchByType.values()) {
+            if (type.getApiParam().equals(apiParam)) {
+                return Optional.of(type);
+            }
+        }
+        return Optional.empty();
     }
 }
