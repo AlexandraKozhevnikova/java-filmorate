@@ -18,8 +18,11 @@ public class ReviewUsefulDaoImpl implements ReviewUsefulDao {
 
     @Override
     public void likeReview(int reviewId, int userId) {
+//        Для подсчёта полезности отзыва ставится +1, если отзыв положительный (like)
+//      и -1, если он отрицательный (dislike).
+        int like = 1;
         String sql = "INSERT INTO review_useful (review_id, user_id, useful) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, reviewId, userId, 1);
+        jdbcTemplate.update(sql, reviewId, userId, like);
     }
 
     @Override
@@ -31,8 +34,11 @@ public class ReviewUsefulDaoImpl implements ReviewUsefulDao {
 
     @Override
     public void dislikeReview(int reviewId, int userId) {
+//      Для подсчёта полезности отзыва ставится +1, если отзыв положительный (like)
+//      и -1, если он отрицательный (dislike).
+        int dislike = -1;
         String sql = "INSERT INTO review_useful (review_id, user_id, useful) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, reviewId, userId, -1);
+        jdbcTemplate.update(sql, reviewId, userId, dislike);
     }
 
     @Override

@@ -32,6 +32,31 @@ public class ReviewsTest {
     private final UserService userService;
     private final FilmService filmService;
 
+    @BeforeEach
+    public void dataPreparation() {
+        User user = User.builder()
+                .login("pinki")
+                .email("pinki@ya.ru")
+                .birthday(LocalDate.now())
+                .build();
+
+        userService.add(user);
+
+        Film film = Film.builder()
+                .name("the time")
+                .duration(100)
+                .ratingMpaId(1)
+                .director(Collections.emptyList())
+                .releaseDate(LocalDate.of(1965, 1, 12))
+                .description("About the time")
+                .genres(List.of(1, 2, 3))
+                .build();
+
+        filmService.addFilm(film);
+        Review review = reviewCreation();
+        reviewService.add(review);
+    }
+
     @Test
     public void addAndGetReviewByIdTest() {
         Review review = reviewCreation();
@@ -142,31 +167,6 @@ public class ReviewsTest {
         Review reviewFromDb = reviewService.getReviewById(reviewId);
 
         Assertions.assertEquals(0, reviewFromDb.getUseful());
-    }
-
-    @BeforeEach
-    public void dataPreparation() {
-        User user = User.builder()
-                .login("pinki")
-                .email("pinki@ya.ru")
-                .birthday(LocalDate.now())
-                .build();
-
-        userService.add(user);
-
-        Film film = Film.builder()
-                .name("the time")
-                .duration(100)
-                .ratingMpaId(1)
-                .director(Collections.emptyList())
-                .releaseDate(LocalDate.of(1965, 1, 12))
-                .description("About the time")
-                .genres(List.of(1, 2, 3))
-                .build();
-
-        filmService.addFilm(film);
-        Review review = reviewCreation();
-        reviewService.add(review);
     }
 
     private Review reviewCreation() {

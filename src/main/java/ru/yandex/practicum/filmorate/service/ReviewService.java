@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.db.DbFilmStorage;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.ReviewStorage;
 
@@ -13,19 +16,18 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor(onConstructor_ = @Autowired)
 public class ReviewService {
     private final ReviewStorage reviewStorage;
     private final UserService userService;
     private final FilmService filmService;
-
-    public ReviewService(ReviewStorage reviewStorage, UserService userService, FilmService filmService) {
-        this.reviewStorage = reviewStorage;
-        this.userService = userService;
-        this.filmService = filmService;
-    }
+    private final DbFilmStorage filmStorage;
 
     public Review add(Review review) {
-        checkUserAndFilm(review);
+        int userId = review.getUserId();
+        int filmId = review.getFilmId();
+        userService.getUserById(userId);
+        filmStorage.isExist(filmId);
         int id = reviewStorage.add(review);
         return getReviewById(id);
     }
@@ -94,12 +96,5 @@ public class ReviewService {
         userService.getUserById(userId);
         reviewStorage.deleteDislikeReview(reviewId, userId);
         return "success";
-    }
-
-    private void checkUserAndFilm(Review review) {
-        int userId = review.getUserId();
-        int filmId = review.getFilmId();
-        userService.getUserById(userId);
-        filmService.getFilmById(filmId);
     }
 }

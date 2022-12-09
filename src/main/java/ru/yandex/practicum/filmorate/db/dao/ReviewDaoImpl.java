@@ -73,7 +73,6 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     private Review mapRowToReview(ResultSet resultSet, int rowNum) throws SQLException {
-
         return Review.builder()
                 .id(resultSet.getInt("review_id"))
                 .content(resultSet.getString("content"))
