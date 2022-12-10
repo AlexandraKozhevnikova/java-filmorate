@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate.web.converter;
 
 import org.springframework.core.convert.converter.Converter;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
-import java.util.NoSuchElementException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 
 public class SortTypeDirectorsConverter implements Converter<String, SortTypeDirectors> {
     @Override
