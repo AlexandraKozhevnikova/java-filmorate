@@ -44,9 +44,13 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
 
     @Override
     public List<Integer> getCommonFilmsIds(int userId, int friendId) {
-        Set<Integer> commonFilmsIds = new HashSet<>(getUsersLikedFilmsIds(userId));
-        commonFilmsIds.add(friendId);
-        return new ArrayList<>(commonFilmsIds);
+        List<Integer> userFilmIds = getUsersLikedFilmsIds(userId);
+        List<Integer> otherFilmsIds = getUsersLikedFilmsIds(friendId);
+        List<Integer> commonFilmsIds = new ArrayList<>();
+        for (Integer id : otherFilmsIds) {
+            if (userFilmIds.contains(id)) commonFilmsIds.add(id);
+        }
+        return commonFilmsIds;
     }
 
     private List<Integer> getUsersLikedFilmsIds(int user_id) {
