@@ -89,23 +89,6 @@ public class FilmDaoImpL implements FilmDao {
         return film;
     }
 
-    @Override
-    public List<Integer> getSortedByPoplarIds(List<Integer> filmIds) {
-
-        String filmIdsInSql = String.join(",", Collections.nCopies(filmIds.size(), "?"));
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(String.format("SELECT film_id, COUNT(film_id) AS popularity" +
-                "FROM film_like" +
-                "WHERE film_id IN (%s)" +
-                "GROUP BY film_id" +
-                "SORT BY popularity", filmIdsInSql));
-
-        List<Integer> sortedFilmIds = new ArrayList<>();
-        while (rs.next()) {
-            sortedFilmIds.add(rs.getInt("film_id"));
-        }
-        return sortedFilmIds;
-    }
-
     public List<Integer> getFilteredFilm(int count,
                                          List<Integer> excludeList,
                                          Integer genreId,

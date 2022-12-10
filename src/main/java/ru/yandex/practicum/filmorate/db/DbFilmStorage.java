@@ -202,12 +202,10 @@ public class DbFilmStorage implements FilmStorage {
     @Override
     public List<Film> getCommonFilms(int userId, int friendId) {
         List<Integer> commonFilmIds = recommendationsDao.getCommonFilmsIds(userId, friendId);
-        List<Integer> sortedCommonFilmIds = filmDao.getSortedByPoplarIds(commonFilmIds);
-        List<Film> commonSortedFilms = new ArrayList<>();
-        for (Integer id : sortedCommonFilmIds) {
-            commonSortedFilms.add(getItemById(id));
-        }
-        return commonSortedFilms;
+        List<Integer> sortedCommonFilmIds = sortByPopular(commonFilmIds);
+        return sortedCommonFilmIds.stream()
+                .map(this::getItemById)
+                .collect(Collectors.toList());
     }
 
     private void setFieldsOnFilm(Film film) {

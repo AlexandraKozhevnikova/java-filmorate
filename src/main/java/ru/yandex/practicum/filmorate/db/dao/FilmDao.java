@@ -20,7 +20,5 @@ public interface FilmDao {
     List<Film> getAllFilmsByDirector(int directorId);
 
     List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year, String title);
-
-    List<Integer> getSortedByPoplarIds(List<Integer> filmIds);
 }
 
