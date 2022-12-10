@@ -49,9 +49,12 @@ public class ReviewUsefulDaoImpl implements ReviewUsefulDao {
     }
 
     @Override
-    public int getUsefulByReviewId(int reviewId) {
+    public Integer getUsefulByReviewId(int reviewId) {
         String sql = "SELECT SUM(useful) FROM review_useful WHERE review_id = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, reviewId);
+        Integer useful = jdbcTemplate.queryForObject(sql, Integer.class, reviewId);
+        if (useful == null)
+            useful = 0;
+        return useful;
     }
 
     /**

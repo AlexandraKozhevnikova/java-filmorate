@@ -9,5 +9,5 @@ public interface ReviewUsefulDao {
 
     void deleteDislikeReview(int reviewId, int userId);
 
-    int getUsefulByReviewId(int reviewId);
+    Integer getUsefulByReviewId(int reviewId);
 }
