@@ -40,7 +40,6 @@ public class FilmController {
     private final FilmService filmService;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
 
-
     @Autowired
     public FilmController(FilmService filmService) {
         this.filmService = filmService;

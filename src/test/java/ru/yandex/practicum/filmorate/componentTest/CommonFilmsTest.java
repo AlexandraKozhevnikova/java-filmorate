@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.componentTest;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

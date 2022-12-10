@@ -14,8 +14,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;

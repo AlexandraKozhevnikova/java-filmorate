@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.db;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
@@ -11,7 +10,6 @@ import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
 import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
-import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;

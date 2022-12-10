@@ -52,5 +52,6 @@ public interface FilmStorage {
 
     List<Integer> sortByPopular(List<Integer> filmWithQuery);
     List<Film> getCommonFilms(int userId, int friendId);
+
 }
 
