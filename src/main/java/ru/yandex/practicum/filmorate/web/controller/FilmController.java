@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.web.dto.SearchByType;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
 import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
@@ -25,6 +26,7 @@ import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/films")
 public class FilmController {
 
-    private final FilmService filmService;
+    private final FilmService filmService ;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
 
 
@@ -111,6 +113,20 @@ public class FilmController {
     ) {
         List<Film> films = filmService.getAllFilmsByDirector(directorId,
                 sortTypeForDirector);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/search")
+    public List<FilmResponse> searchFilms(
+            @NotBlank
+            @RequestParam(name = "query")
+            String query,
+            @RequestParam(name = "by")
+            List<SearchByType> searchBy
+    ) {
+        List<Film> films = filmService.search(query, searchBy);
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
