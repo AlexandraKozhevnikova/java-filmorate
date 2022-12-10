@@ -49,17 +49,13 @@ public class ReviewUsefulDaoImpl implements ReviewUsefulDao {
     }
 
     @Override
-    public Integer getUsefulByReviewId(int reviewId) {
+    public int getUsefulByReviewId(int reviewId) {
         String sql = "SELECT SUM(useful) FROM review_useful WHERE review_id = ?";
-        Integer useful = jdbcTemplate.queryForObject(sql, Integer.class, reviewId);
-        if (useful == null)
-            return 0;
-        return useful;
+        return jdbcTemplate.queryForObject(sql, Integer.class, reviewId);
     }
 
     /**
-     * Метод определяет тип реакции: лайк или дизлайк. Если передаёт положительное число (должно быть +1),
-     * значит это лайк, если отрицательное (должно быть -1), значит дизлайк.
+     * Метод проверяет перед удалением, существует ли лайк или дизлайк от данного пользователя к данному отзыву.
      */
 
     private void checkReactionType(int reviewId, int userId) {

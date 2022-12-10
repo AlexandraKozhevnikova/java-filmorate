@@ -45,6 +45,5 @@ public interface FilmStorage {
     public boolean isDirectorExist(int id);
 
     List<Film> getTopFilms(int threshold, Integer genreId, String year);
-
 }
 

@@ -33,7 +33,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleBadReviewReactionException(final BadReviewReactionException e) {
         log.info("Response status code 400 Bad Request {}", e.getMessage());
-        return Map.of("logic error", e.getMessage());
+        return Map.of("validation error", e.getMessage());
     }
 
     @ExceptionHandler
