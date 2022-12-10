@@ -2,11 +2,13 @@ package ru.yandex.practicum.filmorate.db;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
+import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -28,13 +30,15 @@ public class DbFilmStorage implements FilmStorage {
     private final FilmGenreDao filmGenreDao;
     private final FilmLikeDao filmLikeDao;
     private final DirectorDao directorDao;
+    private final RecommendationsDao recommendationsDao;
 
     @Autowired
-    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao) {
+    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao, RecommendationsDao recommendationsDao) {
         this.filmDao = filmDao;
         this.filmGenreDao = filmGenreDao;
         this.filmLikeDao = filmLikeDao;
         this.directorDao = directorDao;
+        this.recommendationsDao = recommendationsDao;
     }
 
     @Override
@@ -176,6 +180,17 @@ public class DbFilmStorage implements FilmStorage {
             throw new BadFoundResultByIdException("Director with id = " + directorId + " does not exist");
         }
         return true;
+    }
+
+    @Override
+    public List<Film> getCommonFilms(int userId, int friendId) {
+        List<Integer> commonFilmIds = recommendationsDao.getCommonFilmsIds(userId, friendId);
+        List<Integer> sortedCommonFilmIds = filmDao.getSortedByPoplarIds(commonFilmIds);
+        List<Film> commonSortedFilms = new ArrayList<>();
+        for (Integer id : sortedCommonFilmIds) {
+            commonSortedFilms.add(getItemById(id));
+        }
+        return commonSortedFilms;
     }
 
     private void setFieldsOnFilm(Film film) {

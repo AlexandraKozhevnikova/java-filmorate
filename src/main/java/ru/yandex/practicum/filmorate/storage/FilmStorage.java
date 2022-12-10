@@ -46,5 +46,6 @@ public interface FilmStorage {
 
     List<Film> getTopFilms(int threshold, Integer genreId, String year);
 
+    List<Film> getCommonFilms(int userId, int friendId);
 }
 

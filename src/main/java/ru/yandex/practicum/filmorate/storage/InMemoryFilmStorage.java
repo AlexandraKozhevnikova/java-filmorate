@@ -40,6 +40,11 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     }
 
     @Override
+    public List<Film> getCommonFilms(int userId, int friendId) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
     public boolean isExist(int id) {
         throw new NotImplementedException("метод реализован только для БД");
     }

@@ -21,5 +21,6 @@ public interface FilmDao {
 
     List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year);
 
+    List<Integer> getSortedByPoplarIds(List<Integer> filmIds);
 }
 

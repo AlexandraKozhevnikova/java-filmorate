@@ -13,6 +13,8 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +85,23 @@ public class FilmDaoImpL implements FilmDao {
         } catch (EmptyResultDataAccessException ignored) {
         }
         return film;
+    }
+
+    @Override
+    public List<Integer> getSortedByPoplarIds(List<Integer> filmIds) {
+
+        String filmIdsInSql = String.join(",", Collections.nCopies(filmIds.size(), "?"));
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(String.format("SELECT film_id, COUNT(film_id) AS popularity" +
+                "FROM film_like" +
+                "WHERE film_id IN (%s)" +
+                "GROUP BY film_id" +
+                "SORT BY popularity", filmIdsInSql));
+
+        List<Integer> sortedFilms = new ArrayList<>();
+        while (rs.next()) {
+            sortedFilms.add(rs.getInt("film_id"));
+        }
+        return sortedFilms;
     }
 
     public List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year) {

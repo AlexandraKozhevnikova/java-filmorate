@@ -122,4 +122,10 @@ public class FilmService {
         filmStorage.isDirectorExist(directorId);
         return filmStorage.getAllFilmsByDirector(directorId, sortTypeForDirector);
     }
+
+    public List<Film> getCommonFilms(int userId, int friendId) {
+        userService.getUserById(userId);
+        userService.getUserById(friendId);
+        return filmStorage.getCommonFilms(userId, friendId);
+    }
 }

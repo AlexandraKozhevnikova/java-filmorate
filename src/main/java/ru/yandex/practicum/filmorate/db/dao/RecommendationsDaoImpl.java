@@ -42,6 +42,13 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
         return List.copyOf(filmIdsToRecommend);
     }
 
+    @Override
+    public List<Integer> getCommonFilmsIds(int userId, int friendId) {
+        Set<Integer> commonFilmsIds = new HashSet<>(getUsersLikedFilmsIds(userId));
+        commonFilmsIds.add(friendId);
+        return new ArrayList<>(commonFilmsIds);
+    }
+
     private List<Integer> getUsersLikedFilmsIds(int user_id) {
         List<Integer> usersLikedFilmsIds = new ArrayList<>();
         SqlRowSet userRs = jdbcTemplate.queryForRowSet(
