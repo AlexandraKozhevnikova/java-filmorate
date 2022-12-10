@@ -40,6 +40,21 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     }
 
     @Override
+    public List<Integer> searchByFilmTitle(String query) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
+    public List<Integer> searchByFilmDirector(String query) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
+    public List<Integer> sortByPopular(List<Integer> filmWithQuery) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
     public List<Film> getCommonFilms(int userId, int friendId) {
         throw new NotImplementedException("метод реализован только для БД");
     }

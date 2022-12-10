@@ -64,9 +64,9 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
     private List<Integer> maxCommonUserIds(int user_id) {
         List<Integer> maxCommonUserIds = new ArrayList<>();
         SqlRowSet maxCommonUserIdsRs = jdbcTemplate.queryForRowSet(
-                "     SELECT USER_ID, MAX(common_count) as max_common" +
+                "     SELECT USER_ID, MAX(common_count) AS max_common" +
                         " FROM (" +
-                        "          SELECT USER_ID, COUNT(USER_ID) as common_count " +
+                        "          SELECT USER_ID, COUNT(USER_ID) AS common_count " +
                         "          FROM FILM_LIKE " +
                         "          WHERE FILM_ID IN (" +
                         "                                SELECT FILM_ID " +
@@ -78,7 +78,7 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
                 user_id, user_id
         );
         while (maxCommonUserIdsRs.next()) {
-            maxCommonUserIds.add(maxCommonUserIdsRs.getInt("USER_ID"));
+            maxCommonUserIds.add(maxCommonUserIdsRs.getInt("user_id"));
         }
         if (maxCommonUserIds.isEmpty()) {
             return Collections.emptyList();

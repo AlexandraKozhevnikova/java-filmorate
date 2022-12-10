@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
 import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
@@ -112,7 +113,7 @@ public class DbFilmStorage implements FilmStorage {
         int dif = threshold - filmIdWithLikes.size();
         List<Integer> randomFilmsIdWithoutLike = Collections.emptyList();
         if (dif > 0) {
-            randomFilmsIdWithoutLike = filmDao.getFilteredFilm(dif, filmIdWithLikes, genreId, year);
+            randomFilmsIdWithoutLike = filmDao.getFilteredFilm(dif, filmIdWithLikes, genreId, year, null);
         }
         //собираем в общую коллекцию
         List<Film> filmWithLike = filmIdWithLikes.stream()
@@ -123,6 +124,22 @@ public class DbFilmStorage implements FilmStorage {
                 .forEach(film -> filmWithLike.add(film));
 
         return filmWithLike;
+    }
+
+    @Override
+    public List<Integer> searchByFilmTitle(String query) {
+        List<Integer> films = filmDao.getFilteredFilm(0, Collections.emptyList(), null, null, query);
+        return films;
+    }
+
+    @Override
+    public List<Integer> searchByFilmDirector(String name) {
+        return directorDao.getFilmByDirectorName(name);
+    }
+
+    @Override
+    public List<Integer> sortByPopular(List<Integer> filmWithQuery) {
+        return filmLikeDao.sortByPopular(filmWithQuery);
     }
 
     @Override
@@ -167,9 +184,9 @@ public class DbFilmStorage implements FilmStorage {
             setFieldsOnFilm(film);
         }
         if (sortTypeForDirectors.equals(SortTypeDirectors.YEAR)) {
-          films = films.stream()
-                  .sorted(Film::compareFilmsByYear)
-                  .collect(Collectors.toList());
+            films = films.stream()
+                    .sorted(Film::compareFilmsByYear)
+                    .collect(Collectors.toList());
         }
         return films;
     }

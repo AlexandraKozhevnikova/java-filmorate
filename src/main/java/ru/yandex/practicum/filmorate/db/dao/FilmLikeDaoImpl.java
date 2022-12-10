@@ -4,8 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +17,9 @@ import java.util.Map;
 public class FilmLikeDaoImpl implements FilmLikeDao {
 
     private final JdbcTemplate jdbcTemplate;
+
+    private NamedParameterJdbcTemplate namedDb;
+
 
     @Autowired
     public FilmLikeDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -66,5 +72,23 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
                 "LIMIT ? ";
 
         return jdbcTemplate.queryForList(sql, genreId, year, threshold);
+    }
+
+    @Override
+    public List<Integer> sortByPopular(List<Integer> filmWithQuery) {
+        if (filmWithQuery.isEmpty()) {
+            return Collections.emptyList();
+        }
+        namedDb = new NamedParameterJdbcTemplate(jdbcTemplate);
+        MapSqlParameterSource parameters = new MapSqlParameterSource(Map.of("ids", filmWithQuery));
+
+        String sql =
+                " SELECT film_found.id " +
+                        " FROM (VALUES :ids ) AS film_found(ID)  " +
+                        "       LEFT  JOIN film_like fl ON film_found.id = fl.film_id " +
+                        " GROUP BY film_found.id " +
+                        " ORDER BY COUNT(fl.user_id) DESC ";
+
+        return namedDb.queryForList(sql, parameters, Integer.class);
     }
 }

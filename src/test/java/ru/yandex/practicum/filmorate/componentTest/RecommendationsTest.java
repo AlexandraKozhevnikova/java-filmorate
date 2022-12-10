@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class RecommendationsTest {
 
-    public final UserService userService;
+    private final UserService userService;
 
     @Test
     public void shouldReturnEmptyListWhenFullOverlapsTest() {
