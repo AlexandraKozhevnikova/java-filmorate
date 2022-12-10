@@ -131,7 +131,7 @@ public class FilmController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/common/")
+    @GetMapping("/common")
     public List<FilmResponse> getCommon(
             @RequestParam(name = "userId") int userId,
             @RequestParam(name = "friendId") int friendId
