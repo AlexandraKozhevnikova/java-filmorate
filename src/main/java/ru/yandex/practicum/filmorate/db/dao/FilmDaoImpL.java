@@ -97,11 +97,11 @@ public class FilmDaoImpL implements FilmDao {
                 "GROUP BY film_id" +
                 "SORT BY popularity", filmIdsInSql));
 
-        List<Integer> sortedFilms = new ArrayList<>();
+        List<Integer> sortedFilmIds = new ArrayList<>();
         while (rs.next()) {
-            sortedFilms.add(rs.getInt("film_id"));
+            sortedFilmIds.add(rs.getInt("film_id"));
         }
-        return sortedFilms;
+        return sortedFilmIds;
     }
 
     public List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year) {
