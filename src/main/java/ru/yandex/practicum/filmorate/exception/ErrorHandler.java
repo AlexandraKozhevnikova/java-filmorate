@@ -70,6 +70,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgumentException(final IllegalArgumentException e) {
+        log.info("Response status code 400 Bad Request {}", e.getMessage());
+        return Map.of("validation error", e.getLocalizedMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, List<String>> handleHttpMessageNotReadableException(final MismatchedInputException e) {
         List<String> errorFields = e.getPath().stream()
                 .map(it -> it.getFieldName())
