@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 public class ImMemoryFilmStorageTest {
     private final FilmStorage storage = new InMemoryFilmStorage();
 
-
     @Test
     public void addFilmTest() {
         Film film = Film.builder()
