@@ -146,4 +146,10 @@ public class FilmService {
                 .map(this::getFilmById)
                 .collect(Collectors.toList());
     }
+
+    public List<Film> getCommonFilms(int userId, int friendId) {
+        userService.getUserById(userId);
+        userService.getUserById(friendId);
+        return filmStorage.getCommonFilms(userId, friendId);
+    }
 }

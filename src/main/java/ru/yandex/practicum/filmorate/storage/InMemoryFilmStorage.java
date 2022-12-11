@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Qualifier("inMemoryFilmStorage")
@@ -50,6 +51,11 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
 
     @Override
     public List<Integer> sortByPopular(List<Integer> filmWithQuery) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
+    public List<Film> getCommonFilms(int userId, int friendId) {
         throw new NotImplementedException("метод реализован только для БД");
     }
 

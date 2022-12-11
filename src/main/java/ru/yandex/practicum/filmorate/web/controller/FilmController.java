@@ -37,9 +37,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/films")
 public class FilmController {
 
-    private final FilmService filmService ;
+    private final FilmService filmService;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
-
 
     @Autowired
     public FilmController(FilmService filmService) {
@@ -127,6 +126,17 @@ public class FilmController {
             List<SearchByType> searchBy
     ) {
         List<Film> films = filmService.search(query, searchBy);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/common")
+    public List<FilmResponse> getCommon(
+            @RequestParam(name = "userId") int userId,
+            @RequestParam(name = "friendId") int friendId
+    ) {
+        List<Film> films = filmService.getCommonFilms(userId, friendId);
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());

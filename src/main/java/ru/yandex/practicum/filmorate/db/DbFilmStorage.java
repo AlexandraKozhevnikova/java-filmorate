@@ -7,8 +7,9 @@ import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
-import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
+import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
 import ru.yandex.practicum.filmorate.model.Director;
+import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
@@ -28,13 +29,15 @@ public class DbFilmStorage implements FilmStorage {
     private final FilmGenreDao filmGenreDao;
     private final FilmLikeDao filmLikeDao;
     private final DirectorDao directorDao;
+    private final RecommendationsDao recommendationsDao;
 
     @Autowired
-    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao) {
+    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao, RecommendationsDao recommendationsDao) {
         this.filmDao = filmDao;
         this.filmGenreDao = filmGenreDao;
         this.filmLikeDao = filmLikeDao;
         this.directorDao = directorDao;
+        this.recommendationsDao = recommendationsDao;
     }
 
     @Override
@@ -192,6 +195,15 @@ public class DbFilmStorage implements FilmStorage {
             throw new BadFoundResultByIdException("Director with id = " + directorId + " does not exist");
         }
         return true;
+    }
+
+    @Override
+    public List<Film> getCommonFilms(int userId, int friendId) {
+        List<Integer> commonFilmIds = recommendationsDao.getCommonFilmsIds(userId, friendId);
+        List<Integer> sortedCommonFilmIds = sortByPopular(commonFilmIds);
+        return sortedCommonFilmIds.stream()
+                .map(this::getItemById)
+                .collect(Collectors.toList());
     }
 
     private void setFieldsOnFilm(Film film) {
