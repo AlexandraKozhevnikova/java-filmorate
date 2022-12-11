@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
 import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
+import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -28,13 +29,15 @@ public class DbFilmStorage implements FilmStorage {
     private final FilmGenreDao filmGenreDao;
     private final FilmLikeDao filmLikeDao;
     private final DirectorDao directorDao;
+    private final RecommendationsDao recommendationsDao;
 
     @Autowired
-    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao) {
+    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao, RecommendationsDao recommendationsDao) {
         this.filmDao = filmDao;
         this.filmGenreDao = filmGenreDao;
         this.filmLikeDao = filmLikeDao;
         this.directorDao = directorDao;
+        this.recommendationsDao = recommendationsDao;
     }
 
     @Override
@@ -108,7 +111,7 @@ public class DbFilmStorage implements FilmStorage {
         int dif = threshold - filmIdWithLikes.size();
         List<Integer> randomFilmsIdWithoutLike = Collections.emptyList();
         if (dif > 0) {
-            randomFilmsIdWithoutLike = filmDao.getFilteredFilm(dif, filmIdWithLikes, genreId, year);
+            randomFilmsIdWithoutLike = filmDao.getFilteredFilm(dif, filmIdWithLikes, genreId, year, null);
         }
         //собираем в общую коллекцию
         List<Film> filmWithLike = filmIdWithLikes.stream()
@@ -119,6 +122,22 @@ public class DbFilmStorage implements FilmStorage {
                 .forEach(film -> filmWithLike.add(film));
 
         return filmWithLike;
+    }
+
+    @Override
+    public List<Integer> searchByFilmTitle(String query) {
+        List<Integer> films = filmDao.getFilteredFilm(0, Collections.emptyList(), null, null, query);
+        return films;
+    }
+
+    @Override
+    public List<Integer> searchByFilmDirector(String name) {
+        return directorDao.getFilmByDirectorName(name);
+    }
+
+    @Override
+    public List<Integer> sortByPopular(List<Integer> filmWithQuery) {
+        return filmLikeDao.sortByPopular(filmWithQuery);
     }
 
     @Override
@@ -163,9 +182,9 @@ public class DbFilmStorage implements FilmStorage {
             setFieldsOnFilm(film);
         }
         if (sortTypeForDirectors.equals(SortTypeDirectors.YEAR)) {
-          films = films.stream()
-                  .sorted(Film::compareFilmsByYear)
-                  .collect(Collectors.toList());
+            films = films.stream()
+                    .sorted(Film::compareFilmsByYear)
+                    .collect(Collectors.toList());
         }
         return films;
     }
@@ -176,6 +195,15 @@ public class DbFilmStorage implements FilmStorage {
             throw new BadFoundResultByIdException("Director with id = " + directorId + " does not exist");
         }
         return true;
+    }
+
+    @Override
+    public List<Film> getCommonFilms(int userId, int friendId) {
+        List<Integer> commonFilmIds = recommendationsDao.getCommonFilmsIds(userId, friendId);
+        List<Integer> sortedCommonFilmIds = sortByPopular(commonFilmIds);
+        return sortedCommonFilmIds.stream()
+                .map(this::getItemById)
+                .collect(Collectors.toList());
     }
 
     private void setFieldsOnFilm(Film film) {
