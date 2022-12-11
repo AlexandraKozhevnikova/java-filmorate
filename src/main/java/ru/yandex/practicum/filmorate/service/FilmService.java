@@ -5,12 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.web.dto.SearchByType;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,6 +41,7 @@ public class FilmService {
     public Film addFilm(Film filmWithoutId) {
         int id = filmStorage.add(filmWithoutId);
         filmStorage.upsertGenresForFilm(id, filmWithoutId.getGenres());
+        filmStorage.upsertDirectorForFilm(id, filmWithoutId.getDirector());
         return getFilmById(id);
     }
 
@@ -66,8 +72,8 @@ public class FilmService {
 
     }
 
-    public List<Film> getTopFilms(int threshold) {
-        List<Film> films = filmStorage.getTopFilms(threshold);
+    public List<Film> getTopFilms(int threshold, Integer genreId, String year) {
+        List<Film> films = filmStorage.getTopFilms(threshold, genreId, year);
         return films;
     }
 
@@ -93,4 +99,62 @@ public class FilmService {
         filmStorage.deleteFilm(filmId);
     }
 
+
+    public Director addDirector(Director directorWithoutId) {
+        int directorId = filmStorage.addDirector(directorWithoutId);
+        return getDirectorById(directorId);
+    }
+
+    public Director getDirectorById(int directorId) {
+        return filmStorage.getDirectorById(directorId);
+    }
+
+    public List<Director> getAllDirectors() {
+        return filmStorage.getAllDirectors();
+    }
+
+    public Director updateDirector(Director newDirector) {
+        filmStorage.isDirectorExist(newDirector.getId());
+        log.info("Director with id " + newDirector.getId() + " has found");
+        filmStorage.updateDirector(newDirector);
+        return getDirectorById(newDirector.getId());
+    }
+
+    public void deleteDirector(int id) {
+        filmStorage.isDirectorExist(id);
+        filmStorage.deleteDirector(id);
+        log.info("Director with id " + id + " deleted");
+    }
+
+    public List<Film> getAllFilmsByDirector(int directorId, SortTypeDirectors sortTypeForDirector) {
+        filmStorage.isDirectorExist(directorId);
+        return filmStorage.getAllFilmsByDirector(directorId, sortTypeForDirector);
+    }
+
+    // поиск по названию фильма и имени режиссера отсортированный по популярности
+    public List<Film> search(String query, List<SearchByType> searchBy) {
+        List<Integer> filmWithQuery = new ArrayList<>();
+
+        if (searchBy.contains(SearchByType.NAME)) {
+            filmWithQuery.addAll(filmStorage.searchByFilmTitle(query));
+        }
+
+        if (searchBy.contains(SearchByType.DIRECTOR)) {
+            filmWithQuery.addAll(filmStorage.searchByFilmDirector(query));
+        }
+
+        if (!filmWithQuery.isEmpty()) {
+            filmWithQuery = filmStorage.sortByPopular(filmWithQuery);
+        }
+
+        return filmWithQuery.stream()
+                .map(this::getFilmById)
+                .collect(Collectors.toList());
+    }
+
+    public List<Film> getCommonFilms(int userId, int friendId) {
+        userService.getUserById(userId);
+        userService.getUserById(friendId);
+        return filmStorage.getCommonFilms(userId, friendId);
+    }
 }

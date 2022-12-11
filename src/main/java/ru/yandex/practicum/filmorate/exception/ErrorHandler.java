@@ -33,11 +33,12 @@ public class ErrorHandler {
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("logic error", e.getMessage());
     }
+
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleDuplicateKeyException(final DuplicateKeyException e) {
-        log.info("Response status code 200 ок {}", e.getMessage());
-        return Map.of("object already exist", e.getMessage());
+        log.info("Response status code 400 Bad Request {}", e.getMessage());
+        return Map.of("object already exist", e.getLocalizedMessage());
     }
 
 
@@ -66,6 +67,13 @@ public class ErrorHandler {
                 .collect(Collectors.toList());
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("validation error", listError);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgumentException(final IllegalArgumentException e) {
+        log.info("Response status code 400 Bad Request {}", e.getMessage());
+        return Map.of("validation error", e.getLocalizedMessage());
     }
 
     @ExceptionHandler

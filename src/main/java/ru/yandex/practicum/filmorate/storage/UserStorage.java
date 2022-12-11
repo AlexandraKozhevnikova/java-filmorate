@@ -22,4 +22,5 @@ public interface UserStorage {
 
     void deleteUser(int userId);
 
+    List<Integer> getRecommendations(int userId);
 }

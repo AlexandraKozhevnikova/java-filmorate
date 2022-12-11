@@ -1,10 +1,14 @@
 package ru.yandex.practicum.filmorate.web.mapper;
 
+import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
+import ru.yandex.practicum.filmorate.db.dao.DirectorDaoImpL;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.web.dto.Id;
+import ru.yandex.practicum.filmorate.web.dto.director.DirectorResponse;
 import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
 import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
 import ru.yandex.practicum.filmorate.web.dto.film.UpdateFilmRequest;
@@ -22,6 +26,13 @@ public class FilmMapper {
                     .collect(Collectors.toList());
         }
 
+        List<Director> directors = Collections.emptyList();
+        if (dto.getDirectors() != null) {
+            directors = dto.getDirectors().stream()
+                    .map((Id directorId) -> DirectorMapper.mapDirectorForFilm(directorId.getId()))
+                    .collect(Collectors.toList());
+        }
+
         Film film = Film.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -29,6 +40,7 @@ public class FilmMapper {
                 .duration(dto.getDuration())
                 .genres(genres)
                 .ratingMpaId(dto.getRatingMpaId().getId())
+                .director(directors)
                 .build();
         return film;
     }
@@ -40,6 +52,12 @@ public class FilmMapper {
                     .map(Id::getId)
                     .collect(Collectors.toList());
         }
+        List<Director> directors = Collections.emptyList();
+        if (dto.getDirectors() != null) {
+            directors = dto.getDirectors().stream()
+                    .map((Id directorId) -> DirectorMapper.mapDirectorForFilm(directorId.getId()))
+                    .collect(Collectors.toList());
+        }
 
         Film film = Film.builder()
                 .id(dto.getId())
@@ -49,6 +67,7 @@ public class FilmMapper {
                 .duration(dto.getDuration())
                 .ratingMpaId(dto.getRatingMpaId().getId())
                 .genres(genres)
+                .director(directors)
                 .build();
         return film;
     }
@@ -58,7 +77,8 @@ public class FilmMapper {
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
             genres = film.getGenres().stream()
                     .map(id -> Genre.getGenreById(id)
-                            .orElseThrow(() -> new BadFoundResultByIdException("Genre with id = " + id + "does not exist")))
+                            .orElseThrow(() ->
+                                    new BadFoundResultByIdException("Genre with id = " + id + "does not exist")))
                     .collect(Collectors.toList());
         }
 
@@ -74,6 +94,7 @@ public class FilmMapper {
                 .ratingMpa(ratingMpa)
                 .releaseDate(film.getReleaseDate())
                 .genres(genres)
+                .directors(film.getDirector())
                 .build();
     }
 }

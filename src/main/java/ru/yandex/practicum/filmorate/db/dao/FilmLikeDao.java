@@ -9,5 +9,8 @@ public interface FilmLikeDao {
 
     void unlikeFilm(int filmId, int userId);
 
-    List<Map<String, Object>> getTopLikes(int threshold);
+    List<Map<String, Object>> getTopLikes(int threshold, Integer genreId, String year);
+
+    List<Integer> sortByPopular(List<Integer> filmWithQuery);
 }
+

@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.exception.BadFriendshipException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
 import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UserResponse;
+import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.web.mapper.UserMapper;
 
 import javax.validation.Valid;
@@ -120,4 +123,12 @@ public class UserController {
         service.deleteUser(userId);
     }
 
+
+    @GetMapping("/{id}/recommendations")
+    public List<FilmResponse> getRecommendations(@PathVariable("id") int id) {
+        List<Film> recommendations = service.getFilmRecommendations(id);
+        return recommendations.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
 }

@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-class FilmorateApplicationTest {
+class UserDbTest {
     private final DbUserStorage userStorage;
 
     @Test
@@ -30,7 +30,6 @@ class FilmorateApplicationTest {
 
     @Test
     public void addUserTest() {
-
         User user = User.builder()
                 .name("Ron")
                 .login("ron")

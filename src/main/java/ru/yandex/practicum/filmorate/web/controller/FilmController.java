@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.web.dto.SearchByType;
+import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
 import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
 import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
 import ru.yandex.practicum.filmorate.web.dto.film.UpdateFilmRequest;
@@ -23,6 +26,7 @@ import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +39,6 @@ public class FilmController {
 
     private final FilmService filmService;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
-
 
     @Autowired
     public FilmController(FilmService filmService) {
@@ -88,9 +91,52 @@ public class FilmController {
     public List<FilmResponse> getTop(
             @RequestParam(name = "count", defaultValue = "10")
             @Min(value = 1, message = "'count' should be positive")
-            Integer threshold
+            Integer threshold,
+            @RequestParam(name = "genreId", required = false)
+            Integer genreId,
+            @RequestParam(name = "year", required = false)
+            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
+            String year
     ) {
-        List<Film> films = filmService.getTopFilms(threshold);
+        List<Film> films = filmService.getTopFilms(threshold, genreId, year);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/director/{directorId}")
+    public List<FilmResponse> getAllFilmsByDirector(
+            @PathVariable("directorId") int directorId,
+            @RequestParam(name = "sortBy", defaultValue = "likes")
+            SortTypeDirectors sortTypeForDirector
+    ) {
+        List<Film> films = filmService.getAllFilmsByDirector(directorId,
+                sortTypeForDirector);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/search")
+    public List<FilmResponse> searchFilms(
+            @NotBlank
+            @RequestParam(name = "query")
+            String query,
+            @RequestParam(name = "by")
+            List<SearchByType> searchBy
+    ) {
+        List<Film> films = filmService.search(query, searchBy);
+        return films.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/common")
+    public List<FilmResponse> getCommon(
+            @RequestParam(name = "userId") int userId,
+            @RequestParam(name = "friendId") int friendId
+    ) {
+        List<Film> films = filmService.getCommonFilms(userId, friendId);
         return films.stream()
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
