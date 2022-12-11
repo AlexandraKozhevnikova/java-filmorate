@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.web.controller;
+package ru.yandex.practicum.filmorate.componentTest;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -8,44 +8,38 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Collections;
+import java.util.NoSuchElementException;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Sql({"classpath:sql/schema.sql"})
-class FilmControllerTest {
+class FilmDeleteTest {
 
     private final FilmService service;
 
     @Test
-    void deleteFilm() {
-
-        List<Integer> genreList = new ArrayList<>();
-        genreList.add(Genre.ACTION_MOVIE.getId());
-        Film newFilm = new Film(0, "Test", "Test", LocalDate.now(), 1, 1, genreList);
+    void deleteExistFilm() {
+        Film newFilm = Film.builder()
+                .name("Test")
+                .description("Test")
+                .duration(150)
+                .ratingMpaId(1)
+                .releaseDate(LocalDate.now())
+                .genres(Collections.emptyList())
+                .director(Collections.emptyList())
+                .build();
 
         Film film = service.addFilm(newFilm);
-
         Film filmFromDB = service.getFilmById(film.getId());
-
         service.deleteFilm(filmFromDB.getId());
 
-        Film deletedFilm = null;
-        try {
-            deletedFilm = service.getFilmById(film.getId());
-        } catch (Throwable e) {
-        }
-
-        Assertions.assertNull(deletedFilm, "Фильм не удален");
-
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> service.getFilmById(film.getId()),
+                "фильм не удален из бд");
     }
 }

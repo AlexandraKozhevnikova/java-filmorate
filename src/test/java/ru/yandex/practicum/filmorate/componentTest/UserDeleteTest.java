@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.web.controller;
+package ru.yandex.practicum.filmorate.componentTest;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -12,19 +12,16 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Sql({"classpath:sql/schema.sql"})
-class UserControllerTest {
+class UserDeleteTest {
 
     private final UserService service;
 
     @Test
     void deleteUser() {
-
         User newUser = new User();
         newUser.setName("Test");
         newUser.setEmail("Test@gmail.com");
@@ -44,6 +41,5 @@ class UserControllerTest {
         }
 
         Assertions.assertNull(deletedUser, "Пользователь не удален");
-
     }
 }
