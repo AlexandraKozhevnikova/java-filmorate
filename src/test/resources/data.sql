@@ -55,7 +55,6 @@ VALUES (2, 1),
        (14, 7),
        (15, 7);
 
-
 INSERT INTO film_director(film_id, director_id)
 VALUES (13, 3),
        (14, 3),
