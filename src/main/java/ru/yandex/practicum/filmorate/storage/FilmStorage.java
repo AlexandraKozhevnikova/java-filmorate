@@ -26,6 +26,8 @@ public interface FilmStorage {
 
     boolean isExist(int id);
 
+    void deleteFilm(int filmId);
+
     public int addDirector(Director director);
 
     public Director getDirectorById(int id);

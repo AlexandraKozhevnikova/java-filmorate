@@ -209,13 +209,18 @@ public class DbFilmStorage implements FilmStorage {
     private void setFieldsOnFilm(Film film) {
         setGenresOnFilm(film);
         setDirectorsOnFilm(film);
-        //todo add more fields
     }
 
     private void setGenresOnFilm(Film film) {
         List<Integer> genres = getFilmGenresId(film.getId());
         film.setGenres(genres);
     }
+
+    @Override
+    public void deleteFilm(int filmId) {
+        filmDao.deleteFilm(filmId);
+    }
+
 
     private void setDirectorsOnFilm(Film film) {
         List<Director> directors = getFilmDirector(film.getId());

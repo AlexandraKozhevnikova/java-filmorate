@@ -65,6 +65,11 @@ public class InMemoryFilmStorage extends InMemoryStorage<Film> implements FilmSt
     }
 
     @Override
+    public void deleteFilm(int filmId) {
+        throw new NotImplementedException("метод реализован только для БД");
+    }
+
+    @Override
     public int addDirector(Director director) {
         throw new NotImplementedException("метод реализован только для БД");
     }

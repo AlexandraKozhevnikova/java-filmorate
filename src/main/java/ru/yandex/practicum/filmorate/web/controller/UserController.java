@@ -121,6 +121,12 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable("userId") int userId) {
+        service.deleteUser(userId);
+    }
+
+
     @GetMapping("/{id}/recommendations")
     public List<FilmResponse> getRecommendations(@PathVariable("id") int id) {
         List<Film> recommendations = service.getFilmRecommendations(id);

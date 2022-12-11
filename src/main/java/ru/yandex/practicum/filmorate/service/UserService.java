@@ -82,6 +82,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteUser(int userId) {
+        userStorage.deleteUser(userId);
+    }
+
+
     public List<Film> getFilmRecommendations(int user_id) {
         getUserById(user_id);
         List<Film> films = new ArrayList<>();

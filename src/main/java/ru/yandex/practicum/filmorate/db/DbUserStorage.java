@@ -67,6 +67,12 @@ public class DbUserStorage implements UserStorage {
     }
 
     @Override
+    public void deleteUser(int userId) {
+        userDao.deleteUser(userId);
+    }
+
+
+    @Override
     public List<Integer> getRecommendations(int userId) {
         return recommendationsDao.getRecommendations(userId);
     }

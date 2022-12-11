@@ -115,6 +115,10 @@ public class FilmDaoImpL implements FilmDao {
         return filmsId;
     }
 
+    public void deleteFilm(int filmId) {
+        String sql = "DELETE FROM film WHERE id = ?";
+        jdbcTemplate.update(sql, filmId);
+    }
     public List<Film> getAllFilmsByDirector(int directorId) {
         List<Film> filmList = jdbcTemplate.query(
                 "SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_mpa " +
