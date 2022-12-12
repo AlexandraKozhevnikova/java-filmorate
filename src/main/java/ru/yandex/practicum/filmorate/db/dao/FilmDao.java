@@ -17,9 +17,10 @@ public interface FilmDao {
 
     Optional<Film> getFilmById(int id);
 
+    void deleteFilm(int filmId);
+
     List<Film> getAllFilmsByDirector(int directorId);
 
-    List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year);
-
+    List<Integer> getFilteredFilm(int count, List<Integer> excludeList, Integer genreId, String year, String title);
 }
 

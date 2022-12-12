@@ -95,23 +95,23 @@ public class ReviewsTest {
 
     @Test
     public void getAllReviewsTest() {
-//        Для теста создадим ещё один отзыв.
+        // Для теста создадим ещё один отзыв.
         Review newReview = reviewCreation();
         newReview.setContent("Super");
         reviewService.add(newReview);
         int newReviewId = newReview.getId();
 
-//        Добавляем лайк отзыву с id = 2 для проверки сортировки.
+        // Добавляем лайк отзыву с id = 2 для проверки сортировки.
         reviewService.like(newReviewId, newReview.getUserId());
         newReview = reviewService.getReviewById(newReviewId);
 
-//        Выводим полный список. Должно быть 2 отзыва, при этом второй отзыв будет первым, потому что более полезный.
+        //        Выводим полный список. Должно быть 2 отзыва, при этом второй отзыв будет первым, потому что более полезный.
         List<Review> reviews = reviewService.getAllReviews(newReview.getFilmId(), 2);
 
         Assertions.assertEquals(2, reviews.size());
         Assertions.assertEquals(newReview, reviews.get(0));
 
-//    Выводим только один отзыв.
+        //    Выводим только один отзыв.
         reviews = reviewService.getAllReviews(1, 1);
 
         Assertions.assertEquals(1, reviews.size());
@@ -122,17 +122,17 @@ public class ReviewsTest {
         Review review = reviewCreation();
         reviewService.like(review.getId(), review.getUserId());
         Review reviewFromDb = reviewService.getReviewById(review.getId());
-//     Полезность должна вырасти на 1.
+        // Полезность должна вырасти на 1.
         Assertions.assertEquals(1, reviewFromDb.getUseful());
-//      Повторно лайкнуть нельзя, будет ошибка.
+        //   Повторно лайкнуть нельзя, будет ошибка.
         assertThrows(DuplicateKeyException.class, () -> reviewService.like(review.getId(), review.getUserId()));
     }
 
     @Test
     public void deleteLikeTest() {
-//        Нельзя удалить несуществующий лайк.
+        //   Нельзя удалить несуществующий лайк.
         assertThrows(BadReviewReactionException.class, () -> reviewService.deleteLike(1, 1));
-//        Ставим и удаляем лайк. Получаем полезность = 0.
+        //   Ставим и удаляем лайк. Получаем полезность = 0.
         reviewService.like(1, 1);
         reviewService.deleteLike(1, 1);
         Review review = reviewService.getReviewById(1);
@@ -145,23 +145,23 @@ public class ReviewsTest {
         Review review = reviewCreation();
         reviewService.dislike(review.getId(), review.getUserId());
         Review reviewFromDb = reviewService.getReviewById(review.getId());
-//     Полезность должна уменьшиться на 1.
+        //     Полезность должна уменьшиться на 1.
         Assertions.assertEquals(-1, reviewFromDb.getUseful());
-//      Повторно дизлайкнуть нельзя, будет ошибка.
+        //      Повторно дизлайкнуть нельзя, будет ошибка.
         assertThrows(DuplicateKeyException.class, () ->
                 reviewService.like(reviewFromDb.getId(), reviewFromDb.getUserId()));
     }
 
     @Test
     public void deleteDislikeTest() {
-//        Нельзя удалить несуществующий дизлайк.
+        //        Нельзя удалить несуществующий дизлайк.
         Review review = reviewCreation();
         int reviewId = review.getId();
         int userId = review.getUserId();
 
         assertThrows(BadReviewReactionException.class, () ->
                 reviewService.deleteDislike(reviewId, userId));
-//        Ставим и удаляем дизлайк. Получаем полезность = 0.
+        //        Ставим и удаляем дизлайк. Получаем полезность = 0.
         reviewService.dislike(reviewId, userId);
         reviewService.deleteDislike(reviewId, userId);
         Review reviewFromDb = reviewService.getReviewById(reviewId);
