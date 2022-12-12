@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Component
 public class DirectorDaoImpl implements DirectorDao {
+    public static final String DIRECTOR_ID = "director_id";
     private final JdbcTemplate jdbcTemplate;
 
     public DirectorDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -31,7 +32,7 @@ public class DirectorDaoImpl implements DirectorDao {
     public int insertDirector(Director director) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("director")
-                .usingGeneratedKeyColumns("director_id");
+                .usingGeneratedKeyColumns(DIRECTOR_ID);
         return simpleJdbcInsert.executeAndReturnKey(mapDirectorToMap(director)).intValue();
     }
 
@@ -67,7 +68,7 @@ public class DirectorDaoImpl implements DirectorDao {
 
         if (directorRow.next()) {
             Director director = Director.builder()
-                    .id(directorRow.getInt("director_id"))
+                    .id(directorRow.getInt(DIRECTOR_ID))
                     .name(directorRow.getString("name"))
                     .build();
             return Optional.of(director);
@@ -123,14 +124,14 @@ public class DirectorDaoImpl implements DirectorDao {
 
     private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
         return Director.builder()
-                .id(resultSet.getInt("director_id"))
+                .id(resultSet.getInt(DIRECTOR_ID))
                 .name(resultSet.getString("name"))
                 .build();
     }
 
     private Map<String, Object> mapDirectorToMap(Director director) {
         Map<String, Object> map = new HashMap<>();
-        map.put("director_id", director.getId());
+        map.put(DIRECTOR_ID, director.getId());
         map.put("name", director.getName());
         return map;
     }
