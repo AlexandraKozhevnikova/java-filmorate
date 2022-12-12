@@ -5,7 +5,6 @@ import ru.yandex.practicum.filmorate.web.dto.director.AddDirectorRequest;
 import ru.yandex.practicum.filmorate.web.dto.director.DirectorResponse;
 import ru.yandex.practicum.filmorate.web.dto.director.UpdateDirectorRequest;
 
-
 public class DirectorMapper {
     public static Director mapToDirector(AddDirectorRequest dto) {
         return Director.builder()
