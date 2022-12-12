@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -18,11 +17,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-@Slf4j
-public class DirectorDaoImpL implements DirectorDao {
+public class DirectorDaoImpl implements DirectorDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public DirectorDaoImpL(JdbcTemplate jdbcTemplate) {
+    public DirectorDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -54,11 +52,10 @@ public class DirectorDaoImpL implements DirectorDao {
 
     @Override
     public List<Director> getAllDirectors() {
-        List<Director> directorList = jdbcTemplate.query(
+        return jdbcTemplate.query(
                 "SELECT director_id, name FROM director",
                 this::mapRowToDirector
         );
-        return directorList;
     }
 
     @Override

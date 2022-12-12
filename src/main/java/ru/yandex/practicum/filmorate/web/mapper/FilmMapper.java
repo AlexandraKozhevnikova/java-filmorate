@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.web.mapper;
 
 import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
-import ru.yandex.practicum.filmorate.db.dao.DirectorDaoImpL;
+import ru.yandex.practicum.filmorate.db.dao.DirectorDaoImpl;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
