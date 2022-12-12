@@ -21,8 +21,8 @@ public class FeedDaoImpl implements FeedDao {
 
     @Override
     public void addFeed(Feed feed) {
-        String sqlQuery = "insert into feed(entityId, userId, eventType, operation, eventTime) " +
-                "values (?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO feed(entityId, userId, eventType, operation, eventTime) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -40,7 +40,7 @@ public class FeedDaoImpl implements FeedDao {
 
     @Override
     public List<Feed> getFeedById(int id) {
-        String sqlQuery = "SELECT * from feed where userID=?";
+        String sqlQuery = "SELECT * FROM feed WHERE userID=?";
 
         List<Feed> feed = jdbcTemplate.query(sqlQuery, new Object[]{id},
                 new FeedMapper());

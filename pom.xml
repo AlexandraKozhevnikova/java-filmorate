@@ -21,6 +21,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <h2.versoin>2.1.210</h2.versoin>
         <spring-boot-starter-data-jdbc.version>2.7.3</spring-boot-starter-data-jdbc.version>
+        <spring-aspects-version>6.0.2</spring-aspects-version>
     </properties>
 
     <dependencies>
@@ -84,7 +85,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
-            <version>6.0.2</version>
+            <version>${spring-aspects-version}</version>
         </dependency>
 
     </dependencies>
