@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.annotation.FeedAnnotation;
 import ru.yandex.practicum.filmorate.db.DbFilmStorage;
+import ru.yandex.practicum.filmorate.model.EventType;
+import ru.yandex.practicum.filmorate.model.Operation;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.ReviewStorage;
 
@@ -23,6 +26,7 @@ public class ReviewService {
     private final FilmService filmService;
     private final DbFilmStorage filmStorage;
 
+    @FeedAnnotation(eventType = EventType.REVIEW, operation = Operation.ADD)
     public Review add(Review review) {
         int userId = review.getUserId();
         int filmId = review.getFilmId();
@@ -32,6 +36,7 @@ public class ReviewService {
         return getReviewById(id);
     }
 
+    @FeedAnnotation(eventType = EventType.REVIEW, operation = Operation.UPDATE)
     public Review update(Review review) {
         Optional<Review> existReview = reviewStorage.getReviewById(review.getId());
         if (existReview.isPresent()) {
@@ -47,8 +52,9 @@ public class ReviewService {
         return getReviewById(review.getId());
     }
 
-    public void delete(int id) {
-        reviewStorage.deleteReview(id);
+    @FeedAnnotation(eventType = EventType.REVIEW, operation = Operation.REMOVE)
+    public void delete(Review review) {
+        reviewStorage.deleteReview(review.getId());
     }
 
     public Review getReviewById(int id) {

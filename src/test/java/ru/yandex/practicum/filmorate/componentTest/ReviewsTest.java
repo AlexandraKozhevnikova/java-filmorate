@@ -86,7 +86,7 @@ public class ReviewsTest {
     public void deleteTest() {
         Review review = reviewCreation();
 
-        reviewService.delete(review.getId());
+        reviewService.delete(review);
 
         Throwable thrown = assertThrows(NoSuchElementException.class, () -> reviewService.getReviewById(review.getId()));
         String errorMessage = thrown.getMessage();

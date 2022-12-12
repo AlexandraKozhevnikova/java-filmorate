@@ -90,5 +90,5 @@ CREATE TABLE IF NOT EXISTS feed (
     userId INTEGER REFERENCES User_filmorate (id) ON DELETE CASCADE,
     eventType varchar(10),
     operation varchar(10),
-    eventTime timestamp
+    eventTime bigint
 );

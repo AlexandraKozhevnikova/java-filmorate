@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.annotation.FeedAnnotation;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
-import ru.yandex.practicum.filmorate.model.Director;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.RatingMpa;
+import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.web.dto.SearchByType;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
@@ -58,7 +55,7 @@ public class FilmService {
         return filmStorage.getItemById(id);
     }
 
-    @FeedAnnotation
+    @FeedAnnotation(eventType = EventType.LIKE,operation = Operation.ADD)
     public String like(int filmId, int userId) {
         filmStorage.isExist(filmId);
         userService.getUserById(userId);
@@ -66,7 +63,7 @@ public class FilmService {
         return "success";
     }
 
-    @FeedAnnotation
+    @FeedAnnotation(eventType = EventType.LIKE, operation = Operation.REMOVE)
     public String unlike(int filmId, int userId) {
         filmStorage.isExist(filmId);
         userService.getUserById(userId);

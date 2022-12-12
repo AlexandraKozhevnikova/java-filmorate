@@ -15,7 +15,7 @@ public class FeedMapper implements RowMapper<Feed> {
         feed.setUserId(rs.getInt("userId"));
         feed.setEventType(rs.getString("eventType"));
         feed.setOperation(rs.getString("operation"));
-        feed.setEventTime(rs.getTimestamp("eventTime"));
+        feed.setTimestamp(rs.getLong("eventTime"));
         return feed;
     }
 }

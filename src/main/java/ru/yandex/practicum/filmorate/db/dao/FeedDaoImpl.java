@@ -31,7 +31,7 @@ public class FeedDaoImpl implements FeedDao {
             stmt.setInt(2, feed.getUserId());
             stmt.setString(3, feed.getEventType());
             stmt.setString(4, feed.getOperation());
-            stmt.setTimestamp(5, feed.getEventTime());
+            stmt.setLong(5, feed.getTimestamp());
             return stmt;
         }, keyHolder);
         int id = keyHolder.getKey().intValue();
