@@ -3,13 +3,13 @@ package ru.yandex.practicum.filmorate.db;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
-import ru.yandex.practicum.filmorate.db.dao.FilmDao;
-import ru.yandex.practicum.filmorate.db.dao.FilmGenreDao;
-import ru.yandex.practicum.filmorate.db.dao.FilmLikeDao;
 import ru.yandex.practicum.filmorate.db.dao.RecommendationsDao;
-import ru.yandex.practicum.filmorate.model.Director;
+import ru.yandex.practicum.filmorate.db.dao.filmdao.DirectorDao;
+import ru.yandex.practicum.filmorate.db.dao.filmdao.FilmDao;
+import ru.yandex.practicum.filmorate.db.dao.filmdao.FilmGenreDao;
+import ru.yandex.practicum.filmorate.db.dao.filmdao.FilmLikeDao;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.web.dto.SortTypeDirectors;
@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,7 +31,11 @@ public class DbFilmStorage implements FilmStorage {
     private final RecommendationsDao recommendationsDao;
 
     @Autowired
-    public DbFilmStorage(FilmDao filmDao, FilmGenreDao filmGenreDao, FilmLikeDao filmLikeDao, DirectorDao directorDao, RecommendationsDao recommendationsDao) {
+    public DbFilmStorage(FilmDao filmDao,
+                         FilmGenreDao filmGenreDao,
+                         FilmLikeDao filmLikeDao,
+                         DirectorDao directorDao,
+                         RecommendationsDao recommendationsDao) {
         this.filmDao = filmDao;
         this.filmGenreDao = filmGenreDao;
         this.filmLikeDao = filmLikeDao;
@@ -73,8 +76,7 @@ public class DbFilmStorage implements FilmStorage {
 
     @Override
     public Film getItemById(int id) {
-        Optional<Film> film = filmDao.getFilmById(id);
-        Film filmFromDb = film.orElseThrow(() -> new NoSuchElementException("film with id = " + id + " not found"));
+        Film filmFromDb = filmDao.getFilmById(id).orElseThrow(() -> new NoSuchElementException("film with id = " + id + " not found"));
         setFieldsOnFilm(filmFromDb);
         return filmFromDb;
     }
@@ -107,16 +109,17 @@ public class DbFilmStorage implements FilmStorage {
         for (Map<String, Object> map : mapLikes) {
             filmIdWithLikes.add((Integer) map.get("film_id"));
         }
-        //добиваем фильмы без лайков если лайканных не хватает
+        //добываем фильмы без лайков если лайканных не хватает
         int dif = threshold - filmIdWithLikes.size();
         List<Integer> randomFilmsIdWithoutLike = Collections.emptyList();
         if (dif > 0) {
             randomFilmsIdWithoutLike = filmDao.getFilteredFilm(dif, filmIdWithLikes, genreId, year, null);
         }
-        //собираем в общую коллекцию
         List<Film> filmWithLike = filmIdWithLikes.stream()
                 .map(this::getItemById)
                 .collect(Collectors.toList());
+
+        //собираем в общую коллекцию
         randomFilmsIdWithoutLike.stream()
                 .map(this::getItemById)
                 .forEach(film -> filmWithLike.add(film));

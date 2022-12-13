@@ -1,14 +1,11 @@
 package ru.yandex.practicum.filmorate.web.mapper;
 
-import ru.yandex.practicum.filmorate.db.dao.DirectorDao;
-import ru.yandex.practicum.filmorate.db.dao.DirectorDaoImpl;
 import ru.yandex.practicum.filmorate.exception.BadFoundResultByIdException;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMpa;
 import ru.yandex.practicum.filmorate.web.dto.Id;
-import ru.yandex.practicum.filmorate.web.dto.director.DirectorResponse;
 import ru.yandex.practicum.filmorate.web.dto.film.AddFilmRequest;
 import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
 import ru.yandex.practicum.filmorate.web.dto.film.UpdateFilmRequest;

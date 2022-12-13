@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.reviewdao;
 
 public interface ReviewUsefulDao {
     void likeReview(int reviewId, int userId);

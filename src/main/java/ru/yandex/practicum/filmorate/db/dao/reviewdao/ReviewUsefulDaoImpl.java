@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.reviewdao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -60,7 +60,6 @@ public class ReviewUsefulDaoImpl implements ReviewUsefulDao {
     /**
      * Метод проверяет перед удалением, существует ли лайк или дизлайк от данного пользователя к данному отзыву.
      */
-
     private void checkReactionType(int reviewId, int userId) {
         String sql = "SELECT useful FROM review_useful WHERE review_id = ? AND user_id = ?";
         try {

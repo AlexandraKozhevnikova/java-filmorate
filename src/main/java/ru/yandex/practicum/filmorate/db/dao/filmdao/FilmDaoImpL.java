@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.filmdao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 
 @Component
 @Slf4j
