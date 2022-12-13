@@ -69,7 +69,6 @@ public class FilmService {
         userService.getUserById(userId);
         filmStorage.unlikeFilm(filmId, userId);
         return "success";
-
     }
 
     public List<Film> getTopFilms(int threshold, Integer genreId, String year) {

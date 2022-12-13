@@ -5,6 +5,7 @@ import java.util.Optional;
 public enum SearchByType {
     NAME("title"),
     DIRECTOR("director");
+
     private String apiParam;
 
     SearchByType(String apiParam) {
