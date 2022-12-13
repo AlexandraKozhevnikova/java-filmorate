@@ -120,7 +120,7 @@ public class FilmDaoImpL implements FilmDao {
         jdbcTemplate.update(sql, filmId);
     }
     public List<Film> getAllFilmsByDirector(int directorId) {
-        List<Film> filmList = jdbcTemplate.query(
+        return jdbcTemplate.query(
                 "SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_mpa " +
                         "FROM film_director fd " +
                         "LEFT JOIN film f on f.id = fd.film_id " +
@@ -132,7 +132,6 @@ public class FilmDaoImpL implements FilmDao {
                         "ORDER BY liketemp.likecount DESC",
                 this::mapRowToFilm, directorId
         );
-        return filmList;
     }
 
     private Film mapRowToFilm(ResultSet resultSet, int rowNum) throws SQLException {

@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.db.dao;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -18,11 +17,11 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-@Slf4j
-public class DirectorDaoImpL implements DirectorDao {
+public class DirectorDaoImpl implements DirectorDao {
+    public static final String DIRECTOR_ID = "director_id";
     private final JdbcTemplate jdbcTemplate;
 
-    public DirectorDaoImpL(JdbcTemplate jdbcTemplate) {
+    public DirectorDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -33,7 +32,7 @@ public class DirectorDaoImpL implements DirectorDao {
     public int insertDirector(Director director) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("director")
-                .usingGeneratedKeyColumns("director_id");
+                .usingGeneratedKeyColumns(DIRECTOR_ID);
         return simpleJdbcInsert.executeAndReturnKey(mapDirectorToMap(director)).intValue();
     }
 
@@ -54,11 +53,10 @@ public class DirectorDaoImpL implements DirectorDao {
 
     @Override
     public List<Director> getAllDirectors() {
-        List<Director> directorList = jdbcTemplate.query(
+        return jdbcTemplate.query(
                 "SELECT director_id, name FROM director",
                 this::mapRowToDirector
         );
-        return directorList;
     }
 
     @Override
@@ -70,7 +68,7 @@ public class DirectorDaoImpL implements DirectorDao {
 
         if (directorRow.next()) {
             Director director = Director.builder()
-                    .id(directorRow.getInt("director_id"))
+                    .id(directorRow.getInt(DIRECTOR_ID))
                     .name(directorRow.getString("name"))
                     .build();
             return Optional.of(director);
@@ -126,14 +124,14 @@ public class DirectorDaoImpL implements DirectorDao {
 
     private Director mapRowToDirector(ResultSet resultSet, int rowNum) throws SQLException {
         return Director.builder()
-                .id(resultSet.getInt("director_id"))
+                .id(resultSet.getInt(DIRECTOR_ID))
                 .name(resultSet.getString("name"))
                 .build();
     }
 
     private Map<String, Object> mapDirectorToMap(Director director) {
         Map<String, Object> map = new HashMap<>();
-        map.put("director_id", director.getId());
+        map.put(DIRECTOR_ID, director.getId());
         map.put("name", director.getName());
         return map;
     }

@@ -7,10 +7,9 @@ import ru.yandex.practicum.filmorate.web.dto.director.UpdateDirectorRequest;
 
 public class DirectorMapper {
     public static Director mapToDirector(AddDirectorRequest dto) {
-        Director director = Director.builder()
+        return Director.builder()
                 .name(dto.getName())
                 .build();
-        return director;
     }
 
     public static Director mapToDirector(UpdateDirectorRequest dto) {
