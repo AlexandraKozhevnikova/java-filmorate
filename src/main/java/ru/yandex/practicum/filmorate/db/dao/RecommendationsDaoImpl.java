@@ -23,14 +23,14 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
     }
 
     @Override
-    public List<Integer> getRecommendations(int user_id) {
-        List<Integer> usersLikedFilmsIds = getUsersLikedFilmsIds(user_id);
+    public List<Integer> getRecommendations(int userId) {
+        List<Integer> usersLikedFilmsIds = getUsersLikedFilmsIds(userId);
 
         Set<Integer> filmIdsToRecommend = new HashSet<>();
-        for (Integer userId : maxCommonUserIds(user_id)) {
+        for (Integer id : maxCommonUserIds(userId)) {
             SqlRowSet filmsRs = jdbcTemplate.queryForRowSet(
                     "SELECT film_id FROM film_like WHERE user_id = ?",
-                    userId
+                    id
             );
             while (filmsRs.next()) {
                 int foundId = filmsRs.getInt("film_id");
@@ -68,17 +68,12 @@ public class RecommendationsDaoImpl implements RecommendationsDao {
     private List<Integer> maxCommonUserIds(int user_id) {
         List<Integer> maxCommonUserIds = new ArrayList<>();
         SqlRowSet maxCommonUserIdsRs = jdbcTemplate.queryForRowSet(
-                "     SELECT USER_ID, MAX(common_count) AS max_common" +
-                        " FROM (" +
-                        "          SELECT USER_ID, COUNT(USER_ID) AS common_count " +
-                        "          FROM FILM_LIKE " +
-                        "          WHERE FILM_ID IN (" +
-                        "                                SELECT FILM_ID " +
-                        "                                FROM film_like " +
-                        "                                WHERE user_id = ?) " +
-                        "          AND USER_ID <> ? " +
-                        "          GROUP BY user_id) " +
-                        "GROUP BY common_count, USER_ID",
+                "SELECT fl.USER_ID, count(fl.USER_ID) as common_count " +
+                    "FROM film_like AS fl " +
+                    "INNER JOIN film_like AS joined ON joined.FILM_ID = fl.FILM_ID " +
+                        "AND joined.USER_ID = ? " +
+                    "GROUP BY fl.USER_ID HAVING fl.USER_ID <> ? " +
+                    "ORDER BY common_count",
                 user_id, user_id
         );
         while (maxCommonUserIdsRs.next()) {

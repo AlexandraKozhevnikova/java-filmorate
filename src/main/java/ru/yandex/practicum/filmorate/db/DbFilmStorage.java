@@ -73,8 +73,7 @@ public class DbFilmStorage implements FilmStorage {
 
     @Override
     public Film getItemById(int id) {
-        Optional<Film> film = filmDao.getFilmById(id);
-        Film filmFromDb = film.orElseThrow(() -> new NoSuchElementException("film with id = " + id + " not found"));
+        Film filmFromDb = filmDao.getFilmById(id).orElseThrow(() -> new NoSuchElementException("film with id = " + id + " not found"));
         setFieldsOnFilm(filmFromDb);
         return filmFromDb;
     }
