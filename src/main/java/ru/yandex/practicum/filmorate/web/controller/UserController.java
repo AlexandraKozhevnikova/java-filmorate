@@ -4,19 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.BadFriendshipException;
+import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FeedService;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.web.dto.film.FilmResponse;
+import ru.yandex.practicum.filmorate.web.dto.film.*;
 import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UserResponse;
@@ -34,11 +29,13 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService service;
+    private final FeedService feedService;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
 
     @Autowired
-    public UserController(UserService service) {
+    public UserController(UserService service, FeedService feedService) {
         this.service = service;
+        this.feedService = feedService;
     }
 
     @GetMapping("/{id}")
@@ -134,4 +131,10 @@ public class UserController {
                 .map(FilmMapper::mapFilmToFilmResponse)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/{id}/feed")
+    public List<Feed> getFeedById(@PathVariable("id") int id) {
+        return feedService.getFeedById(id);
+    }
+
 }

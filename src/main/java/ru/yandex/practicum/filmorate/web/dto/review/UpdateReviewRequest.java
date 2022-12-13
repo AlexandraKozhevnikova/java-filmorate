@@ -13,6 +13,12 @@ public class UpdateReviewRequest {
     @NotNull(message = "'isPositive' must not be null")
     private Boolean isPositive;
 
+    @NotNull(message = "'userId' must not be null")
+    private Integer userId;
+
+    @NotNull(message = "'filmId' must not be null")
+    private Integer filmId;
+
     @JsonGetter
     public Boolean getIsPositive() {
         return isPositive;
