@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -159,8 +158,7 @@ public class DbFilmStorage implements FilmStorage {
 
     @Override
     public Director getDirectorById(int directorId) {
-        Optional<Director> director = directorDao.getDirectorById(directorId);
-        return director.orElseThrow(
+        return directorDao.getDirectorById(directorId).orElseThrow(
                 () -> new NoSuchElementException("director with id = " + directorId + " not found"));
     }
 
@@ -185,7 +183,7 @@ public class DbFilmStorage implements FilmStorage {
         for (Film film : films) {
             setFieldsOnFilm(film);
         }
-        if (sortTypeForDirectors.equals(SortTypeDirectors.YEAR)) {
+        if (sortTypeForDirectors == SortTypeDirectors.YEAR) {
             films = films.stream()
                     .sorted(Film::compareFilmsByYear)
                     .collect(Collectors.toList());
