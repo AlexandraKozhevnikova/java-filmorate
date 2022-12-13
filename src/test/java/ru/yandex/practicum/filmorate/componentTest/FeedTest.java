@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.service.FeedService;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -21,7 +21,6 @@ import java.util.List;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@Sql({"classpath:sql/schema.sql", "classpath:sql/data.sql"})
 class FeedTest {
 
     private final ReviewService reviewService;
@@ -29,6 +28,8 @@ class FeedTest {
     private final FilmService filmService;
 
     private final FeedService feedService;
+
+    private final JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     public void dataPreparation() {
@@ -51,6 +52,9 @@ class FeedTest {
                 .build();
 
         filmService.addFilm(film);
+
+        String SQL = "DELETE FROM feed;";
+        jdbcTemplate.update(SQL);
     }
 
     @Test
