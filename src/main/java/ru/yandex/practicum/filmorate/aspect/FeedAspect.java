@@ -52,27 +52,24 @@ public class FeedAspect {
         feed.setOperation(operation.getName());
         feed.setEventType(eventType.getName());
         feed.setTimestamp(Timestamp.valueOf(LocalDateTime.now()).getTime());
-        if (eventType.equals(EventType.FRIEND)) {
+        if (eventType == EventType.FRIEND) {
             Integer userId = (Integer) arguments[0];
             Integer friendId = (Integer) arguments[1];
             feed.setUserId(userId);
             feed.setEntityId(friendId);
-        } else if (eventType.equals(EventType.LIKE)) {
+        } else if (eventType == EventType.LIKE) {
             Integer filmId = (Integer) arguments[0];
             Integer userId = (Integer) arguments[1];
             feed.setUserId(userId);
             feed.setEntityId(filmId);
-        } else if (eventType.equals(EventType.REVIEW)) {
-
+        } else if (eventType == EventType.REVIEW) {
             Review review = (Review) arguments[0];
             Integer reviewId = review.getId();
             Integer userId = review.getUserId();
             feed.setUserId(userId);
             feed.setEntityId(reviewId);
-
         }
 
         return feed;
     }
-
 }
