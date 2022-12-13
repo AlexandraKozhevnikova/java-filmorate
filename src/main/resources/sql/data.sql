@@ -1,0 +1,10 @@
+DELETE FROM film;
+DELETE FROM film_genre;
+DELETE FROM user_filmorate;
+DELETE FROM film_like;
+DELETE FROM friendship;
+DELETE FROM review;
+DELETE FROM review_useful;
+DELETE FROM director;
+DELETE FROM film_director;
+DELETE FROM feed;
