@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.db;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.db.dao.ReviewDao;
-import ru.yandex.practicum.filmorate.db.dao.ReviewUsefulDao;
+import ru.yandex.practicum.filmorate.db.dao.reviewdao.ReviewDao;
+import ru.yandex.practicum.filmorate.db.dao.reviewdao.ReviewUsefulDao;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.ReviewStorage;
 

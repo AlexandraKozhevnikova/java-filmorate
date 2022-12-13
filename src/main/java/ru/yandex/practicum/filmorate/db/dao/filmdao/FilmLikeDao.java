@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.filmdao;
 
 import java.util.List;
 import java.util.Map;

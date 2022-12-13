@@ -1,6 +1,7 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.filmdao;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -19,10 +20,11 @@ import java.util.Optional;
 
 @Component
 @Slf4j
-public class DirectorDaoImpL implements DirectorDao {
+public class DirectorDaoImpl implements DirectorDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public DirectorDaoImpL(JdbcTemplate jdbcTemplate) {
+    @Autowired
+    public DirectorDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

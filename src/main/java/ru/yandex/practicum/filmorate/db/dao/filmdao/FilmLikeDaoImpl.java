@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.filmdao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,11 @@ import java.util.Map;
 @Slf4j
 @Component
 public class FilmLikeDaoImpl implements FilmLikeDao {
+
+    //интовое значение которое точно не может быть равно валидному идетификатору жанра
+    private static final int GENRE_STUB = -1;
+    //стринговое значение которое точно не может быть равно валидному году выпуска фильма
+    private static final String YEAR_STUB = "0000";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -41,11 +46,11 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
     @Override
     public List<Map<String, Object>> getTopLikes(int threshold, Integer genreId, String year) {
         if (year == null) {
-            year = "0000";
+            year = YEAR_STUB;
         }
 
         if (genreId == null) {
-            genreId = -1;
+            genreId = GENRE_STUB;
         }
 
         String sql = "WITH " +
@@ -53,19 +58,26 @@ public class FilmLikeDaoImpl implements FilmLikeDao {
                 "   SELECT film_id " +
                 "   FROM film_genre " +
                 "   WHERE 1 = 1 " +
-                (genreId == -1 ? " AND 1 <> ?" : " AND genre_id = ?") +
+                //проверяем нужна ли фильтрация по жанру
+                // Плейсхолдер ? нужно чтобы был использован не зависимо от результата проверки на условие
+                (genreId == GENRE_STUB ? " AND 1 <> ?" : " AND genre_id = ?") +
                 "), " +
                 "film_filtred(film_id) AS (" +
                 "   SELECT id " +
                 "   FROM film " +
                 "   WHERE 1=1 " +
-                (year == "0000" ? " AND 1 <> ? " : "AND  EXTRACT(YEAR FROM release_date) = ?") +
+                //проверяем нужна ли фильтрация по году
+                (year == YEAR_STUB ? " AND 1 <> ? " : "AND  EXTRACT(YEAR FROM release_date) = ?") +
                 ") " +
                 "SELECT film_like.film_id, COUNT(user_id) as count_likes " +
                 "FROM film_like " +
-                (genreId == -1 ? " LEFT " : " ") +
+                //проверяем нужно ли сохранить в результате джойна отфильтрованные по жанру фильмы
+                // (в случае если эти фильмы окажутся без лайка и количества залайканных фильмов не хватит
+                // для  колисчества threshold)
+                (genreId == GENRE_STUB ? " LEFT " : " ") +
                 "    JOIN genre_filtred ON FILM_LIKE.FILM_ID = genre_filtred.film_id " +
-                (year == "0000" ? " LEFT " : " ") +
+                //проверяем нужно ли сохранить в результате джойна отфильтрованные по году фильмы
+                (year == YEAR_STUB ? " LEFT " : " ") +
                 "    JOIN film_filtred ON FILM_LIKE.FILM_ID = film_filtred.film_id " +
                 "GROUP BY FILM_LIKE.film_id " +
                 "ORDER BY count_likes desc " +

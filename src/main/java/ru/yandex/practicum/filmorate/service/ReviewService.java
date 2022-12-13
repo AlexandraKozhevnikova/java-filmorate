@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor(onConstructor_ = @Autowired)
 public class ReviewService {
+    private final String SUCCESS = "success";
     private final ReviewStorage reviewStorage;
     private final UserService userService;
-    private final FilmService filmService;
     private final DbFilmStorage filmStorage;
 
     @FeedAnnotation(eventType = EventType.REVIEW, operation = Operation.ADD)
@@ -80,27 +80,27 @@ public class ReviewService {
         reviewStorage.getReviewById(reviewId);
         userService.getUserById(userId);
         reviewStorage.likeReview(reviewId, userId);
-        return "success";
+        return SUCCESS;
     }
 
     public String deleteLike(int reviewId, int userId) {
         reviewStorage.getReviewById(reviewId);
         userService.getUserById(userId);
         reviewStorage.deleteLikeReview(reviewId, userId);
-        return "success";
+        return SUCCESS;
     }
 
     public String dislike(int reviewId, int userId) {
         reviewStorage.getReviewById(reviewId);
         userService.getUserById(userId);
         reviewStorage.dislikeReview(reviewId, userId);
-        return "success";
+        return SUCCESS;
     }
 
     public String deleteDislike(int reviewId, int userId) {
         reviewStorage.getReviewById(reviewId);
         userService.getUserById(userId);
         reviewStorage.deleteDislikeReview(reviewId, userId);
-        return "success";
+        return SUCCESS;
     }
 }
