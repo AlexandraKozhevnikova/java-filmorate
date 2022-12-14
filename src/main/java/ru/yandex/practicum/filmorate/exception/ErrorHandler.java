@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.exception;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +31,23 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleBadReviewReactionException(final BadReviewReactionException e) {
+        log.info("Response status code 400 Bad Request {}", e.getMessage());
+        return Map.of("validation error", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleBadFriendshipException(final BadFriendshipException e) {
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("logic error", e.getMessage());
     }
+
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleDuplicateKeyException(final DuplicateKeyException e) {
-        log.info("Response status code 200 ок {}", e.getMessage());
-        return Map.of("object already exist", e.getMessage());
+        log.info("Response status code 400 Bad Request {}", e.getMessage());
+        return Map.of("object already exist", e.getLocalizedMessage());
     }
 
 
@@ -52,7 +62,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, List<String>> handleConstraintViolationException(final ConstraintViolationException e) {
         List<String> listError = e.getConstraintViolations().stream()
-                .map(it -> it.getMessage())
+                .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("validation error", listError);
@@ -70,9 +80,16 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgumentException(final IllegalArgumentException e) {
+        log.info("Response status code 400 Bad Request {}", e.getMessage());
+        return Map.of("validation error", e.getLocalizedMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, List<String>> handleHttpMessageNotReadableException(final MismatchedInputException e) {
         List<String> errorFields = e.getPath().stream()
-                .map(it -> it.getFieldName())
+                .map(JsonMappingException.Reference::getFieldName)
                 .collect(Collectors.toList());
         log.info("Response status code 400 Bad Request {}", e.getMessage());
         return Map.of("could not parse fields: ", errorFields);

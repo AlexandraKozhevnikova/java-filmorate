@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.userdao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -76,6 +76,11 @@ public class UserDaoImpl implements UserDao {
         String sql = "SELECT id, email, login, name, birthday FROM user_filmorate";
         List<User> userList = jdbcTemplate.query(sql, this::mapRowToUser);
         return userList;
+    }
+
+    public void deleteUser(int userId) {
+        String sql = "DELETE FROM user_filmorate WHERE id = ?";
+        jdbcTemplate.update(sql, userId);
     }
 
     private User mapRowToUser(ResultSet rs, int rowNumber) throws SQLException {

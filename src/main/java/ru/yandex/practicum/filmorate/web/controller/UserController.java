@@ -4,20 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.BadFriendshipException;
+import ru.yandex.practicum.filmorate.model.Feed;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FeedService;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.web.dto.film.*;
 import ru.yandex.practicum.filmorate.web.dto.user.AddUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UpdateUserRequest;
 import ru.yandex.practicum.filmorate.web.dto.user.UserResponse;
+import ru.yandex.practicum.filmorate.web.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.web.mapper.UserMapper;
 
 import javax.validation.Valid;
@@ -31,11 +29,13 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService service;
+    private final FeedService feedService;
     private final ObjectMapper jacksonMapper = new ObjectMapper();
 
     @Autowired
-    public UserController(UserService service) {
+    public UserController(UserService service, FeedService feedService) {
         this.service = service;
+        this.feedService = feedService;
     }
 
     @GetMapping("/{id}")
@@ -46,7 +46,10 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> getAllUsers() throws JsonProcessingException {
-        log.info("Get request: GET {}", Arrays.stream(this.getClass().getAnnotation(RequestMapping.class).value()).findFirst().get());
+        log.info("Get request: GET {}", Arrays.stream(this.getClass().getAnnotation(RequestMapping.class)
+                .value())
+                .findFirst()
+                .get());
         List<UserResponse> responseBody = service.getAllUsers().stream()
                 .map(UserMapper::mapUserToResponse)
                 .collect(Collectors.toList());
@@ -114,4 +117,24 @@ public class UserController {
                 .map(UserMapper::mapUserToResponse)
                 .collect(Collectors.toList());
     }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable("userId") int userId) {
+        service.deleteUser(userId);
+    }
+
+
+    @GetMapping("/{id}/recommendations")
+    public List<FilmResponse> getRecommendations(@PathVariable("id") int id) {
+        List<Film> recommendations = service.getFilmRecommendations(id);
+        return recommendations.stream()
+                .map(FilmMapper::mapFilmToFilmResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}/feed")
+    public List<Feed> getFeedById(@PathVariable("id") int id) {
+        return feedService.getFeedById(id);
+    }
+
 }

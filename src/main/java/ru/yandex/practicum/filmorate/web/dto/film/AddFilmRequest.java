@@ -34,4 +34,5 @@ public class AddFilmRequest {
     @NotNull(message = "'mpa' must not be null")
     @JsonProperty("mpa")
     private Id ratingMpaId;
+    private List<Id> directors;
 }

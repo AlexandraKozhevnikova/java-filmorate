@@ -1,21 +1,25 @@
-package ru.yandex.practicum.filmorate.db.dao;
+package ru.yandex.practicum.filmorate.db.dao.filmdao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlParameterValue;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 
 @Component
 @Slf4j
@@ -40,8 +44,19 @@ public class FilmDaoImpL implements FilmDao {
     }
 
     @Override
+    public boolean isExist(int id) {
+        String sql = "SELECT id FROM film WHERE id = ?";
+        SqlRowSet rs = jdbcTemplate.queryForRowSet("SELECT id FROM film WHERE id = ?", id);
+        if (rs.next()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void update(Film film) {
-        String sql = "UPDATE film SET name = ?, description = ?, release_date = ?, duration = ?, rating_MPA = ? WHERE id = ?";
+        String sql = "UPDATE film SET name = ?, description = ?, release_date = ?, duration = ?, rating_mpa = ? " +
+                "WHERE id = ?";
         jdbcTemplate.update(
                 sql,
                 film.getName(),
@@ -56,7 +71,7 @@ public class FilmDaoImpL implements FilmDao {
     @Override
     public List<Film> getAllFilms() {
         List<Film> filmList = jdbcTemplate.query(
-                "SELECT id, name, description, release_date, duration, rating_MPA  FROM film",
+                "SELECT id, name, description, release_date, duration, rating_mpa  FROM film",
                 this::mapRowToFilm
         );
         return filmList;
@@ -64,7 +79,7 @@ public class FilmDaoImpL implements FilmDao {
 
     @Override
     public Optional<Film> getFilmById(int id) {
-        String sql = "SELECT id, name, description, release_date, duration, rating_MPA FROM film WHERE id = ?";
+        String sql = "SELECT id, name, description, release_date, duration, rating_mpa FROM film WHERE id = ?";
         Optional<Film> film = Optional.empty();
         try {
             film = Optional.ofNullable(jdbcTemplate.queryForObject(sql, this::mapRowToFilm, id));
@@ -73,22 +88,52 @@ public class FilmDaoImpL implements FilmDao {
         return film;
     }
 
-    public List<Film> getFilteredFilm(int count, List<Integer> excludeList) {
+    public List<Integer> getFilteredFilm(int count,
+                                         List<Integer> excludeList,
+                                         Integer genreId,
+                                         String year,
+                                         String title
+    ) {
         namedDb = new NamedParameterJdbcTemplate(jdbcTemplate);
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource("ids", excludeList);
+        MapSqlParameterSource parameters = new MapSqlParameterSource(Map.of("ids", excludeList));
         parameters.addValue("count", count);
+        parameters.addValue("genreId", genreId);
+        parameters.addValue("year", year);
+        parameters.addValue("title", new SqlParameterValue(Types.VARCHAR, "%" + title + "%"));
 
-        String sql = "SELECT id, name, description, release_date, duration, rating_MPA " +
+        String sql = "SELECT id " +
                 "FROM film " +
-                (!excludeList.isEmpty() ? "WHERE id NOT IN (:ids) " : "") +
-                "LIMIT (:count)";
+                "WHERE 1=1 " +
+                (!excludeList.isEmpty() ? "AND id NOT IN (:ids) " : "") +
+                (genreId == null ? " " : " AND id IN (SELECT film_id FROM film_genre WHERE genre_id = :genreId)") +
+                (year == null ? " " : " AND  EXTRACT(YEAR FROM release_date) = :year") +
+                (title == null ? " " : " AND name ILIKE  :title") +
+                (count > 0 ? " LIMIT (:count)" : "");
 
-        List<Film> films = namedDb.query(sql, parameters, this::mapRowToFilm);
+        List<Integer> filmsId = namedDb.query(sql, parameters, (rs, rowNum) -> rs.getInt("id"));
 
-        return films;
+        return filmsId;
     }
 
+    public void deleteFilm(int filmId) {
+        String sql = "DELETE FROM film WHERE id = ?";
+        jdbcTemplate.update(sql, filmId);
+    }
+    public List<Film> getAllFilmsByDirector(int directorId) {
+        return jdbcTemplate.query(
+                "SELECT f.id, f.name, f.description, f.release_date, f.duration, f.rating_mpa " +
+                        "FROM film_director fd " +
+                        "LEFT JOIN film f on f.id = fd.film_id " +
+                        "LEFT JOIN (" +
+                        "SELECT DISTINCT film_id, COUNT(user_id) AS likecount " +
+                        "FROM film_like " +
+                        "GROUP BY film_id) AS liketemp ON fd.film_id = liketemp.film_id " +
+                        "WHERE director_id = ? " +
+                        "ORDER BY liketemp.likecount DESC",
+                this::mapRowToFilm, directorId
+        );
+    }
 
     private Film mapRowToFilm(ResultSet resultSet, int rowNum) throws SQLException {
         Optional<Date> date = Optional.ofNullable(resultSet.getDate("release_date"));
@@ -117,4 +162,3 @@ public class FilmDaoImpL implements FilmDao {
         return map;
     }
 }
-

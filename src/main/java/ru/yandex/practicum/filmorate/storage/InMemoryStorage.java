@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 public class InMemoryStorage<T extends IdControl> {
     private final Map<Integer, T> itemList = new HashMap<>();
@@ -27,8 +27,12 @@ public class InMemoryStorage<T extends IdControl> {
         return new ArrayList<>(itemList.values());
     }
 
-    public Optional<T> getItemById(int id) {
-        return Optional.ofNullable(itemList.get(id));
+    public T getItemById(int id) {
+        T item = itemList.get(id);
+        if (item == null) {
+            throw new NoSuchElementException("item with id = " + id + " not found");
+        }
+        return item;
     }
 
     private int getIdForNewItem() {

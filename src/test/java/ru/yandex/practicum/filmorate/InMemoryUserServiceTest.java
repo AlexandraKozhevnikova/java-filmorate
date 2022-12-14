@@ -4,16 +4,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
-public class UserServiceTest {
+public class InMemoryUserServiceTest {
 
-    private UserStorage storage = new InMemoryUserStorage();
-    private UserService service = new UserService(storage);
+    private final UserStorage userStorage = new InMemoryUserStorage();
+    private final FilmStorage filmStorage = new InMemoryFilmStorage();
+    private final UserService userService = new UserService(filmStorage, userStorage);
 
     @Test
     public void addUserTest() {
@@ -23,7 +26,7 @@ public class UserServiceTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        user = service.add(user);
+        user = userService.add(user);
         Assertions.assertEquals(1, user.getId());
     }
 
@@ -38,10 +41,10 @@ public class UserServiceTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        service.update(user);
+        userService.update(user);
         Assertions.assertEquals(
                 "PIN",
-                storage.getItemById(1).get().getName());
+                userStorage.getItemById(1).getName());
     }
 
     @Test
@@ -55,7 +58,7 @@ public class UserServiceTest {
 
         Assertions.assertThrows(
                 NoSuchElementException.class,
-                () -> service.update(user)
+                () -> userService.update(user)
         );
     }
 
@@ -63,14 +66,14 @@ public class UserServiceTest {
     public void getNotExistUserTest() {
         Assertions.assertThrows(
                 NoSuchElementException.class,
-                () -> service.getUserById(123)
+                () -> userService.getUserById(123)
         );
     }
 
     @Test
     public void getExistUserTest() {
         dataPreparation();
-        User user = service.getUserById(1);
+        User user = userService.getUserById(1);
         Assertions.assertEquals("pinki@ya.ru", user.getEmail());
     }
 
@@ -80,7 +83,7 @@ public class UserServiceTest {
         dataPreparation();
         dataPreparation();
 
-        Assertions.assertEquals(3, storage.getAllItems().size());
+        Assertions.assertEquals(3, userStorage.getAllItems().size());
     }
 
     private void dataPreparation() {
@@ -90,6 +93,6 @@ public class UserServiceTest {
                 .birthday(LocalDate.now())
                 .build();
 
-        service.add(user);
+        userService.add(user);
     }
 }

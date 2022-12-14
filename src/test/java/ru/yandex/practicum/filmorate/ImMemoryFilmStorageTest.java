@@ -7,11 +7,10 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 public class ImMemoryFilmStorageTest {
-    private FilmStorage storage = new InMemoryFilmStorage();
-
+    private final FilmStorage storage = new InMemoryFilmStorage();
 
     @Test
     public void addFilmTest() {
@@ -37,25 +36,24 @@ public class ImMemoryFilmStorageTest {
         storage.update(film);
         Assertions.assertEquals(
                 "the GREAT time",
-                storage.getItemById(1).get().getName());
+                storage.getItemById(1).getName());
     }
 
     @Test
     public void getNotExistFilmTest() {
-        Optional<Film> film;
-
-        film = storage.getItemById(123);
-        Assertions.assertFalse(film.isPresent());
+        Assertions.assertThrows(
+                NoSuchElementException.class,
+                () -> storage.getItemById(123)
+        );
     }
 
     @Test
     public void getExistFilmTest() {
         dataPreparation();
-        Optional<Film> film;
 
-        film = storage.getItemById(1);
-        Assertions.assertTrue(film.isPresent());
-        Assertions.assertEquals("the time", film.get().getName());
+        Film film = storage.getItemById(1);
+        Assertions.assertTrue(film != null);
+        Assertions.assertEquals("the time", film.getName());
     }
 
     @Test
